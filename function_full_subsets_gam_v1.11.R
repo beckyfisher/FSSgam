@@ -7,6 +7,7 @@ full.subsets.gam=function(use.dat,test.fit,pred.vars.cont,pred.vars.fact=NA,
                          factor.interactions=F, max.models=500,r2.type="r2.lm.est",
                          report.unique.r2=F){
 
+
   # make an "intercept" term for the null model
   use.dat$intercept=1
   interaction.terms=NA
