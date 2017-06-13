@@ -1,6 +1,6 @@
-# FSSgam
-# Consists of two functions: full.subsets.gam and check.correlations
-# requires: doParallel, MuMIn, gamm4, mgcv, nnet
+### FSSgam
+Consists of two functions: full.subsets.gam and check.correlations
+requires: doParallel, MuMIn, gamm4, mgcv, nnet
 
 ### arguments ################################################################
  
@@ -24,9 +24,9 @@ The total number of models allowed to be fit. If the candidate set is bigger tha
 The value to extract from the gam model fit to use as the R squared value. Defaults to "r2.lm.est" which returns and estimated R squared value based on a linear regression between the observed and predicted values. "r2" will return the adjusted R.sq as reported by gam, gamm or gamm4."dev" will return the deviance explained as reported by gam or gamm. Note gamm4 does not currently return a deviance.
 The estimated null model R2 is subtracted from each model R2 to give an idea of the unique variance explained. This can be useful where null terms are included in the model set.
 
-### known issues -------------------------------------------------------------
-# This function assumes you know what you are doing. Non-gaussian mixed model
-# gamm resorts to PQL meaning that AICc calls will not return the AIC of the
-# actual model. Please thoroughly read the help files contained within the gamm4
-# and mgcv packages, including information under details.
-### -------------------------------------------------------------------------- 
+### known issues
+This function assumes you know what you are doing. Non-gaussian mixed model
+gamm resorts to PQL meaning that AICc calls will not return the AIC of the
+actual model. Please thoroughly read the help files contained within the gamm4
+and mgcv packages, including information under details.
+
