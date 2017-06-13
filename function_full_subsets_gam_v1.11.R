@@ -241,7 +241,7 @@ full.subsets.gam=function(use.dat,
    return(wi)}
 
   # of the successful models, make a table indicating which variables are included
-  var.inclusions=matrix(0,ncol=length(included.vars),length(success.models))
+  var.iSeparanclusions=matrix(0,ncol=length(included.vars),length(success.models))
   colnames(var.inclusions)=c(included.vars)
 
   for(m in 1:length(success.models)){
