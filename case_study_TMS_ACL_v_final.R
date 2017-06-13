@@ -7,7 +7,7 @@
 # Sex and Species are included as interaction terms with each other, and as
 # interaction terms between the two smoothers.
 
-source("C:/Users/rfisher/Dropbox/FSS_paper/function_full_subsets_gam_v1.11.r")
+source("C:/Users/rfisher/Dropbox/FSS_paper/FSSgam/function_full_subsets_gam_v1.11.r")
 setwd("C:/Users/rfisher/Dropbox/FSS_paper/case_study_TMS_ACL")
 dat=read.csv(file="gastropod_dataset.csv")
 dim(dat)
@@ -17,8 +17,6 @@ str(dat)
 dat$year=as.factor(dat$year)
 
 # response variable exploration, what distribution?
-resp.var="GSI"
-
 hist(dat$GSI)
 range(dat$GSI)
  # slightly skewed, continuous variable, does not include zero = gamma
@@ -31,8 +29,7 @@ cont.vars=c("lunar.date","month")
 require(mgcv)
 require(MuMIn)
 use.dat=dat
-use.dat$response=dat[,resp.var]
-start.fit=gam(response~s(lunar.date,k=5,bs='cc'),
+start.fit=gam(GSI~s(lunar.date,k=5,bs='cc'),
               family="Gamma",
               data=use.dat)
 out.list=full.subsets.gam(use.dat=use.dat,
@@ -92,7 +89,7 @@ model.dat$pchs=16
 for(a in 1:length(sex.lvls)){
     model.dat$cols[which(model.dat$Sex==sex.lvls[a])]=sex.cols[a]}
 
-y.lim=c(0,ceiling(max(model.dat$response)))
+y.lim=c(0,ceiling(max(model.dat$GSI)))
 lunar.lim=range(model.dat$lunar.date)
 lunar.seq=seq(from=1,to=30,length=100)
 month.lim=range(model.dat$month)
@@ -124,7 +121,7 @@ for(r in 1:nrow(fact.grid.plot)){
        col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])
  lines(x.seq,pred.vals$fit-1.96*pred.vals$se, lty=3,lwd=1.5,
        col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])}
-points(jitter(plot.dat$lunar.date),plot.dat$response,pch=16,col=plot.dat$cols)}
+points(jitter(plot.dat$lunar.date),plot.dat$GSI,pch=16,col=plot.dat$cols)}
 # month
 for(x in 1:length(spp.lvls)){
 spp=spp.lvls[x]
@@ -146,7 +143,7 @@ for(r in 1:nrow(fact.grid.plot)){
        col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])
  lines(x.seq,pred.vals$fit-1.96*pred.vals$se, lty=3,lwd=1.5,
        col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])}
-points(jitter(plot.dat$month),plot.dat$response,pch=16,col=plot.dat$cols)}
+points(jitter(plot.dat$month),plot.dat$GSI,pch=16,col=plot.dat$cols)}
 
 mtext(side=1,text=c("Lunar date","Month of the year"),at=c(0.25,0.75),outer=T,line=2.5)
 mtext(side=2,text="GSI",outer=T,line=2)

@@ -62,7 +62,7 @@ par(mfrow=c(2,1))
  }
 dev.off()
 
-source("C:/Users/rfisher/Dropbox/FSS_paper/function_full_subsets_gam_v1.11.R")
+source("C:/Users/rfisher/Dropbox/FSS_paper/FSSgam/function_full_subsets_gam_v1.11.r")
 
 ### now fit the models ---------------------------------------------------------
 i=1
