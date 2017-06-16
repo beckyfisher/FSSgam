@@ -52,7 +52,7 @@ full.subsets.gam=function(use.dat,
     if(factor.interactions==T){
         if(length(pred.vars.fact)<2){
             stop("You have less than 2 factors. Please reset 'factor.interactions' to 'False'")}
-
+      factor.correlations=check.correlations(use.dat[,pred.vars.fact])
       fact.combns=list()
       fact.cmbns.size=size
       if(size>length(pred.vars.fact)){fact.cmbns.size=length(pred.vars.fact)}
@@ -60,10 +60,20 @@ full.subsets.gam=function(use.dat,
         if(i<=length(pred.vars.fact)){
         fact.combns=c(fact.combns,
          combn(pred.vars.fact,i,simplify=F)) }}
+        # check which were correlated
+        fact.combns=lapply(fact.combns,FUN=function(x){
+                row.index=which(match(rownames(factor.correlations),x)>0)
+                col.index=which(match(colnames(factor.correlations),x)>0)
+                cor.mat.m=factor.correlations[row.index,col.index]
+                out=x
+                if(max(abs(cor.mat.m[upper.tri(cor.mat.m)]))>cov.cutoff){out=NA}
+                return(out)})
+        fact.combns[which(is.na(fact.combns))]=NULL
         tt=data.frame(lapply(fact.combns,FUN=function(x){
                    do.call("paste",as.list(use.dat[,x]))}))
         factor.interaction.terms=unlist(lapply(fact.combns,FUN=paste,collapse=".I."))
         colnames(tt)=factor.interaction.terms
+
       use.dat=cbind(use.dat,tt)
       pred.vars.fact=c(pred.vars.fact,factor.interaction.terms)
     }
@@ -241,7 +251,7 @@ full.subsets.gam=function(use.dat,
    return(wi)}
 
   # of the successful models, make a table indicating which variables are included
-  var.iSeparanclusions=matrix(0,ncol=length(included.vars),length(success.models))
+  var.inclusions=matrix(0,ncol=length(included.vars),length(success.models))
   colnames(var.inclusions)=c(included.vars)
 
   for(m in 1:length(success.models)){
