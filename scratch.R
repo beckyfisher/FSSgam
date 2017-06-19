@@ -1,4 +1,3 @@
-
 # set arg vals
 use.dat
 test.fit
