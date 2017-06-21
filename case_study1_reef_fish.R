@@ -1,10 +1,11 @@
 
+dat=read.csv("data_case_study_fish_hab.csv")
+
 require(mgcv)
 require(MuMIn)
 require(doParallel)
 require(plyr)
 
-dat=read.csv("data_case_study_fish_hab.csv")
 colnames(dat)
 
 dat$SQRTSA=dat$SA
