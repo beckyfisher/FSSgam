@@ -4,7 +4,6 @@ require(MuMIn)
 require(doParallel)
 require(plyr)
 
-setwd("C:/Users/rfisher/Dropbox/FSS_paper/case_study_SKW")
 dat=read.csv("data_case_study_fish_hab.csv")
 colnames(dat)
 
@@ -171,38 +170,3 @@ for(r in 1:length(resp.vars)){
 legend("bottom",legend= zones,bty="n",ncol=2,col=c(1,2),pch=c(16,16),
    inset=-0.61,xpd=NA,cex=.8)
 dev.off()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
