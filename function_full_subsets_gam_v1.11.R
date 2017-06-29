@@ -34,7 +34,7 @@ full.subsets.gam=function(use.dat,
         stop(paste("Null model not successfully fitted, please check your inputs.
                    If there are no random effects try using 'gam' instead of 'uGamm' 
                    in your test.fit model call.",
-                   "  ",
+                   " ",
                    "The following error message was provided:  ",
                    "  ",
                    null.fit, ""))}
