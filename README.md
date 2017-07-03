@@ -21,3 +21,7 @@ gamm resorts to PQL meaning that AICc calls will not return the AIC of the
 actual model. Please thoroughly read the help files contained within the gamm4
 and mgcv packages, including information under details.
 
+
+
+![alt text](https://user-images.githubusercontent.com/14978794/27793878-571b6bba-6032-11e7-9c3b-8e651238b116.png "Importance scores")
+<small>Example of importance scores </small>
