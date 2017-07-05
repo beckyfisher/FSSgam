@@ -211,8 +211,8 @@ full.subsets.gam=function(use.dat,
        }
 
   # now fit the models by updating the test fit (with or without parallel)
-  require(doParallel)
   if(parallel==T){
+   require(doParallel)
    cl=makePSOCKcluster(n.cores)
    registerDoParallel(cl)
    out.dat<-foreach(l = 1:length(mod.formula),
@@ -222,10 +222,10 @@ full.subsets.gam=function(use.dat,
    stopCluster(cl)
    registerDoSEQ()
            }else{
-   out.dat<-foreach(l = 1:length(mod.formula),
-                   .packages=c('mgcv','gamm4','MuMIn'),
-                   .errorhandling='pass')%do%{
-           out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
+      out.dat=list()
+      for(l in 1:length(mod.formula)){
+        out=update(test.fit,formula=mod.formula[[l]],data=use.dat)
+        out.dat=c(out.dat,list(out))}
   }
   names(out.dat)=names(mod.formula[1:n.mods])
 
@@ -306,22 +306,10 @@ full.subsets.gam=function(use.dat,
   # now calculate the variable importance
   # first for AICc
   variable.weights.raw=colSums(mod.data.out[,included.vars]*mod.data.out$wi.AICc)
-  variable.weights.per.mod=variable.weights.raw/colSums(mod.data.out[,included.vars])
-  variable.weights.r2.scaled=variable.weights.per.mod/
-                             max(variable.weights.per.mod)*
-                             max(mod.data.out$r2.vals)
-  aic.var.weights=list(variable.weights.raw=variable.weights.raw,
-                       variable.weights.per.mod=variable.weights.per.mod,
-                       variable.weights.r2.scaled=variable.weights.r2.scaled)
+  aic.var.weights=list(variable.weights.r2.scaled=variable.weights.r2.scaled)
   # next for BIC
   variable.weights.raw=colSums(mod.data.out[,included.vars]*mod.data.out$wi.BIC)
-  variable.weights.per.mod=variable.weights.raw/colSums(mod.data.out[,included.vars])
-  variable.weights.r2.scaled=variable.weights.per.mod/
-                             max(variable.weights.per.mod)*
-                             max(mod.data.out$r2.vals)
-  bic.var.weights=list(variable.weights.raw=variable.weights.raw,
-                       variable.weights.per.mod=variable.weights.per.mod,
-                       variable.weights.r2.scaled=variable.weights.r2.scaled)
+  bic.var.weights=list(variable.weights.r2.scaled=variable.weights.r2.scaled)
   # now return the list of outputs
   return(list(mod.data.out=mod.data.out,
               used.data=use.dat,

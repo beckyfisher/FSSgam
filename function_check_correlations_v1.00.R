@@ -43,8 +43,8 @@ check.correlations=function(dat,parallel=F,n.cores=1){
   # estimate r values for fact-fact combinations
   lm.grid=expand.grid(list(fact.var1=fact.vars,fact.var2=fact.vars))
   require(nnet)
-  require(doParallel)
   if(parallel==T){
+   require(doParallel)
    cl=makePSOCKcluster(n.cores)
    registerDoParallel(cl)
    out.cor.dat<-foreach(r = 1:nrow(lm.grid),.packages=c('nnet'),.errorhandling='pass')%dopar%{
@@ -58,15 +58,19 @@ check.correlations=function(dat,parallel=F,n.cores=1){
       c(var.1,var.2,r.est)}}
    stopCluster(cl)
    registerDoSEQ()}else{
-    out.cor.dat<-foreach(r = 1:nrow(lm.grid),.packages=c('nnet'),.errorhandling='pass')%do%{
-    var.1=as.character(lm.grid[r,1])
-    var.2=as.character(lm.grid[r,2])
-    dat.r=na.omit(dat[,c(var.1,var.2)])
-    fit <- try(summary(multinom(dat.r[,var.1] ~ dat.r[,var.2],trace=F))$deviance,silent=T)
-    null.fit=try(summary(multinom(dat[,var.1] ~ 1,trace=F))$deviance,silent=T)
-    if(class(fit)!="try-error"){
-      r.est=sqrt(1-(fit/null.fit))
-      out=c(var.1,var.2,r.est)}}}
+    out.cor.dat=list()
+    for(r in 1:nrow(lm.grid)){
+          var.1=as.character(lm.grid[r,1])
+          var.2=as.character(lm.grid[r,2])
+          dat.r=na.omit(dat[,c(var.1,var.2)])
+          fit <- try(summary(multinom(dat.r[,var.1] ~ dat.r[,var.2],trace=F))$deviance,silent=T)
+          null.fit=try(summary(multinom(dat[,var.1] ~ 1,trace=F))$deviance,silent=T)
+          out=NA
+          if(class(fit)!="try-error"){
+                   r.est=sqrt(1-(fit/null.fit))
+                   out=c(var.1,var.2,r.est)}
+      out.cor.dat=c(out.cor.dat,list(out))}
+      }
 
     for(r in 1:length(out.cor.dat)){
        out.cor.mat[which(colnames(out.cor.mat)==out.cor.dat[[r]][1]),
