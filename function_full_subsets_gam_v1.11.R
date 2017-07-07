@@ -1,6 +1,6 @@
 full.subsets.gam=function(use.dat,
                           test.fit,
-                          pred.vars.cont,
+                          pred.vars.cont=NA,
                           pred.vars.fact=NA,
                           cyclic.vars=NA,
                           linear.vars=NA,
