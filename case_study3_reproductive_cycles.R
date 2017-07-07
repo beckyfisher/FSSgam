@@ -1,5 +1,15 @@
-### 11 May 2017 ################################################################
-# Gastropod reproduction case study.
+# A simple function for full subsets multiple regression in ecology with R
+#
+# R. Fisher
+# S.K. Wilson
+# S.M. Sin
+# A.C. Lee
+# T.J. Langlois
+
+# Reproducible example for:
+# Case Study 3: Reproductive patterns of tropical intertidal invertebrates over
+# multiple temporal scales
+
 # The analysis uses the full.subsets.function to fit a complete model set
 # to explore temporal patterns in gonadal somatix index (GSI) in two species of
 # gastropods. GSI is modelled as a Gamma distribution.
@@ -7,9 +17,16 @@
 # Sex and Species are included as interaction terms with each other, and as
 # interaction terms between the two smoothers.
 
-source("C:/Users/rfisher/Dropbox/FSS_paper/FSSgam/function_full_subsets_gam_v1.11.r")
-setwd("C:/Users/rfisher/Dropbox/FSS_paper/case_study_TMS_ACL")
-dat=read.csv(file="gastropod_dataset.csv")
+# Source functions----
+library(RCurl)
+function_full_subsets_gam <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_full_subsets_gam_v1.11.R?token=AOSO6tZYAozKTAZ1Kt-aqlQIsiKuxONjks5ZZCtiwA%3D%3D", ssl.verifypeer = FALSE)
+eval(parse(text = function_full_subsets_gam))
+
+function_check_correlations <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_check_correlations_v1.00.R?token=AOSO6uxF2ON3UFyXj10uqm_N_94ZSEM3ks5ZZCyCwA%3D%3D", ssl.verifypeer = FALSE)
+eval(parse(text = function_check_correlations))
+
+# load data
+dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study3_dataset.csv?token=AcAXe29zQDbPndVaz6YZqJE0f5rV33VMks5ZaBIxwA%3D%3D"))
 dim(dat)
 
 str(dat)
@@ -53,7 +70,7 @@ mod.table=mod.table[order(mod.table$AICc),]
 head(mod.table)
 write.csv(mod.table,"modfits.csv")
 
-barplot(out.list$variable.importance$bic$variable.weights.per.mod,las=2,
+barplot(out.list$variable.importance$bic$variable.weights.raw,las=2,
         ylab="Relative variable importance")
 
 write.csv(out.list$predictor.correlations,"predictor_correlations.csv")

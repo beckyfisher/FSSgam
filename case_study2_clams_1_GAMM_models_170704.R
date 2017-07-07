@@ -1,4 +1,4 @@
-# A simple function for full subsets multiple regression in ecology with R
+﻿# A simple function for full subsets multiple regression in ecology with R
 # 
 # R. Fisher
 # S.K. Wilson
@@ -18,7 +18,6 @@
 # We have used a Tweedie error distribution to account for the high occurence of zero values in the dataset.
 # We have implemented the ramdom effects and Tweedie error distribution using the mgcv() package
 
-
 # librarys----
 detach("package:plyr", unload=TRUE)#will error - don't worry
 library(tidyr)
@@ -34,30 +33,20 @@ library(doParallel)
 library(gamm4)
 library(RCurl) #needed to download data from GitHub
 
-
 rm(list=ls())
 study<-"Clams"
 
-# Where the data sits----
-# Set your specific work.dir here-
-work.dir=("~/Dropbox/FSS_paper") # for Tim's mac
-model.out=paste(work.dir,"case_study_TL clams/ModelOut",sep="/")
-
-
-
-# Load functions----
+# Source functions----
 function_full_subsets_gam <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_full_subsets_gam_v1.11.R?token=AOSO6tZYAozKTAZ1Kt-aqlQIsiKuxONjks5ZZCtiwA%3D%3D", ssl.verifypeer = FALSE)
 eval(parse(text = function_full_subsets_gam))
 
 function_check_correlations <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_check_correlations_v1.00.R?token=AOSO6uxF2ON3UFyXj10uqm_N_94ZSEM3ks5ZZCyCwA%3D%3D", ssl.verifypeer = FALSE)
 eval(parse(text = function_check_correlations))
 
-
-
-
 # Bring in and format the data----
 name<-"clams"
 
+# Load the dataset
 dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_dataset.csv?token=AOSO6uyYhat9-Era46nbjALQpTydsTskks5ZY3vhwA%3D%3D"))%>%
   rename(response=Abundance)%>%
   #   Transform variables
@@ -67,7 +56,6 @@ dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam
   mutate(sqrt.X500um=sqrt(X500um))%>%
   na.omit()
 head(dat,2)
-
 
 # Set predictor variables---
 pred.vars=c("depth","X4mm","X2mm","X1mm","X500um","X250um","X125um","X63um",
@@ -79,8 +67,6 @@ pred.vars=c("depth","X4mm","X2mm","X1mm","X500um","X250um","X125um","X63um",
 # Check for correalation of predictor variables- remove anything highly correlated (>0.95)---
 round(cor(dat[,pred.vars]),2)
 # nothing is highly correlated 
-
-setwd(model.out)
 
 pdf(file=paste(name,"predictor_plots.pdf",sep = "_"),onefile=T)
 for(p in 1:length(pred.vars)){
@@ -96,11 +82,9 @@ dev.off()
 # Decided that X4mm, X2mm, X1mm and X500um needed a sqrt transformation
 #Decided Depth, x63um, InPreds and BioTurb were not informative variables. 
 
-
 # # Re-set the predictors for modeling----
 pred.vars=c("sqrt.X4mm","sqrt.X2mm","sqrt.X1mm","sqrt.X500um",
             "fetch","org","snapper","lobster") 
-
 
 # Check to make sure Response vector has not more than 80% zeros----
 unique.vars=unique(as.character(dat$Taxa))
@@ -113,20 +97,12 @@ for(i in 1:length(unique.vars)){
 unique.vars.use     
 write.csv(unique.vars.use,file=paste(name,"unique.vars.use.csv",sep = "_"))
 
-
-
 # Run the full subset model selection----
-# Set directory for the model outputs-
-setwd(model.out)
-
-
-# Set variables needed for the FSS function-
 resp.vars=unique.vars.use
 use.dat=dat
 factor.vars=c("Status")# Status as a Factor with two levels
 out.all=list()
 var.imp=list()
-
 
 # Loop through the FSS function for each Taxa----
 for(i in 1:length(resp.vars)){
@@ -166,7 +142,7 @@ for(i in 1:length(resp.vars)){
     mtext(side=2,text=resp.vars[i],outer=F)}  
    dev.off()
   }
-  }
+}
 
 # Model fits and importance---
 names(out.all)=resp.vars
@@ -185,10 +161,3 @@ heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
           sepcolor = "black",margins=c(12,8), lhei=c(4,15),Rowv=FALSE,Colv=FALSE)
 dev.off()
 # END OF MODEL---
-
-
-
-
-
-
-
