@@ -156,7 +156,6 @@ full.subsets.gam=function(use.dat,
   if(nchar(null.terms)>0){# to add a bs='re' random effect
     mod.formula=list(null.formula)}
 
-  #use.mods=lapply(use.mods,FUN=function(x){gsub(".t.","*",x,fixed=T)})
   for(m in 1:length(use.mods)){
      mod.m=use.mods[[m]]
      cont.smooths=mod.m[which(match(mod.m,setdiff(pred.vars.cont,linear.vars))>0)]
@@ -186,8 +185,6 @@ full.subsets.gam=function(use.dat,
      if(nchar(null.terms)>0){#
        formula.m=as.formula(paste("~",
                paste(c(all.terms.vec,null.terms),collapse="+")))}
-     #out=list(formula.m=formula.m,test.fit=test.fit,use.dat=use.dat)
-     #mod.formula=c(mod.formula,list(out))
      mod.formula=c(mod.formula,list(formula.m))
   }
 
@@ -306,10 +303,10 @@ full.subsets.gam=function(use.dat,
   # now calculate the variable importance
   # first for AICc
   variable.weights.raw=colSums(mod.data.out[,included.vars]*mod.data.out$wi.AICc)
-  aic.var.weights=list(variable.weights.r2.scaled=variable.weights.r2.scaled)
+  aic.var.weights=list(variable.weights.raw=variable.weights.raw)
   # next for BIC
   variable.weights.raw=colSums(mod.data.out[,included.vars]*mod.data.out$wi.BIC)
-  bic.var.weights=list(variable.weights.r2.scaled=variable.weights.r2.scaled)
+  bic.var.weights=list(variable.weights.raw=variable.weights.raw)
   # now return the list of outputs
   return(list(mod.data.out=mod.data.out,
               used.data=use.dat,
@@ -319,4 +316,3 @@ full.subsets.gam=function(use.dat,
               variable.importance=
                  list(aic=aic.var.weights,bic=bic.var.weights)))
 } #------------------ end function --------------------------------------------#
-

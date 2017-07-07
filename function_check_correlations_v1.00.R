@@ -1,4 +1,4 @@
-check.correlations=function(dat,parallel=F,n.cores=1){
+check.correlations=function(dat,parallel=F,n.cores=4){
   classes.dat=sapply(dat,class)
   fact.vars=names(which(classes.dat=="factor" | classes.dat=="character"))
   cont.vars=names(which(classes.dat=="integer" | classes.dat=="numeric"))
@@ -35,7 +35,8 @@ check.correlations=function(dat,parallel=F,n.cores=1){
        col.index=which(colnames(out.cor.mat)==r.estimates$cont.var[r])
        row.index=which(rownames(out.cor.mat)==r.estimates$fact.var[r])
        out.cor.mat[row.index,col.index]=r.estimates[r,3]
-    }}else{
+     }
+    }else{
         fact.fact.lower.right=matrix(NA,ncol=length(fact.vars),nrow=length(fact.vars))
     colnames(fact.fact.lower.right)=fact.vars;rownames(fact.fact.lower.right)=fact.vars
     out.cor.mat=fact.fact.lower.right}
@@ -77,5 +78,4 @@ check.correlations=function(dat,parallel=F,n.cores=1){
                    which(rownames(out.cor.mat)==out.cor.dat[[r]][2])]=
                    as.numeric(out.cor.dat[[r]][3])}}else{out.cor.mat=cor.mat}
   return(out.cor.mat)
-
 }
