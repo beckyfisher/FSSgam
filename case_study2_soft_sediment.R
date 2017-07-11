@@ -177,7 +177,9 @@ dev.off()
 
 # Part 2 - custom plot of importance scores----
 
-dat.taxa<-read.csv("clams_all.var.imp.csv")%>%
+
+# Load the dataset
+dat.taxa <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_all.var.imp.csv?token=AOSO6ma3MdgxTWJgICEtKgUVUGiZkRW0ks5ZbagowA%3D%3D"))%>%
   rename(resp.var=X)%>%
   gather(key=predictor,value=importance,2:ncol(.))
 head(dat.taxa,5)
