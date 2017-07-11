@@ -171,10 +171,6 @@ heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
 dev.off()
 
 
-
-
-
-
 # Part 2 - custom plot of importance scores----
 
 
@@ -183,7 +179,6 @@ dat.taxa <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/F
   rename(resp.var=X)%>%
   gather(key=predictor,value=importance,2:ncol(.))
 head(dat.taxa,5)
-
 
 
 # Plotting defaults----
