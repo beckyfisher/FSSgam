@@ -1,4 +1,4 @@
-﻿# A simple function for full subsets multiple regression in ecology with R
+# A simple function for full subsets multiple regression in ecology with R
 # 
 # R. Fisher
 # S.K. Wilson
@@ -13,10 +13,20 @@
 #   Langlois, T. J., M. J. Anderson, and R. C. Babcock. 2005. Reef-associated predators influence adjacent soft-sediment communities. Ecology 86: 1508–1519.
 
 # Script information----
+
+# Part 1-FSS modeling----
 # This script is designed to work with long format data - where response variables are stacked one upon each other (see http://tidyr.tidyverse.org/)
 # There are two random factors, Site and NTR location
 # We have used a Tweedie error distribution to account for the high occurence of zero values in the dataset.
 # We have implemented the ramdom effects and Tweedie error distribution using the mgcv() package
+
+# Part 2 - custom plot of importance scores----
+# using ggplot2()
+
+# Part 3 - plots of the most parsimonious models----
+# here we use plots of the raw response variables and fitted relationships - to allow for the plotting of interactions between continous predictor variables and factors with levels again using ggplot2()
+
+# Part 1-FSS modeling----
 
 # librarys----
 detach("package:plyr", unload=TRUE)#will error - don't worry
@@ -34,7 +44,6 @@ library(gamm4)
 library(RCurl) #needed to download data from GitHub
 
 rm(list=ls())
-study<-"Clams"
 
 # Source functions----
 function_full_subsets_gam <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_full_subsets_gam_v1.11.R?token=AOSO6tZYAozKTAZ1Kt-aqlQIsiKuxONjks5ZZCtiwA%3D%3D", ssl.verifypeer = FALSE)
@@ -161,12 +170,19 @@ heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
           sepcolor = "black",margins=c(12,8), lhei=c(4,15),Rowv=FALSE,Colv=FALSE)
 dev.off()
 
-study<-"Clams"
+
+
+
+
+
+# Part 2 - custom plot of importance scores----
 
 dat.taxa<-read.csv("clams_all.var.imp.csv")%>%
   rename(resp.var=X)%>%
   gather(key=predictor,value=importance,2:ncol(.))
 head(dat.taxa,5)
+
+
 
 # Plotting defaults----
 library(ggplot2)
@@ -248,7 +264,10 @@ gg.importance.scores
 
 ggsave("Langlois.importance.scores.png",width = 15, height = 7,units = "cm")
 
-### now  make a nice plot of the most interesting models
+
+# Part 3 - plots of the most parsimonious models----
+
+### now  make a nice plot of the most interesting models-----
 library(gridExtra)
 library(grid)
 # Theme-
