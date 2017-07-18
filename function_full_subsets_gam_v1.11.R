@@ -266,6 +266,7 @@ full.subsets.gam=function(use.dat,
   mod.data.out$wi.AICc=round(wi(mod.data.out$AICc),3)
   mod.data.out$wi.BIC=round(wi(mod.data.out$BIC),3)
   mod.data.out$r2.vals=round(unlist(lapply(success.models,FUN=function(x){
+        out=NA
         if(class(x)[1]=="gam" & r2.type=="dev"){out=summary(x)$dev.expl}
         if(class(x)[1]=="gam" & r2.type=="r2"){out=summary(x)$r.sq}
         if(class(x)[1]=="gam" & r2.type=="r2.lm.est"){
@@ -275,7 +276,9 @@ full.subsets.gam=function(use.dat,
            if(length(out)==0){out=NA}}
         if(class(x)[[1]]=="gamm4" & r2.type=="r2"){out=summary(x$gam)$r.sq}
         if(class(x)[[1]]=="gamm4" & r2.type=="r2.lm.est"){
-           out=summary(lm(attributes(x$mer)$frame$y~predict(x,re.form=NA)))$r.sq}
+           out=summary(lm(attributes(x$mer)$frame$y~
+                        predict(x,re.form=NA,type="response")))$r.sq}
+           if(is.null(out)){out=NA}
         return(out)})),3)
 
   # substract the null model r2 value from each model r2 value
