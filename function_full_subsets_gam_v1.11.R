@@ -228,7 +228,7 @@ full.subsets.gam=function(use.dat,
 
   # find all the models that didn't fit and extract the error messages
   model.success=lapply(lapply(out.dat,FUN=class),FUN=function(x){
-     x[1]=="gamm" | x[1]=="gamm4" | x[1]=="gam"})
+     x[1]!="try-error"})
   failed.models=mod.formula[which(model.success==F)]
   success.models=out.dat[which(model.success==T)]
   if(length(success.models)==0){
