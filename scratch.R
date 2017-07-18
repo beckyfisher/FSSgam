@@ -1,7 +1,7 @@
 # set arg vals
 use.dat
 test.fit
-pred.vars.cont
+pred.vars.cont=NA
 pred.vars.fact=NA
 size=3
 k=5
