@@ -277,7 +277,7 @@ full.subsets.gam=function(use.dat,
         if(class(x)[[1]]=="gamm4" & r2.type=="r2"){out=summary(x$gam)$r.sq}
         if(class(x)[[1]]=="gamm4" & r2.type=="r2.lm.est"){
            out=summary(lm(attributes(x$mer)$frame$y~
-                        predict(x,re.form=NA,type="response")))$r.sq}
+                        predict(x[[1]],re.form=NA,type="response")))$r.sq}
            if(is.null(out)){out=NA}
         return(out)})),3)
 
