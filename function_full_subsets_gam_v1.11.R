@@ -24,12 +24,18 @@ full.subsets.gam=function(use.dat,
   all.predictors=na.omit(c(pred.vars.cont,pred.vars.fact,linear.vars))
   included.vars=all.predictors
 
+
   # check the null model will fit
   if(nchar(null.terms)>0){
     null.formula=as.formula(paste("~ intercept-1",null.terms,sep="+"))}else{
     null.formula=as.formula("~ intercept-1")}
-  null.fit=try(update(test.fit,formula=null.formula,
-                data=use.dat),silent=T)
+
+  if(grep("dsm",class(test.fit))>0){
+    null.formula=as.formula(paste("~1",null.terms,sep="+"))
+    null.fit=try(update(test.fit,formula=null.formula),silent=T)
+  }else{
+    null.fit=try(update(test.fit,formula=null.formula,data=use.dat),silent=T)}
+
   if(class(null.fit)[1]=="try-error"){
         stop(paste("Null model not successfully fitted, please check your inputs.
                    If there are no random effects try using 'gam' instead of 'uGamm' 
@@ -215,13 +221,20 @@ full.subsets.gam=function(use.dat,
    out.dat<-foreach(l = 1:length(mod.formula),
                    .packages=c('mgcv','gamm4','MuMIn'),
                    .errorhandling='pass')%dopar%{
-           out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
+         if(grep("dsm",class(test.fit))>0){
+           out=update(test.fit,formula=mod.formula[[l]])}
+         if(grep("dsm",class(test.fit))==0){
+        out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
+   }
    stopCluster(cl)
    registerDoSEQ()
            }else{
       out.dat=list()
       for(l in 1:length(mod.formula)){
-        out=update(test.fit,formula=mod.formula[[l]],data=use.dat)
+         if(grep("dsm",class(test.fit))>0){
+           out=update(test.fit,formula=mod.formula[[l]])}
+         if(grep("dsm",class(test.fit))==0){
+        out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
         out.dat=c(out.dat,list(out))}
   }
   names(out.dat)=names(mod.formula[1:n.mods])
