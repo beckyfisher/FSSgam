@@ -30,7 +30,7 @@ full.subsets.gam=function(use.dat,
     null.formula=as.formula(paste("~ intercept-1",null.terms,sep="+"))}else{
     null.formula=as.formula("~ intercept-1")}
 
-  if(grep("dsm",class(test.fit))>0){
+  if(length(grep("dsm",class(test.fit)))>0){
     null.formula=as.formula(paste("~1",null.terms,sep="+"))
     null.fit=try(update(test.fit,formula=null.formula),silent=T)
   }else{
@@ -221,9 +221,9 @@ full.subsets.gam=function(use.dat,
    out.dat<-foreach(l = 1:length(mod.formula),
                    .packages=c('mgcv','gamm4','MuMIn'),
                    .errorhandling='pass')%dopar%{
-         if(grep("dsm",class(test.fit))>0){
+         if(length(grep("dsm",class(test.fit)))>0){
            out=update(test.fit,formula=mod.formula[[l]])}
-         if(grep("dsm",class(test.fit))==0){
+         if(length(grep("dsm",class(test.fit)))==0){
         out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
    }
    stopCluster(cl)
@@ -231,9 +231,9 @@ full.subsets.gam=function(use.dat,
            }else{
       out.dat=list()
       for(l in 1:length(mod.formula)){
-         if(grep("dsm",class(test.fit))>0){
+         if(length(grep("dsm",class(test.fit)))>0){
            out=update(test.fit,formula=mod.formula[[l]])}
-         if(grep("dsm",class(test.fit))==0){
+         if(length(grep("dsm",class(test.fit)))==0){
         out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
         out.dat=c(out.dat,list(out))}
   }
