@@ -232,9 +232,9 @@ full.subsets.gam=function(use.dat,
       out.dat=list()
       for(l in 1:length(mod.formula)){
          if(length(grep("dsm",class(test.fit)))>0){
-           out=update(test.fit,formula=mod.formula[[l]])}
+           out=try(update(test.fit,formula=mod.formula[[l]]),silent=T)}
          if(length(grep("dsm",class(test.fit)))==0){
-        out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
+        out=try(update(test.fit,formula=mod.formula[[l]],data=use.dat),silent=T)}
         out.dat=c(out.dat,list(out))}
   }
   names(out.dat)=names(mod.formula[1:n.mods])
