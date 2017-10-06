@@ -240,8 +240,11 @@ full.subsets.gam=function(use.dat,
   names(out.dat)=names(mod.formula[1:n.mods])
 
   # find all the models that didn't fit and extract the error messages
+#  model.success=lapply(lapply(out.dat,FUN=class),FUN=function(x){
+#     x[1]!="try-error"})
   model.success=lapply(lapply(out.dat,FUN=class),FUN=function(x){
-     x[1]!="try-error"})
+     length(grep("gam",x))>0})
+
   failed.models=mod.formula[which(model.success==F)]
   success.models=out.dat[which(model.success==T)]
   if(length(success.models)==0){
