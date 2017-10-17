@@ -51,7 +51,7 @@ full.subsets.gam=function(use.dat,
 
   # if there are factors
   if(length(na.omit(pred.vars.fact))>0){
-  # if there are more than two factors
+  # if there are two or more factors
   if(length(na.omit(pred.vars.fact))>1){
     # make all the interactions between factors
     if(factor.interactions==T){
