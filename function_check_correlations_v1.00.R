@@ -55,7 +55,8 @@ check.correlations=function(dat,parallel=F,n.cores=4){
     fit <- try(summary(multinom(dat.r[,var.1] ~ dat.r[,var.2],trace=F))$deviance,silent=T)
     null.fit=try(summary(multinom(dat[,var.1] ~ 1,trace=F))$deviance,silent=T)
     if(class(fit)!="try-error"){
-      r.est=sqrt(1-(fit/null.fit))
+       if(round(fit,5)==round(null.fit,5)){r.est=0}else{
+      r.est=sqrt(1-(fit/null.fit))}
       c(var.1,var.2,r.est)}}
    stopCluster(cl)
    registerDoSEQ()}else{
@@ -68,7 +69,8 @@ check.correlations=function(dat,parallel=F,n.cores=4){
           null.fit=try(summary(multinom(dat[,var.1] ~ 1,trace=F))$deviance,silent=T)
           out=NA
           if(class(fit)!="try-error"){
-                   r.est=sqrt(1-(fit/null.fit))
+           if(round(fit,5)==round(null.fit,5)){r.est=0}else{
+                   r.est=sqrt(1-(fit/null.fit))}
                    out=c(var.1,var.2,r.est)}
       out.cor.dat=c(out.cor.dat,list(out))}
       }
