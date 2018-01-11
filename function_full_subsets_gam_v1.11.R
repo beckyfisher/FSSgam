@@ -320,11 +320,21 @@ full.subsets.gam=function(use.dat,
   mod.data.out=cbind(mod.data.out,var.inclusions)
 
   # now calculate the variable importance
+   # find the min number of models for each variable
+  min.mods=min(colSums(mod.data.out[,included.vars]))
   # first for AICc
-  variable.weights.raw=colSums(mod.data.out[,included.vars]*mod.data.out$wi.AICc)
+  var.weights=unlist(lapply(included.vars,FUN=function(x){
+           sum(sort(mod.data.out$wi.AICc[which(mod.data.out[,x]==1)],decreasing=T)[1:min.mods])}))
+  names(var.weights)=included.vars
+  variable.weights.raw=var.weights
+  #variable.weights.raw=colSums(mod.data.out[,included.vars]*mod.data.out$wi.AICc)
   aic.var.weights=list(variable.weights.raw=variable.weights.raw)
   # next for BIC
-  variable.weights.raw=colSums(mod.data.out[,included.vars]*mod.data.out$wi.BIC)
+  var.weights=unlist(lapply(included.vars,FUN=function(x){
+           sum(sort(mod.data.out$wi.BIC[which(mod.data.out[,x]==1)],decreasing=T)[1:min.mods])}))
+  names(var.weights)=included.vars
+  variable.weights.raw=var.weights
+  #variable.weights.raw=colSums(mod.data.out[,included.vars]*mod.data.out$wi.BIC)
   bic.var.weights=list(variable.weights.raw=variable.weights.raw)
   # now return the list of outputs
   return(list(mod.data.out=mod.data.out,
