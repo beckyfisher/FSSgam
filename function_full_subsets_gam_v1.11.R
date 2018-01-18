@@ -109,7 +109,7 @@ full.subsets.gam=function(use.dat,
   cor.matrix=check.correlations(use.dat[,all.predictors],parallel=parallel,n.cores=n.cores)
   # replace NA's with zero.
   cor.matrix[which(cor.matrix=="NaN")]=0
-
+  cor.matrix[which(is.na(cor.matrix)==T)]=0
   # make all possible combinations
   if(length(na.omit(c(pred.vars.cont,
                       pred.vars.fact)))<size){
