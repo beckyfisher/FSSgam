@@ -12,7 +12,6 @@ factor.interactions=F
 cov.cutoff=0.28
 bs.arg="'cr'"
 null.terms=""
-weight.vec=rep(1,nrow(use.dat))
 max.models=500
 parallel=F
 n.cores=4
