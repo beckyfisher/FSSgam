@@ -21,7 +21,7 @@ full.subsets.gam=function(use.dat,
   use.dat$intercept=1
   interaction.terms=NA
   linear.interaction.terms=NA
-  all.predictors=na.omit(c(pred.vars.cont,pred.vars.fact,linear.vars))
+  all.predictors=unique(na.omit(c(pred.vars.cont,pred.vars.fact,linear.vars)))
   included.vars=all.predictors
 
 
@@ -178,6 +178,7 @@ full.subsets.gam=function(use.dat,
      if(length(linear.interaction.terms>0)){all.terms.vec=c(all.terms.vec,
                gsub(".t.","*",linear.interaction.terms,fixed=T))}
      if(length(factor.terms>0)){all.terms.vec=c(all.terms.vec,factor.terms)}
+     if(length(linear.terms>0)){all.terms.vec=c(all.terms.vec,linear.terms)}
      if(max(is.na(cyclic.vars))!=1){
        for(cc in 1:length(cyclic.vars)){
            for(v in 1:length(all.terms.vec)){
