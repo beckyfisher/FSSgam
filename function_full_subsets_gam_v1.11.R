@@ -7,6 +7,7 @@ full.subsets.gam=function(use.dat,
                           smooth.interactions=pred.vars.fact,
                           factor.interactions=F,
                           cov.cutoff=0.28,
+                          cor.matrix=NA,
                           size=3,
                           k=5,
                           bs.arg="'cr'",
@@ -106,10 +107,12 @@ full.subsets.gam=function(use.dat,
 
   all.predictors=na.omit(unique(c(all.predictors,pred.vars.fact)))
   # calculate a correlation matrix between all predictors
-  cor.matrix=check.correlations(use.dat[,all.predictors],parallel=parallel,n.cores=n.cores)
+  if(is.na(cor.matrix)){
+   cor.matrix=check.correlations(use.dat[,all.predictors],parallel=parallel,n.cores=n.cores)
   # replace NA's with zero.
   cor.matrix[which(cor.matrix=="NaN")]=0
-  cor.matrix[which(is.na(cor.matrix)==T)]=0
+  cor.matrix[which(is.na(cor.matrix)==T)]=0}
+
   # make all possible combinations
   if(length(na.omit(c(pred.vars.cont,
                       pred.vars.fact)))<size){
