@@ -108,7 +108,7 @@ full.subsets.gam=function(use.dat,
   all.predictors=na.omit(unique(c(all.predictors,pred.vars.fact)))
   # calculate a correlation matrix between all predictors
   cc=check.correlations(use.dat[,all.predictors],parallel=parallel,n.cores=n.cores)
-  if(is.na(cor.matrix)){
+  if(length(cor.matrix)==1){
    cor.matrix=cc
    # replace NA's with zero.
    cor.matrix[which(cor.matrix=="NaN")]=0
