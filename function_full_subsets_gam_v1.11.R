@@ -219,10 +219,7 @@ full.subsets.gam=function(use.dat,
         is larger than you can realistically fit, try reducing the number of predictors,
         setting the covariance 'cov.cutoff' argument to less than ", cov.cutoff,
         "
-        or setting 'factor.interactions' to FALSE (if you have factors).
-
-        To run the current model set will take approximately ",time.to.run," minutes
-        and use ",mod.gbs," gigabytes of additional memory.",sep=""))
+        or setting 'factor.interactions' to FALSE (if you have factors).",sep=""))
        }
 
   # now fit the models by updating the test fit (with or without parallel)
