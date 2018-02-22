@@ -17,3 +17,4 @@ parallel=F
 n.cores=4
 r2.type="r2.lm.est"
 report.unique.r2=F
+cor.matrix=NA

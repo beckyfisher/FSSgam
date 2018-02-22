@@ -107,12 +107,19 @@ full.subsets.gam=function(use.dat,
 
   all.predictors=na.omit(unique(c(all.predictors,pred.vars.fact)))
   # calculate a correlation matrix between all predictors
+  cc=check.correlations(use.dat[,all.predictors],parallel=parallel,n.cores=n.cores)
   if(is.na(cor.matrix)){
-   cor.matrix=check.correlations(use.dat[,all.predictors],parallel=parallel,n.cores=n.cores)
-  # replace NA's with zero.
-  cor.matrix[which(cor.matrix=="NaN")]=0
-  cor.matrix[which(is.na(cor.matrix)==T)]=0}
-
+   cor.matrix=cc
+   # replace NA's with zero.
+   cor.matrix[which(cor.matrix=="NaN")]=0
+   cor.matrix[which(is.na(cor.matrix)==T)]=0}else{
+      # check if the user defined matrix has the same rownames and colnames
+      check.predictors=c(match(all.predictors,colnames(cor.matrix)),
+                         match(all.predictors,rownames(cor.matrix)))
+      missing.predictors=unique(rep(all.predictors,2)[which(is.na(check.predictors))])
+      if(length(missing.predictors)>0){
+            stop(paste("Supplied cor.matrix is missing required predictors: ",
+            paste(missing.predictors,collapse=", "),".",sep=""))}
   # make all possible combinations
   if(length(na.omit(c(pred.vars.cont,
                       pred.vars.fact)))<size){
