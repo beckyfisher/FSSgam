@@ -106,6 +106,7 @@ full.subsets.gam=function(use.dat,
                                 sep=".t.")}
    }}
    # if we want continuous interactions
+   continuous.interaction.terms=NA
     if(continuous.interactions==T){
         if(length(pred.vars.cont)<2){
             stop("You have less than 2 continuous predictors you wish interactions for.
