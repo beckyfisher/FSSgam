@@ -120,6 +120,7 @@ full.subsets.gam=function(use.dat,
       if(length(missing.predictors)>0){
             stop(paste("Supplied cor.matrix is missing required predictors: ",
             paste(missing.predictors,collapse=", "),".",sep=""))}
+  }
   # make all possible combinations
   if(length(na.omit(c(pred.vars.cont,
                       pred.vars.fact)))<size){
