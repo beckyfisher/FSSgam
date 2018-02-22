@@ -6,6 +6,7 @@ full.subsets.gam=function(use.dat,
                           linear.vars=NA,
                           smooth.interactions=pred.vars.fact,
                           factor.interactions=F,
+                          continuous.interactions=F,
                           cov.cutoff=0.28,
                           cor.matrix=NA,
                           size=3,
@@ -49,7 +50,7 @@ full.subsets.gam=function(use.dat,
   if(max(is.na(use.dat[,all.predictors]))==1){
         stop("Predictor variables contain NA and AICc/BIC comparisons are invalid. 
         Remove rows with NA from the input data or interpolate missing predictors.")}
-
+  interaction.terms=NA
   # if there are factors
   if(length(na.omit(pred.vars.fact))>0){
   # if there are two or more factors
@@ -104,6 +105,33 @@ full.subsets.gam=function(use.dat,
      linear.interaction.terms=paste(linear.interactions$Var1,linear.interactions$Var2,
                                 sep=".t.")}
    }}
+   # if we want continuous interactions
+    if(continuous.interactions==T){
+        if(length(pred.vars.cont)<2){
+            stop("You have less than 2 continuous predictors you wish interactions for.
+            Please reset 'continuous.interactions' to 'False'")}
+      continuous.correlations=check.correlations(use.dat[,pred.vars.cont])
+      cont.combns=list()
+      cont.cmbns.size=size
+      if(size>length(pred.vars.cont)){cont.cmbns.size=length(pred.vars.cont)}
+      for(i in 2:cont.cmbns.size){
+        if(i<=length(pred.vars.cont)){
+        cont.combns=c(cont.combns,
+         combn(pred.vars.cont,i,simplify=F)) }}
+        # check which were correlated
+        cont.combns=lapply(cont.combns,FUN=function(x){
+                row.index=which(match(rownames(continuous.correlations),x)>0)
+                col.index=which(match(colnames(continuous.correlations),x)>0)
+                cor.mat.m=continuous.correlations[row.index,col.index]
+                out=x
+                if(max(abs(cor.mat.m[upper.tri(cor.mat.m)]))>cov.cutoff){out=NA}
+                return(out)})
+        cont.combns[which(is.na(cont.combns))]=NULL
+        tt=data.frame(lapply(cont.combns,FUN=function(x){
+                   do.call("paste",as.list(use.dat[,x]))}))
+        continuous.interaction.terms=unlist(lapply(cont.combns,FUN=paste,collapse=".te."))
+        colnames(tt)=continuous.interaction.terms
+    }
 
   all.predictors=na.omit(unique(c(all.predictors,pred.vars.fact)))
   # calculate a correlation matrix between all predictors
@@ -121,6 +149,7 @@ full.subsets.gam=function(use.dat,
             stop(paste("Supplied cor.matrix is missing required predictors: ",
             paste(missing.predictors,collapse=", "),".",sep=""))}
   }
+
   # make all possible combinations
   if(length(na.omit(c(pred.vars.cont,
                       pred.vars.fact)))<size){
@@ -129,7 +158,9 @@ full.subsets.gam=function(use.dat,
   for(i in 1:size){
     all.mods=c(all.mods,
      combn(na.omit(c(pred.vars.cont,pred.vars.fact,
-                     interaction.terms,linear.interaction.terms)),
+                     interaction.terms,
+                     linear.interaction.terms,
+                     continuous.interaction.terms)),
                      i,simplify=F))
   }
 
@@ -137,11 +168,17 @@ full.subsets.gam=function(use.dat,
   use.mods=all.mods
   for(m in 1:length(all.mods)){
     mod.m=all.mods[[m]]
-    mod.terms=unlist(strsplit(unlist(strsplit(mod.m,split=".by.",fixed=T)),
-                               split=".t.",fixed=T))
-    n.vars.m=unique(unlist(strsplit(unlist(strsplit(unlist(strsplit(mod.m,split=".by.",fixed=T)),
-                                  split=".I.",fixed=T)), split=".t.",fixed=T)))
-    cont.vars=na.omit(na.omit(c(pred.vars.cont,linear.vars))[match(mod.terms,na.omit(c(pred.vars.cont,linear.vars)))])
+    mod.terms=unlist(strsplit(unlist(strsplit(unlist(strsplit(mod.m,
+                               split=".by.",fixed=T)),
+                               split=".t.",fixed=T)),
+                               split=".te."))
+    n.vars.m=unique(unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(mod.m,
+                                  split=".by.",fixed=T)),
+                                  split=".I.",fixed=T)),
+                                  split=".t.",fixed=T)),
+                                  split=".te.",fixed=T)))
+    cont.vars=na.omit(na.omit(c(pred.vars.cont,linear.vars))[match(mod.terms,
+                                           na.omit(c(pred.vars.cont,linear.vars)))])
     fact.vars=unique(na.omit(pred.vars.fact[match(mod.terms,pred.vars.fact)]))
 
     # if there are factor vars
@@ -160,8 +197,9 @@ full.subsets.gam=function(use.dat,
     # remove the model if there are more than the number of terms specified in "size"
     if(length(n.vars.m)>size){use.mods[[m]]=NA}
 
-    # remove the models if a continuous predictor occurs as a by and as a single term
+    # remove the models if a continuous predictor occurs as a by, or a te, and as a single term
     if(length(cont.vars)>length(unique(cont.vars))){use.mods[[m]]=NA}
+
   }
 
   use.mods[which(is.na(use.mods))]=NULL
@@ -177,6 +215,7 @@ full.subsets.gam=function(use.dat,
      mod.m=use.mods[[m]]
      cont.smooths=mod.m[which(match(mod.m,setdiff(pred.vars.cont,linear.vars))>0)]
      by.smooths=mod.m[grep(".by.",mod.m)]
+     te.smooths=mod.m[grep(".te.",mod.m)]
      factor.terms=mod.m[which(match(mod.m,pred.vars.fact)>0)]
      linear.terms=mod.m[which(match(mod.m,linear.vars)>0)]
      linear.interaction.terms=mod.m[grep(paste(linear.vars,".t.",sep=""),mod.m)]
@@ -186,6 +225,8 @@ full.subsets.gam=function(use.dat,
                   paste("s(",cont.smooths,",k=",k,",bs=",bs.arg,")",sep=""))}
      if(length(by.smooths>0)){all.terms.vec=c(all.terms.vec,
          paste("s(",gsub(".by.",",by=",by.smooths),",k=",k,",bs=",bs.arg,")",sep=""))}
+     if(length(te.smooths>0)){all.terms.vec=c(all.terms.vec,
+         paste("te(",gsub(".te.",",",te.smooths),",k=",k,",bs=",bs.arg,")",sep=""))}
      if(length(linear.interaction.terms>0)){all.terms.vec=c(all.terms.vec,
                gsub(".t.","*",linear.interaction.terms,fixed=T))}
      if(length(factor.terms>0)){all.terms.vec=c(all.terms.vec,factor.terms)}
@@ -277,9 +318,9 @@ full.subsets.gam=function(use.dat,
 
   for(m in 1:length(success.models)){
         pred.vars.m=unique(
-          unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(names(success.models)[m],
+          unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(names(success.models)[m],
           split="+",fixed=T)),split=".by.",fixed=T)),split=".I.",fixed=T)),
-          split="*",fixed=T)),split=".t.",fixed=T)))
+          split="*",fixed=T)),split=".t.",fixed=T)),split=".te.")))
         if(pred.vars.m[1]!="null"){var.inclusions[m,pred.vars.m]=1}}
 
   # now make a table of all the model summary data
