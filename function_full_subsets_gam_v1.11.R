@@ -255,11 +255,24 @@ full.subsets.gam=function(use.dat,
      if(length(factor.terms>0)){all.terms.vec=c(all.terms.vec,factor.terms)}
      if(length(linear.terms>0)){all.terms.vec=c(all.terms.vec,linear.terms)}
      if(max(is.na(cyclic.vars))!=1){
-       for(cc in 1:length(cyclic.vars)){
+       for(r in 1:length(cyclic.vars)){
            for(v in 1:length(all.terms.vec)){
-             if(length(grep(cyclic.vars[cc],all.terms.vec[v]))>0){
+             if(length(grep(cyclic.vars[r],all.terms.vec[v]))>0){
                   all.terms.vec[v]=gsub(paste("bs=",bs.arg,sep=""),"bs='cc'",all.terms.vec[v])
                   }}}}
+     for(v in 1:length(all.terms.vec)){
+         if(length(grep("te(",all.terms.vec[v],fixed=T))>0){
+            bs.arg.v=c("","")
+            smooth.vars.v=unlist(strsplit(gsub("te(","",all.terms.vec[v],fixed=T),split=","))[1:2]
+            var.type.vec=unlist(lapply(smooth.vars.v,FUN=function(x){match(x,cyclic.vars)}))
+            bs.arg.v[which(is.na(var.type.vec))]=bs.arg
+            bs.arg.v[which(var.type.vec>0)]="'cc'"
+            bs.arg.v=paste("bs=c(",paste0(bs.arg.v,collapse=","),")",sep="")
+            all.terms.vec[v]=gsub("bs='cc'",bs.arg.v,all.terms.vec[v])
+            all.terms.vec[v]=gsub(paste("bs=",bs.arg,sep=""),bs.arg.v,all.terms.vec[v])
+         }
+     }
+
      if(nchar(null.terms)==0){# if there is no bs='re' random effect
                                 # or other null term in the null model
        formula.m=as.formula(paste("~",

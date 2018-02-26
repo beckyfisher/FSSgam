@@ -53,7 +53,7 @@ out.list=full.subsets.gam(use.dat=use.dat,
                          test.fit=start.fit,
                          pred.vars.cont=cont.vars,
                          pred.vars.fact=factor.vars,
-                         cyclic.vars=cyclic.vars,k=5,
+                         cyclic.vars=cyclic.vars,k=5,smooth.smooth.interactions=T,
                          parallel=T,factor.factor.interactions=T,size=4)
 names(out.list)
 
