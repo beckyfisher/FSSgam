@@ -4,7 +4,7 @@ full.subsets.gam=function(use.dat,
                           pred.vars.fact=NA,
                           cyclic.vars=NA,
                           linear.vars=NA,
-                          smooth.interactions=pred.vars.fact,
+                          factor.smooth.interactions=pred.vars.fact,
                           factor.factor.interactions=F,
                           continuous.interactions=F,
                           cov.cutoff=0.28,
@@ -18,16 +18,26 @@ full.subsets.gam=function(use.dat,
                           n.cores=4,
                           r2.type="r2.lm.est",
                           report.unique.r2=F,
-                          factor.interactions=NA){
+                          factor.interactions="previous.arg",
+                          smooth.interactions="previous.arg"){
 
   # manage previous version arguments
-  if(is.na(factor.interactions)!=T){
+  if(factor.interactions!="previous.arg"){
      factor.factor.interactions=factor.interactions
      warning('Argument factor.interactions has been replaced with factor.factor.interactions.
               Please update your code as usage of factor.interactions will not be supported in
               future versions.')
      }
-
+  if(is.na(smooth.interactions)==T){
+     factor.smooth.interactions=smooth.interactions
+     warning('Argument smooth.interactions has been replaced with factor.smooth.interactions.
+              Please update your code as usage of smooth.interactions will not be supported in
+              future versions.')}else{if(smooth.interactions!="previous.arg"){
+     factor.smooth.interactions=smooth.interactions
+     warning('Argument smooth.interactions has been replaced with factor.smooth.interactions.
+              Please update your code as usage of smooth.interactions will not be supported in
+              future versions.')
+     }}
 
   # make an "intercept" term for the null model
   use.dat$intercept=1
@@ -102,18 +112,18 @@ full.subsets.gam=function(use.dat,
        use.dat[,pred.vars.fact[f]]=factor(use.dat[,pred.vars.fact[f]])}
 
    # check which ones should be included as interactions with the smoothers
-   smooth.interactions=pred.vars.fact[which(unlist(lapply(strsplit(pred.vars.fact,
+   factor.smooth.interactions=pred.vars.fact[which(unlist(lapply(strsplit(pred.vars.fact,
       split=".I."),function(x){
-      max(is.na(match(x,smooth.interactions)))}))==0)]
+      max(is.na(match(x,factor.smooth.interactions)))}))==0)]
 
    # make the interaction terms between the factors and continuous predictors
-   if(length(na.omit(smooth.interactions))>0){
-    all.interactions=expand.grid(setdiff(pred.vars.cont,linear.vars),smooth.interactions)
+   if(length(na.omit(factor.smooth.interactions))>0){
+    all.interactions=expand.grid(setdiff(pred.vars.cont,linear.vars),factor.smooth.interactions)
     interaction.terms=paste(all.interactions$Var1,all.interactions$Var2,sep=".by.")
 
     # now interactions between linear continous predictors and factors
     if(length(na.omit(linear.vars))>0){
-     linear.interactions=expand.grid(linear.vars,smooth.interactions)
+     linear.interactions=expand.grid(linear.vars,factor.smooth.interactions)
      linear.interaction.terms=paste(linear.interactions$Var1,linear.interactions$Var2,
                                 sep=".t.")}
    }}
