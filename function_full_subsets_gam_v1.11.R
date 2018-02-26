@@ -6,7 +6,7 @@ full.subsets.gam=function(use.dat,
                           linear.vars=NA,
                           factor.smooth.interactions=pred.vars.fact,
                           factor.factor.interactions=F,
-                          continuous.interactions=F,
+                          smooth.smooth.interactions=F,
                           cov.cutoff=0.28,
                           cor.matrix=NA,
                           size=3,
@@ -127,12 +127,12 @@ full.subsets.gam=function(use.dat,
      linear.interaction.terms=paste(linear.interactions$Var1,linear.interactions$Var2,
                                 sep=".t.")}
    }}
-   # if we want continuous interactions
-   continuous.interaction.terms=NA
-    if(continuous.interactions==T){
+   # if we want smooth.smooth interactions
+   smooth.smooth.interaction.terms=NA
+    if(smooth.smooth.interactions==T){
         if(length(pred.vars.cont)<2){
             stop("You have less than 2 continuous predictors you wish interactions for.
-            Please reset 'continuous.interactions' to 'False'")}
+            Please reset 'smooth.smooth.interactions' to 'False'")}
       continuous.correlations=check.correlations(use.dat[,pred.vars.cont])
       cont.combns=list()
       cont.cmbns.size=size
@@ -152,8 +152,8 @@ full.subsets.gam=function(use.dat,
         cont.combns[which(is.na(cont.combns))]=NULL
         tt=data.frame(lapply(cont.combns,FUN=function(x){
                    do.call("paste",as.list(use.dat[,x]))}))
-        continuous.interaction.terms=unlist(lapply(cont.combns,FUN=paste,collapse=".te."))
-        colnames(tt)=continuous.interaction.terms
+        smooth.smooth.interaction.terms=unlist(lapply(cont.combns,FUN=paste,collapse=".te."))
+        colnames(tt)=smooth.smooth.interaction.terms
     }
 
   all.predictors=na.omit(unique(c(all.predictors,pred.vars.fact)))
@@ -183,7 +183,7 @@ full.subsets.gam=function(use.dat,
      combn(na.omit(c(pred.vars.cont,pred.vars.fact,
                      interaction.terms,
                      linear.interaction.terms,
-                     continuous.interaction.terms)),
+                     smooth.smooth.interaction.terms)),
                      i,simplify=F))
   }
 
