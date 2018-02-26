@@ -1,4 +1,4 @@
-﻿# A simple function for full subsets multiple regression in ecology with R
+# A simple function for full subsets multiple regression in ecology with R
 # 
 # R. Fisher
 # S.K. Wilson

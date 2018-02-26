@@ -322,8 +322,12 @@ full.subsets.gam=function(use.dat,
   for(m in 1:length(success.models)){
         pred.vars.m=unique(
           unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(names(success.models)[m],
-          split="+",fixed=T)),split=".by.",fixed=T)),split=".I.",fixed=T)),
-          split="*",fixed=T)),split=".t.",fixed=T)),split=".te.")))
+          split="+",fixed=T)),
+          split=".by.",fixed=T)),
+          split=".I.",fixed=T)),
+          split="*",fixed=T)),
+          split=".t.",fixed=T)),
+          split=".te.",fixed=T)))
         if(pred.vars.m[1]!="null"){var.inclusions[m,pred.vars.m]=1}}
 
   # now make a table of all the model summary data
