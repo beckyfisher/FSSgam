@@ -5,7 +5,7 @@ full.subsets.gam=function(use.dat,
                           cyclic.vars=NA,
                           linear.vars=NA,
                           smooth.interactions=pred.vars.fact,
-                          factor.interactions=F,
+                          factor.factor.interactions=F,
                           continuous.interactions=F,
                           cov.cutoff=0.28,
                           cor.matrix=NA,
@@ -58,9 +58,9 @@ full.subsets.gam=function(use.dat,
   # if there are two or more factors
   if(length(na.omit(pred.vars.fact))>1){
     # make all the interactions between factors
-    if(factor.interactions==T){
+    if(factor.factor.interactions==T){
         if(length(pred.vars.fact)<2){
-            stop("You have less than 2 factors. Please reset 'factor.interactions' to 'False'")}
+            stop("You have less than 2 factors. Please reset 'factor.factor.interactions' to 'False'")}
       factor.correlations=check.correlations(use.dat[,pred.vars.fact])
       fact.combns=list()
       fact.cmbns.size=size
@@ -263,7 +263,7 @@ full.subsets.gam=function(use.dat,
         is larger than you can realistically fit, try reducing the number of predictors,
         setting the covariance 'cov.cutoff' argument to less than ", cov.cutoff,
         "
-        or setting 'factor.interactions' to FALSE (if you have factors).",sep=""))
+        or setting 'factor.factor.interactions' to FALSE (if you have factors).",sep=""))
        }
 
   # now fit the models by updating the test fit (with or without parallel)
