@@ -17,7 +17,17 @@ full.subsets.gam=function(use.dat,
                           parallel=F,
                           n.cores=4,
                           r2.type="r2.lm.est",
-                          report.unique.r2=F){
+                          report.unique.r2=F,
+                          factor.interactions=NA){
+
+  # manage previous version arguments
+  if(is.na(factor.interactions)!=T){
+     factor.factor.interactions=factor.interactions
+     warning('Argument factor.interactions has been replaced with factor.factor.interactions.
+              Please update your code as usage of factor.interactions will not be supported in
+              future versions.')
+     }
+
 
   # make an "intercept" term for the null model
   use.dat$intercept=1
