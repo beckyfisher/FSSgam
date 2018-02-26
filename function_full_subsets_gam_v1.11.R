@@ -46,10 +46,12 @@ full.subsets.gam=function(use.dat,
                    "The following error message was provided:  ",
                    "  ",
                    null.fit, ""))}
+
   # check for missing predictor values
   if(max(is.na(use.dat[,all.predictors]))==1){
         stop("Predictor variables contain NA and AICc/BIC comparisons are invalid. 
         Remove rows with NA from the input data or interpolate missing predictors.")}
+
   interaction.terms=NA
   # if there are factors
   if(length(na.omit(pred.vars.fact))>0){
@@ -172,7 +174,7 @@ full.subsets.gam=function(use.dat,
     mod.terms=unlist(strsplit(unlist(strsplit(unlist(strsplit(mod.m,
                                split=".by.",fixed=T)),
                                split=".t.",fixed=T)),
-                               split=".te."))
+                               split=".te.",fixed=T))
     n.vars.m=unique(unlist(strsplit(unlist(strsplit(unlist(strsplit(unlist(strsplit(mod.m,
                                   split=".by.",fixed=T)),
                                   split=".I.",fixed=T)),
@@ -215,19 +217,19 @@ full.subsets.gam=function(use.dat,
   for(m in 1:length(use.mods)){
      mod.m=use.mods[[m]]
      cont.smooths=mod.m[which(match(mod.m,setdiff(pred.vars.cont,linear.vars))>0)]
-     by.smooths=mod.m[grep(".by.",mod.m)]
-     te.smooths=mod.m[grep(".te.",mod.m)]
+     by.smooths=mod.m[grep(".by.",mod.m,fixed=T)]
+     te.smooths=mod.m[grep(".te.",mod.m,fixed=T)]
      factor.terms=mod.m[which(match(mod.m,pred.vars.fact)>0)]
      linear.terms=mod.m[which(match(mod.m,linear.vars)>0)]
-     linear.interaction.terms=mod.m[grep(paste(linear.vars,".t.",sep=""),mod.m)]
+     linear.interaction.terms=mod.m[grep(paste(linear.vars,".t.",sep=""),mod.m,fixed=T)]
      all.terms.vec=character()
 
      if(length(cont.smooths>0)){all.terms.vec=c(all.terms.vec,
                   paste("s(",cont.smooths,",k=",k,",bs=",bs.arg,")",sep=""))}
      if(length(by.smooths>0)){all.terms.vec=c(all.terms.vec,
-         paste("s(",gsub(".by.",",by=",by.smooths),",k=",k,",bs=",bs.arg,")",sep=""))}
+         paste("s(",gsub(".by.",",by=",by.smooths,fixed=T),",k=",k,",bs=",bs.arg,")",sep=""))}
      if(length(te.smooths>0)){all.terms.vec=c(all.terms.vec,
-         paste("te(",gsub(".te.",",",te.smooths),",k=",k,",bs=",bs.arg,")",sep=""))}
+         paste("te(",gsub(".te.",",",te.smooths,fixed=T),",k=",k,",bs=",bs.arg,")",sep=""))}
      if(length(linear.interaction.terms>0)){all.terms.vec=c(all.terms.vec,
                gsub(".t.","*",linear.interaction.terms,fixed=T))}
      if(length(factor.terms>0)){all.terms.vec=c(all.terms.vec,factor.terms)}

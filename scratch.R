@@ -9,6 +9,7 @@ cyclic.vars=NA
 linear.vars=NA
 smooth.interactions=pred.vars.fact
 factor.interactions=F
+continuous.interactions=F
 cov.cutoff=0.28
 bs.arg="'cr'"
 null.terms=""
