@@ -81,7 +81,7 @@ write.csv(out.list$predictor.correlations,"predictor_correlations.csv")
 mod.table=mod.table[order(mod.table$AIC),]
 head(mod.table)
 
-best.model=out.list$success.models[[mod.table$modname[1]]]
+best.model=out.list$success.models[[as.character(mod.table$modname[1])]]
 plot(best.model,all.terms=T,pages=1)
 
 gam.check(best.model)
