@@ -78,7 +78,8 @@ full.subsets.gam=function(use.dat,
   # if there are two or more factors
   if(length(na.omit(pred.vars.fact))>1){
     # make all the interactions between factors
-    if(factor.factor.interactions==T){
+    if(class(factor.factor.interactions)=="logical"){
+     if(factor.factor.interactions==T){
         if(length(pred.vars.fact)<2){
             stop("You have less than 2 factors. Please reset 'factor.factor.interactions' to 'False'")}
       factor.correlations=check.correlations(use.dat[,pred.vars.fact])
@@ -105,6 +106,7 @@ full.subsets.gam=function(use.dat,
 
       use.dat=cbind(use.dat,tt)
       pred.vars.fact=c(pred.vars.fact,factor.interaction.terms)
+      }
     }
     # make only specified interactions between factors
     if(class(factor.factor.interactions)=="character"){
@@ -160,7 +162,9 @@ full.subsets.gam=function(use.dat,
    }}
    # if we want smooth.smooth interactions
    smooth.smooth.interaction.terms=NA
-    if(smooth.smooth.interactions==T){
+    # for interactions amonst all continuous predictors
+    if(class(smooth.smooth.interactions)=="logical"){
+      if(smooth.smooth.interactions==T){
         if(length(pred.vars.cont)<2){
             stop("You have less than 2 continuous predictors you wish interactions for.
             Please reset 'smooth.smooth.interactions' to 'False'")}
@@ -172,6 +176,35 @@ full.subsets.gam=function(use.dat,
         if(i<=length(pred.vars.cont)){
         cont.combns=c(cont.combns,
          combn(pred.vars.cont,i,simplify=F)) }}
+        # check which were correlated
+        cont.combns=lapply(cont.combns,FUN=function(x){
+                row.index=which(match(rownames(continuous.correlations),x)>0)
+                col.index=which(match(colnames(continuous.correlations),x)>0)
+                cor.mat.m=continuous.correlations[row.index,col.index]
+                out=x
+                if(max(abs(cor.mat.m[upper.tri(cor.mat.m)]))>cov.cutoff){out=NA}
+                return(out)})
+        cont.combns[which(is.na(cont.combns))]=NULL
+        tt=data.frame(lapply(cont.combns,FUN=function(x){
+                   do.call("paste",as.list(use.dat[,x]))}))
+        smooth.smooth.interaction.terms=unlist(lapply(cont.combns,FUN=paste,collapse=".te."))
+        colnames(tt)=smooth.smooth.interaction.terms
+     }
+    }
+    # for only interactions amonst continuous predictors
+    if(class(smooth.smooth.interactions)=="character"){
+        if(length(smooth.smooth.interactions)<2){
+            stop("You specified less than 2 variables as smooth.smooth.interactions.")}
+        if(max(is.na(match(smooth.smooth.interactions,colnames(use.dat))))==1){
+            stop("Not all specified smooth.smooth.interactions are supplied in use.dat")}
+      continuous.correlations=check.correlations(use.dat[,smooth.smooth.interactions])
+      cont.combns=list()
+      cont.cmbns.size=size
+      if(size>length(smooth.smooth.interactions)){cont.cmbns.size=length(smooth.smooth.interactions)}
+      for(i in 2:cont.cmbns.size){
+        if(i<=length(smooth.smooth.interactions)){
+        cont.combns=c(cont.combns,
+         combn(smooth.smooth.interactions,i,simplify=F)) }}
         # check which were correlated
         cont.combns=lapply(cont.combns,FUN=function(x){
                 row.index=which(match(rownames(continuous.correlations),x)>0)
