@@ -106,6 +106,37 @@ full.subsets.gam=function(use.dat,
       use.dat=cbind(use.dat,tt)
       pred.vars.fact=c(pred.vars.fact,factor.interaction.terms)
     }
+    # make only specified interactions between factors
+    if(class(factor.factor.interactions)=="character"){
+        if(length(factor.factor.interactions)<2){
+            stop("You specified less than 2 factors as factor.factor.interactions.")}
+        if(max(is.na(match(factor.factor.interactions,colnames(use.dat))))==1){
+            stop("Not all specified factor.factor.interactions are supplied in use.dat")}
+      factor.correlations=check.correlations(use.dat[,factor.factor.interactions])
+      fact.combns=list()
+      fact.cmbns.size=size
+      if(size>length(factor.factor.interactions)){fact.cmbns.size=length(factor.factor.interactions)}
+      for(i in 2:fact.cmbns.size){
+        if(i<=length(factor.factor.interactions)){
+        fact.combns=c(fact.combns,
+         combn(factor.factor.interactions,i,simplify=F)) }}
+        # check which were correlated
+        fact.combns=lapply(fact.combns,FUN=function(x){
+                row.index=which(match(rownames(factor.correlations),x)>0)
+                col.index=which(match(colnames(factor.correlations),x)>0)
+                cor.mat.m=factor.correlations[row.index,col.index]
+                out=x
+                if(max(abs(cor.mat.m[upper.tri(cor.mat.m)]))>cov.cutoff){out=NA}
+                return(out)})
+        fact.combns[which(is.na(fact.combns))]=NULL
+        tt=data.frame(lapply(fact.combns,FUN=function(x){
+                   do.call("paste",as.list(use.dat[,x]))}))
+        factor.interaction.terms=unlist(lapply(fact.combns,FUN=paste,collapse=".I."))
+        colnames(tt)=factor.interaction.terms
+
+      use.dat=cbind(use.dat,tt)
+      pred.vars.fact=c(pred.vars.fact,factor.interaction.terms)
+    }
    }
    # make sure the factors are factors
    for(f in 1:length(pred.vars.fact)){
