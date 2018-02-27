@@ -9,7 +9,7 @@ full.subsets.gam=function(use.dat,
                           smooth.smooth.interactions=F,
                           cov.cutoff=0.28,
                           cor.matrix=NA,
-                          size=3,
+                          max.predictors=3,
                           k=5,
                           bs.arg="'cr'",
                           null.terms="",
@@ -19,7 +19,8 @@ full.subsets.gam=function(use.dat,
                           r2.type="r2.lm.est",
                           report.unique.r2=F,
                           factor.interactions="previous.arg",
-                          smooth.interactions="previous.arg"){
+                          smooth.interactions="previous.arg",
+                          size="previous.arg"){
 
   # manage previous version arguments
   if(factor.interactions!="previous.arg"){
@@ -38,6 +39,12 @@ full.subsets.gam=function(use.dat,
               Please update your code as usage of smooth.interactions will not be supported in
               future versions.')
      }}
+  if(size!="previous.arg"){
+     size=max.predictors
+     warning('Argument size has been replaced with max.predictors.
+              Please update your code as usage of size will not be supported in
+              future versions.')
+     }
 
   # make an "intercept" term for the null model
   use.dat$intercept=1
@@ -84,9 +91,9 @@ full.subsets.gam=function(use.dat,
             stop("You have less than 2 factors. Please reset 'factor.factor.interactions' to 'False'")}
       factor.correlations=check.correlations(use.dat[,pred.vars.fact])
       fact.combns=list()
-      fact.cmbns.size=size
-      if(size>length(pred.vars.fact)){fact.cmbns.size=length(pred.vars.fact)}
-      for(i in 2:fact.cmbns.size){
+      fact.cmbns.max.predictors=max.predictors
+      if(max.predictors>length(pred.vars.fact)){fact.cmbns.max.predictors=length(pred.vars.fact)}
+      for(i in 2:fact.cmbns.max.predictors){
         if(i<=length(pred.vars.fact)){
         fact.combns=c(fact.combns,
          combn(pred.vars.fact,i,simplify=F)) }}
@@ -116,9 +123,9 @@ full.subsets.gam=function(use.dat,
             stop("Not all specified factor.factor.interactions are supplied in use.dat")}
       factor.correlations=check.correlations(use.dat[,factor.factor.interactions])
       fact.combns=list()
-      fact.cmbns.size=size
-      if(size>length(factor.factor.interactions)){fact.cmbns.size=length(factor.factor.interactions)}
-      for(i in 2:fact.cmbns.size){
+      fact.cmbns.max.predictors=max.predictors
+      if(max.predictors>length(factor.factor.interactions)){fact.cmbns.max.predictors=length(factor.factor.interactions)}
+      for(i in 2:fact.cmbns.max.predictors){
         if(i<=length(factor.factor.interactions)){
         fact.combns=c(fact.combns,
          combn(factor.factor.interactions,i,simplify=F)) }}
@@ -170,9 +177,9 @@ full.subsets.gam=function(use.dat,
             Please reset 'smooth.smooth.interactions' to 'False'")}
       continuous.correlations=check.correlations(use.dat[,pred.vars.cont])
       cont.combns=list()
-      cont.cmbns.size=size
-      if(size>length(pred.vars.cont)){cont.cmbns.size=length(pred.vars.cont)}
-      for(i in 2:cont.cmbns.size){
+      cont.cmbns.max.predictors=max.predictors
+      if(max.predictors>length(pred.vars.cont)){cont.cmbns.max.predictors=length(pred.vars.cont)}
+      for(i in 2:cont.cmbns.max.predictors){
         if(i<=length(pred.vars.cont)){
         cont.combns=c(cont.combns,
          combn(pred.vars.cont,i,simplify=F)) }}
@@ -199,9 +206,9 @@ full.subsets.gam=function(use.dat,
             stop("Not all specified smooth.smooth.interactions are supplied in use.dat")}
       continuous.correlations=check.correlations(use.dat[,smooth.smooth.interactions])
       cont.combns=list()
-      cont.cmbns.size=size
-      if(size>length(smooth.smooth.interactions)){cont.cmbns.size=length(smooth.smooth.interactions)}
-      for(i in 2:cont.cmbns.size){
+      cont.cmbns.max.predictors=max.predictors
+      if(max.predictors>length(smooth.smooth.interactions)){cont.cmbns.max.predictors=length(smooth.smooth.interactions)}
+      for(i in 2:cont.cmbns.max.predictors){
         if(i<=length(smooth.smooth.interactions)){
         cont.combns=c(cont.combns,
          combn(smooth.smooth.interactions,i,simplify=F)) }}
@@ -239,10 +246,10 @@ full.subsets.gam=function(use.dat,
 
   # make all possible combinations
   if(length(na.omit(c(pred.vars.cont,
-                      pred.vars.fact)))<size){
-        stop("Model size is greater than the number of predictors.")}
+                      pred.vars.fact)))<max.predictors){
+        stop("Model max.predictors is greater than the number of predictors.")}
   all.mods=list()
-  for(i in 1:size){
+  for(i in 1:max.predictors){
     all.mods=c(all.mods,
      combn(na.omit(c(pred.vars.cont,pred.vars.fact,
                      interaction.terms,
@@ -281,8 +288,8 @@ full.subsets.gam=function(use.dat,
      if(max(abs(cor.mat.m[upper.tri(cor.mat.m)]))>cov.cutoff){use.mods[[m]]=NA}
     }
 
-    # remove the model if there are more than the number of terms specified in "size"
-    if(length(n.vars.m)>size){use.mods[[m]]=NA}
+    # remove the model if there are more than the number of terms specified in "max.predictors"
+    if(length(n.vars.m)>max.predictors){use.mods[[m]]=NA}
 
     # remove the models if a continuous predictor occurs as a by, or a te, and as a single term
     if(length(cont.vars)>length(unique(cont.vars))){use.mods[[m]]=NA}

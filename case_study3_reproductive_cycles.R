@@ -56,7 +56,7 @@ out.list=full.subsets.gam(use.dat=use.dat,
                          cyclic.vars=cyclic.vars,k=5,
                          factor.factor.interactions=T,
                          smooth.smooth.interactions=T,
-                         parallel=T,size=4)
+                         parallel=T,max.predictors=4)
 names(out.list)
 
 write.csv(out.list$predictor.correlations,"predictor_correlations.csv")
