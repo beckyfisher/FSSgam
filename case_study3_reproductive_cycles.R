@@ -101,7 +101,7 @@ sex.ltys=c(1,2)
 sex.pchs=c(19,21)
 sex.lvls=levels(model.dat$Sex)
 spp.lvls=levels(model.dat$Species)
-sex.cols=c("black","darkgrey")
+sex.cols=c("blue","red")
 
 # create some symbology and colour schemes for plotting
 model.dat$pchs=16
