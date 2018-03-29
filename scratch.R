@@ -3,7 +3,7 @@ use.dat
 test.fit
 pred.vars.cont=NA
 pred.vars.fact=NA
-size=3
+max.predictors=3
 k=5
 cyclic.vars=NA
 linear.vars=NA
@@ -19,3 +19,6 @@ n.cores=4
 r2.type="r2.lm.est"
 report.unique.r2=F
 cor.matrix=NA
+factor.interactions="previous.arg"
+smooth.interactions="previous.arg"
+size="previous.arg"
