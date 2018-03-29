@@ -468,8 +468,11 @@ full.subsets.gam=function(use.dat,
         if(class(x)[1]=="gam"){
           edf.m=summary(x)$edf
           p.coeff.m=summary(x)$p.coeff}else{
-           edf.m=summary(x$gam)$edf
-           p.coeff.m=summary(x$gam)$p.coeff}
+           #edf.m=summary(x$gam)$edf
+           #p.coeff.m=summary(x$gam)$p.coeff
+           edf.m=x$gam$edf
+           p.coeff.m=x$gam$p.coeff
+           }
         edf.m[which(edf.m<1)]=1 # any edf<0 are reset to 1 to ensure proper
                                 # parameter count when there is shrinkage (bs='cc')
         return(sum(c(edf.m,length(p.coeff.m))))})),2)
