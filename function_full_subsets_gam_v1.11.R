@@ -478,7 +478,8 @@ full.subsets.gam=function(use.dat,
         return(sum(c(edf.m,length(p.coeff.m))))})),2)
   # count the edf values less than 0.25 to check for serious shrinkage
   mod.data.out$edf.less.1=unlist(lapply(success.models,FUN=function(x){
-        if(class(x)[1]=="gam"){edf.m=summary(x)$edf}else{edf.m=summary(x$gam)$edf}
+        #if(class(x)[1]=="gam"){edf.m=summary(x)$edf}else{edf.m=summary(x$gam)$edf}
+        if(class(x)[1]=="gam"){edf.m=summary(x)$edf}else{edf.m=x$gam$edf}
         return(length(which(edf.m<0.25)))}))
   # now add columns for the included predictors to the dataframe
   mod.data.out=cbind(mod.data.out,var.inclusions)
