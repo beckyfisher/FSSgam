@@ -1,6 +1,7 @@
 ### FSSgam
 Consists of two functions: full.subsets.gam and check.correlations
-requires: doParallel, MuMIn, gamm4, mgcv, nnet
+
+Requires: doParallel, MuMIn, gamm4, mgcv, nnet
 
 ### Summary ################################################################
  
@@ -14,6 +15,8 @@ The function takes a range of arguments that allow control over the model set be
 
 The use of the function is demonstrated via case studies that highlight how appropriate model sets can be easily constructed, and the broader utility of the approach for exploratory ecology.
 
+### Argument and outputs
+See Table S1 and Table S2 for argument details and an explanation of outputs returned by the function.
 
 ### known issues
 This function assumes you know what you are doing. Non-gaussian mixed model
