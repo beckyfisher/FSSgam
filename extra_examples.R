@@ -1,22 +1,124 @@
+# Source functions----
+library(RCurl)
+function_full_subsets_gam <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_full_subsets_gam_v1.11.R")
+eval(parse(text = function_full_subsets_gam))
+
+function_check_correlations <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_check_correlations_v1.00.R")
+eval(parse(text = function_check_correlations))
+
+# load data
+dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/extra_examples_coral_data.csv"))
+colnames(dat)
+head(dat)
+str(dat)
+
+require(mgcv)
+require(MuMIn)
+require(doParallel)
+require(plyr)
 
 
-cat.preds=c("survey","bleach_pres","dredge_pres","dhw_fact" )
-null.vars=c("site")
-cont.preds=c("Av_wave_height","Depth")
+# define the
+cat.preds=c("Survey","bleach.pres","dredge.pres","dhw.fact")
+null.vars=c("Site")
+cont.preds=c("av.wave","Depth")
 
-#model
-use.dat=na.omit(dat[,c(null.vars,cat.preds,cont.preds,"coral")])
-  Model1=uGamm(coral~s(Latitude,k=4,bs='cr'),
-              family=gaussian(), random=~(1|site),
+# get rid of NA's and unused columns
+use.dat=na.omit(dat[,c(null.vars,cat.preds,cont.preds,"allcoral","totalpoints")])
+
+#test.fit model for all coral, with total points as trials
+Model1=uGamm(cbind(use.dat$allcoral,use.dat$totalpoints-use.dat$allcoral)~s(Depth,k=4,bs='cr'),
+              family=binomial(), random=~(1|Site),
              data=use.dat,
              lme4=TRUE)
 
-  out.list=full.subsets.gam(use.dat=use.dat,max.predictors=3,
-                            test.fit=Model1,k=5,
-                            pred.vars.cont=cont.preds,
-                            pred.vars.fact=cat.preds,
-                            factor.factor.interactions=TRUE)
+out.list=full.subsets.gam(use.dat=use.dat,
+                          test.fit=Model1,
+                          pred.vars.cont=cont.preds,
+                          pred.vars.fact=cat.preds,
+                          factor.factor.interactions=TRUE,
+                          factor.smooth.interactions=NA)
 
+# examine the output
+names(out.list)
+out.list$failed.models
+length(out.list$success.models)
+mod.table=out.list$mod.data.out
+mod.table=mod.table[order(mod.table$AICc),]
+head(mod.table)
+
+
+### no example running across a range of response variables
+resp.vars=c("Acropora.spp.","Turbinaria.spp.","Pocillopora.spp.","Porites.spp.")
+# get rid of NA's and unused columns
+use.dat=na.omit(dat[,c(null.vars,cat.preds,cont.preds,resp.vars,"totalpoints")])
+
+out.all=list()
+var.imp=list()
+fss.all=list()
+top.all=list()
+i=1
+pdf(file="mod_fits_all.pdf",onefile=T)
+for(i in 1:length(resp.vars)){
+ use.dat$response=use.dat[,resp.vars[i]]
+ #test.fit model for the particular coral i, with total points as trials
+ Model1=uGamm(cbind(use.dat$response,use.dat$totalpoints-use.dat$response)~s(Depth,k=4,bs='cr'),
+              family=binomial(), random=~(1|Site),
+             data=use.dat,
+             lme4=TRUE)
+
+ out.list=full.subsets.gam(use.dat=use.dat,
+                          test.fit=Model1,
+                          pred.vars.cont=cont.preds,
+                          pred.vars.fact=cat.preds,
+                          factor.factor.interactions=TRUE,
+                          factor.smooth.interactions=NA)
+ fss.all=c(fss.all,list(out.list))
+ mod.table=out.list$mod.data.out
+ mod.table=mod.table[order(mod.table$AICc),]
+ out.i=mod.table
+ out.all=c(out.all,list(out.i))
+ var.imp=c(var.imp,list(out.list$variable.importance$aic$variable.weights.raw))
+ all.less.2AICc=mod.table[which(mod.table$delta.AICc<2),]
+ top.all=c(top.all,list(all.less.2AICc))
+
+ # plot the all best models
+ par(oma=c(1,1,4,1))
+ for(r in 1:nrow(all.less.2AICc)){
+ best.model.name=as.character(all.less.2AICc$modname[r])
+ best.model=out.list$success.models[[best.model.name]]
+ if(best.model.name!="null"){
+  plot(best.model$gam,all.terms=T,pages=1,residuals=T,pch=16)
+  mtext(side=3,text=resp.vars[i],outer=T)}
+ }
+}
+dev.off()
+
+names(out.all)=resp.vars
+names(var.imp)=resp.vars
+names(top.all)=resp.vars
+names(fss.all)=resp.vars
+
+all.mod.fits=do.call("rbind",out.all)
+all.var.imp=do.call("rbind",var.imp)
+top.mod.fits=do.call("rbind",top.all)
+
+require(car)
+require(doBy)
+require(gplots)
+require(RColorBrewer)
+
+pdf(file="var_importance.pdf",height=5,width=7,pointsize=10)
+heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
+                     col=colorRampPalette(c("white","yellow","orange","red"))(30),
+                     trace="none",key.title = "",keysize=2,
+                     notecol="black",key=T,
+                     sepcolor = "black",margins=c(12,14), lhei=c(3,10),lwid=c(3,10),
+                     Rowv=FALSE,Colv=FALSE)
+dev.off()
+
+write.csv(all.mod.fits,"all_model_fits.csv")
+write.csv(top.mod.fits,"top_model_fits.csv")
 
 
 
