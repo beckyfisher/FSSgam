@@ -37,7 +37,8 @@ out.list=full.subsets.gam(use.dat=use.dat,
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds,
                           factor.factor.interactions=TRUE,
-                          factor.smooth.interactions=NA)
+                          factor.smooth.interactions=NA,
+                          r2.type="r2")
 
 # examine the output
 names(out.list)
@@ -72,7 +73,8 @@ for(i in 1:length(resp.vars)){
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds,
                           factor.factor.interactions=TRUE,
-                          factor.smooth.interactions=NA)
+                          factor.smooth.interactions=NA,
+                          r2.type="r2")
  fss.all=c(fss.all,list(out.list))
  mod.table=out.list$mod.data.out
  mod.table=mod.table[order(mod.table$AICc),]
