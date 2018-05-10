@@ -49,7 +49,7 @@ mod.table=mod.table[order(mod.table$AICc),]
 head(mod.table)
 
 
-### no example running across a range of response variables
+### now example running across a range of response variables
 resp.vars=c("Acropora.spp.","Turbinaria.spp.","Pocillopora.spp.","Porites.spp.")
 # get rid of NA's and unused columns
 use.dat=na.omit(dat[,c(null.vars,cat.preds,cont.preds,resp.vars,"totalpoints")])
