@@ -436,6 +436,7 @@ full.subsets.gam=function(use.dat,
 
   # now make a table of all the model summary data
   mod.data.out=data.frame("modname"=names(success.models))
+  mod.data.out$formula=lapply(success.models,FUN=function(x){as.character(formula(x)[3])})
   mod.data.out$AICc=unlist(lapply(success.models,FUN=AICc))
   mod.data.out$BIC=unlist(lapply(success.models,FUN=BIC))
   mod.data.out$delta.AICc=round(mod.data.out$AICc-min(mod.data.out$AICc),3)
@@ -505,7 +506,7 @@ full.subsets.gam=function(use.dat,
   return(list(mod.data.out=mod.data.out,
               used.data=use.dat,
               predictor.correlations=cor.matrix,
-              mod.formula=mod.formula,
+              #mod.formula=mod.formula,
               failed.models=failed.models,
               success.models=success.models,
               variable.importance=
