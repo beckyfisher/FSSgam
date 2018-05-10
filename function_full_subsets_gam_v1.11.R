@@ -505,6 +505,7 @@ full.subsets.gam=function(use.dat,
   return(list(mod.data.out=mod.data.out,
               used.data=use.dat,
               predictor.correlations=cor.matrix,
+              mod.formula=mod.formula,
               failed.models=failed.models,
               success.models=success.models,
               variable.importance=
