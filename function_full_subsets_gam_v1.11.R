@@ -198,7 +198,7 @@ full.subsets.gam=function(use.dat,
         colnames(tt)=smooth.smooth.interaction.terms
      }
     }
-    # for only interactions amonst continuous predictors
+    # for only specific interactions amonst continuous predictors
     if(class(smooth.smooth.interactions)=="character"){
         if(length(smooth.smooth.interactions)<2){
             stop("You specified less than 2 variables as smooth.smooth.interactions.")}

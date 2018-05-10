@@ -246,7 +246,7 @@ scale_y_discrete(limits = c("CPN",
   geom_text(aes(label=label))
 gg.importance.scores
 
-ggsave("Langlois.importance.scores.png",width = 15, height = 7,units = "cm")
+ggsave("Langlois.importance.scores.pdf",width = 15, height = 7,units = "cm")
 
 ### now  make a nice plot of the most interesting models
 library(gridExtra)
