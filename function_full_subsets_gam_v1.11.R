@@ -319,9 +319,11 @@ full.subsets.gam=function(use.dat,
                   paste("s(",cont.smooths,",k=",k,",bs=",bs.arg,")",sep=""))}
      if(length(by.smooths>0)){all.terms.vec=c(all.terms.vec,
          paste("s(",gsub(".by.",",by=",by.smooths,fixed=T),",k=",k,",bs=",bs.arg,")",sep=""))}
-     if(length(te.smooths>0)){all.terms.vec=c(all.terms.vec,
+     if(length(te.smooths>0) & class(test.fit)[[1]]!="gamm4"){all.terms.vec=c(all.terms.vec,
          paste("te(",gsub(".te.",",",te.smooths,fixed=T),",k=",k,",bs=",bs.arg,")",sep=""))}
-     if(length(linear.interaction.terms>0)){all.terms.vec=c(all.terms.vec,
+     if(length(te.smooths>0) & class(test.fit)[[1]]=="gamm4"){all.terms.vec=c(all.terms.vec,
+         paste("t2(",gsub(".te.",",",te.smooths,fixed=T),",k=",k,",bs=",bs.arg,")",sep=""))}
+      if(length(linear.interaction.terms>0)){all.terms.vec=c(all.terms.vec,
                gsub(".t.","*",linear.interaction.terms,fixed=T))}
      if(length(factor.terms>0)){all.terms.vec=c(all.terms.vec,factor.terms)}
      if(length(linear.terms>0)){all.terms.vec=c(all.terms.vec,linear.terms)}

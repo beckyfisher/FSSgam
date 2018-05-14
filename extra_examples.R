@@ -38,6 +38,7 @@ out.list=full.subsets.gam(use.dat=use.dat,
                           pred.vars.fact=cat.preds,
                           factor.factor.interactions=TRUE,
                           factor.smooth.interactions=NA,
+                          smooth.smooth.interactions=TRUE,
                           r2.type="r2")
 
 # examine the output
