@@ -122,29 +122,33 @@ full.subsets.gam=function(use.dat,
         if(max(is.na(match(factor.factor.interactions,colnames(use.dat))))==1){
             stop("Not all specified factor.factor.interactions are supplied in use.dat")}
       factor.correlations=check.correlations(use.dat[,factor.factor.interactions])
-      fact.combns=list()
-      fact.cmbns.max.predictors=max.predictors
-      if(max.predictors>length(factor.factor.interactions)){fact.cmbns.max.predictors=length(factor.factor.interactions)}
-      for(i in 2:fact.cmbns.max.predictors){
-        if(i<=length(factor.factor.interactions)){
-        fact.combns=c(fact.combns,
-         combn(factor.factor.interactions,i,simplify=F)) }}
-        # check which were correlated
-        fact.combns=lapply(fact.combns,FUN=function(x){
-                row.index=which(match(rownames(factor.correlations),x)>0)
-                col.index=which(match(colnames(factor.correlations),x)>0)
-                cor.mat.m=factor.correlations[row.index,col.index]
-                out=x
-                if(max(abs(cor.mat.m[upper.tri(cor.mat.m)]))>cov.cutoff){out=NA}
-                return(out)})
-        fact.combns[which(is.na(fact.combns))]=NULL
-        tt=data.frame(lapply(fact.combns,FUN=function(x){
-                   do.call("paste",as.list(use.dat[,x]))}))
-        factor.interaction.terms=unlist(lapply(fact.combns,FUN=paste,collapse=".I."))
-        colnames(tt)=factor.interaction.terms
+      #if(min(factor.correlations,na.rm=T)>cov.cutoff){
+      #   stop("All factors have a correlation higher than your cutoff value")}
+      if(min(factor.correlations,na.rm=T)<cov.cutoff){
+        fact.combns=list()
+        fact.cmbns.max.predictors=max.predictors
+        if(max.predictors>length(factor.factor.interactions)){fact.cmbns.max.predictors=length(factor.factor.interactions)}
+        for(i in 2:fact.cmbns.max.predictors){
+          if(i<=length(factor.factor.interactions)){
+          fact.combns=c(fact.combns,
+           combn(factor.factor.interactions,i,simplify=F)) }}
+          # check which were correlated
+          fact.combns=lapply(fact.combns,FUN=function(x){
+                  row.index=which(match(rownames(factor.correlations),x)>0)
+                  col.index=which(match(colnames(factor.correlations),x)>0)
+                  cor.mat.m=factor.correlations[row.index,col.index]
+                  out=x
+                  if(max(abs(cor.mat.m[upper.tri(cor.mat.m)]))>cov.cutoff){out=NA}
+                  return(out)})
+          fact.combns[which(is.na(fact.combns))]=NULL
+          tt=data.frame(lapply(fact.combns,FUN=function(x){
+                     do.call("paste",as.list(use.dat[,x]))}))
+          factor.interaction.terms=unlist(lapply(fact.combns,FUN=paste,collapse=".I."))
+          colnames(tt)=factor.interaction.terms
 
-      use.dat=cbind(use.dat,tt)
-      pred.vars.fact=c(pred.vars.fact,factor.interaction.terms)
+        use.dat=cbind(use.dat,tt)
+        pred.vars.fact=c(pred.vars.fact,factor.interaction.terms)
+      }
     }
    }
    # make sure the factors are factors
