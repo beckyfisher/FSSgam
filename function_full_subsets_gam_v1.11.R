@@ -79,7 +79,9 @@ full.subsets.gam=function(use.dat,
         stop("Predictor variables contain NA and AICc/BIC comparisons are invalid. 
         Remove rows with NA from the input data or interpolate missing predictors.")}
 
+  # make the interaction terms vector
   interaction.terms=NA
+
   # if there are factors
   if(length(na.omit(pred.vars.fact))>0){
   # if there are two or more factors
@@ -124,7 +126,7 @@ full.subsets.gam=function(use.dat,
       factor.correlations=check.correlations(use.dat[,factor.factor.interactions])
       #if(min(factor.correlations,na.rm=T)>cov.cutoff){
       #   stop("All factors have a correlation higher than your cutoff value")}
-      if(min(factor.correlations,na.rm=T)<cov.cutoff){
+      if(length(which(factor.correlations<cov.cutoff))>1){
         fact.combns=list()
         fact.cmbns.max.predictors=max.predictors
         if(max.predictors>length(factor.factor.interactions)){fact.cmbns.max.predictors=length(factor.factor.interactions)}
@@ -170,7 +172,9 @@ full.subsets.gam=function(use.dat,
      linear.interactions=expand.grid(linear.vars,factor.smooth.interactions)
      linear.interaction.terms=paste(linear.interactions$Var1,linear.interactions$Var2,
                                 sep=".t.")}
-   }}
+    }
+   }
+
    # if we want smooth.smooth interactions
    smooth.smooth.interaction.terms=NA
     # for interactions amonst all continuous predictors
