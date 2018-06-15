@@ -95,7 +95,7 @@ for(i in 1:length(resp.vars)){
                     +s(SQRTSA,bs='cr',k=4)+s(site,bs="re"),
                     family=resp.vars.fams[[i]],
                     data=use.dat)
- out.list=full.subsets.gam(use.dat=use.dat,size=2,   # limit size here because null model already complex
+ out.list=full.subsets.gam(use.dat=use.dat,max.predictors=2,   # limit size here because null model already complex
                            test.fit=Model1,k=3,
                            pred.vars.cont=cont.preds,
                            pred.vars.fact=cat.preds,
