@@ -180,8 +180,8 @@ dev.off()
 
 # Load the dataset
 dat.taxa <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_all.var.imp.csv?token=AOSO6ma3MdgxTWJgICEtKgUVUGiZkRW0ks5ZbagowA%3D%3D"))%>%
-  # rename(resp.var=X)%>%
-  # gather(key=predictor,value=importance,2:ncol(.))%>%
+  rename(resp.var=X)%>%
+  gather(key=predictor,value=importance,2:ncol(.))%>%
   glimpse()
 
 
@@ -263,8 +263,6 @@ scale_y_discrete(limits = c("CPN",
   Theme1+
   geom_text(aes(label=label))
 gg.importance.scores
-
-ggsave("Langlois.importance.scores.pdf",width = 15, height = 7,units = "cm")
 
 
 # Part 3 - plots of the most parsimonious models----
