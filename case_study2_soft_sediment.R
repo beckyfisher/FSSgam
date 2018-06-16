@@ -45,6 +45,7 @@ library(RCurl) #needed to download data from GitHub
 
 rm(list=ls())
 
+
 # Source functions----
 function_full_subsets_gam <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_full_subsets_gam_v1.11.R?token=AOSO6tZYAozKTAZ1Kt-aqlQIsiKuxONjks5ZZCtiwA%3D%3D", ssl.verifypeer = FALSE)
 eval(parse(text = function_full_subsets_gam))
@@ -63,8 +64,8 @@ dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam
   mutate(sqrt.X2mm=sqrt(X2mm))%>%
   mutate(sqrt.X1mm=sqrt(X1mm))%>%
   mutate(sqrt.X500um=sqrt(X500um))%>%
-  na.omit()
-head(dat,2)
+  na.omit()%>%
+  glimpse()
 
 # Set predictor variables---
 pred.vars=c("depth","X4mm","X2mm","X1mm","X500um","X250um","X125um","X63um",
@@ -77,14 +78,18 @@ pred.vars=c("depth","X4mm","X2mm","X1mm","X500um","X250um","X125um","X63um",
 round(cor(dat[,pred.vars]),2)
 # nothing is highly correlated 
 
-pdf(file=paste(name,"predictor_plots.pdf",sep = "_"),onefile=T)
-for(p in 1:length(pred.vars)){
-  par(mfrow=c(2,1))
-  plot.dat=dat
-  hist(plot.dat[,pred.vars[p]],main=pred.vars[p])
-  plot(plot.dat[,pred.vars[p]])
+# Plot of likely transformations
+par(mfrow=c(3,2))
+for (i in pred.vars) {
+  x<-dat[ ,i]
+  x = as.numeric(unlist(x))
+  hist((x))#Looks best
+  plot((x),main = paste(i))
+  hist(sqrt(x))
+  plot(sqrt(x))
+  hist(log(x+1))
+  plot(log(x+1))
 }
-dev.off()
 
 # Review of individual predictors - we have to make sure they have an even distribution---
 #If the data are squewed to low numbers try sqrt>log or if squewed to high numbers try ^2 of ^3
@@ -104,7 +109,6 @@ for(i in 1:length(unique.vars)){
     unique.vars.use=c(unique.vars.use,unique.vars[i])}
 }
 unique.vars.use     
-write.csv(unique.vars.use,file=paste(name,"unique.vars.use.csv",sep = "_"))
 
 # Run the full subset model selection----
 resp.vars=unique.vars.use
@@ -176,9 +180,10 @@ dev.off()
 
 # Load the dataset
 dat.taxa <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_all.var.imp.csv?token=AOSO6ma3MdgxTWJgICEtKgUVUGiZkRW0ks5ZbagowA%3D%3D"))%>%
-  rename(resp.var=X)%>%
-  gather(key=predictor,value=importance,2:ncol(.))
-head(dat.taxa,5)
+  # rename(resp.var=X)%>%
+  # gather(key=predictor,value=importance,2:ncol(.))%>%
+  glimpse()
+
 
 
 # Plotting defaults----
