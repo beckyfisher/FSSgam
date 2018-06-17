@@ -54,7 +54,9 @@ out.list=full.subsets.gam(use.dat=use.dat,
                          pred.vars.cont=cont.vars,
                          pred.vars.fact=factor.vars,
                          cyclic.vars=cyclic.vars,k=5,
-                         parallel=T,factor.interactions=T,size=4)
+                         factor.factor.interactions=T,
+                         smooth.smooth.interactions=T,
+                         parallel=T,max.predictors=4)
 names(out.list)
 
 write.csv(out.list$predictor.correlations,"predictor_correlations.csv")
@@ -79,7 +81,7 @@ write.csv(out.list$predictor.correlations,"predictor_correlations.csv")
 mod.table=mod.table[order(mod.table$AIC),]
 head(mod.table)
 
-best.model=out.list$success.models[[mod.table$modname[1]]]
+best.model=out.list$success.models[[as.character(mod.table$modname[1])]]
 plot(best.model,all.terms=T,pages=1)
 
 gam.check(best.model)
@@ -99,7 +101,7 @@ sex.ltys=c(1,2)
 sex.pchs=c(19,21)
 sex.lvls=levels(model.dat$Sex)
 spp.lvls=levels(model.dat$Species)
-sex.cols=c("black","darkgrey")
+sex.cols=c("blue","red")
 
 # create some symbology and colour schemes for plotting
 model.dat$pchs=16
