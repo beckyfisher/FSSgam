@@ -164,7 +164,7 @@ full.subsets.gam=function(use.dat,
 
    # make the interaction terms between the factors and continuous predictors
    if(length(na.omit(factor.smooth.interactions))>0){
-    all.interactions=expand.grid(setdiff(pred.vars.cont,linear.vars),factor.smooth.interactions)
+    all.interactions=expand.grid(pred.vars.cont,factor.smooth.interactions)
     interaction.terms=paste(all.interactions$Var1,all.interactions$Var2,sep=".by.")
 
     # now interactions between linear continous predictors and factors
@@ -173,6 +173,7 @@ full.subsets.gam=function(use.dat,
      linear.interaction.terms=paste(linear.interactions$Var1,linear.interactions$Var2,
                                 sep=".t.")}
     }
+
    }
 
    # if we want smooth.smooth interactions
