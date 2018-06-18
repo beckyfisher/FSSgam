@@ -148,8 +148,8 @@ heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
                      Rowv=FALSE,Colv=FALSE)
 dev.off()
 
-write.csv(all.mod.fits,"all_model_fits_functional_biomass.csv")
-write.csv(top.mod.fits,"top_model_fits_functional_biomass.csv")
+write.csv(all.mod.fits[,-2],"all_model_fits_functional_biomass.csv")
+write.csv(top.mod.fits[,-2],"top_model_fits_functional_biomass.csv")
 write.csv(out.list$predictor.correlations,"predictor_correlations.csv")
 
 #### pretty plots of best models -----------------------------------------------
