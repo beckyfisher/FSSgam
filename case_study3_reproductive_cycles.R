@@ -70,7 +70,7 @@ length(out.list$success.models)
 mod.table=out.list$mod.data.out
 mod.table=mod.table[order(mod.table$AICc),]
 head(mod.table)
-write.csv(mod.table,"modfits.csv")
+write.csv(mod.table[,-2],"modfits.csv")
 
 barplot(out.list$variable.importance$bic$variable.weights.raw,las=2,
         ylab="Relative variable importance")

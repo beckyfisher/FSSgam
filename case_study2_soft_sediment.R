@@ -162,7 +162,7 @@ names(out.all)=resp.vars
 names(var.imp)=resp.vars
 all.mod.fits=do.call("rbind",out.all)
 all.var.imp=do.call("rbind",var.imp)
-write.csv(all.mod.fits,file=paste(name,"all.mod.fits.csv",sep="_"))
+write.csv(all.mod.fits[,-2],file=paste(name,"all.mod.fits.csv",sep="_"))
 write.csv(all.var.imp,file=paste(name,"all.var.imp.csv",sep="_"))
 
 # Generic importance plots-
