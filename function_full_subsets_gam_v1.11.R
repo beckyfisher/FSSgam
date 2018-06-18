@@ -157,21 +157,47 @@ full.subsets.gam=function(use.dat,
    for(f in 1:length(pred.vars.fact)){
        use.dat[,pred.vars.fact[f]]=factor(use.dat[,pred.vars.fact[f]])}
 
-   # check which ones should be included as interactions with the smoothers
-   factor.smooth.interactions=pred.vars.fact[which(unlist(lapply(strsplit(pred.vars.fact,
-      split=".I."),function(x){
-      max(is.na(match(x,factor.smooth.interactions)))}))==0)]
 
-   # make the interaction terms between the factors and continuous predictors
-   if(length(na.omit(factor.smooth.interactions))>0){
-    all.interactions=expand.grid(pred.vars.cont,factor.smooth.interactions)
-    interaction.terms=paste(all.interactions$Var1,all.interactions$Var2,sep=".by.")
+   # check which factors should be included as interactions with the smoothers
+   # for if only factors are specified (including default)
+   if(class(factor.smooth.interactions)=="character"){
 
-    # now interactions between linear continous predictors and factors
-    if(length(na.omit(linear.vars))>0){
-     linear.interactions=expand.grid(linear.vars,factor.smooth.interactions)
-     linear.interaction.terms=paste(linear.interactions$Var1,linear.interactions$Var2,
-                                sep=".t.")}
+     factor.smooth.interactions=pred.vars.fact[which(unlist(lapply(strsplit(pred.vars.fact,
+        split=".I."),function(x){
+        max(is.na(match(x,factor.smooth.interactions)))}))==0)]
+     # make the interaction terms between the factors and continuous predictors
+
+     if(length(na.omit(factor.smooth.interactions))>0){
+      all.interactions=expand.grid(pred.vars.cont,factor.smooth.interactions)
+      interaction.terms=paste(all.interactions$Var1,all.interactions$Var2,sep=".by.")
+
+      # now interactions between linear continous predictors and factors
+      if(length(na.omit(linear.vars))>0){
+       linear.interactions=expand.grid(linear.vars,factor.smooth.interactions)
+       linear.interaction.terms=paste(linear.interactions$Var1,linear.interactions$Var2,
+                                  sep=".t.")}
+      }
+    }
+   if(class(factor.smooth.interactions)=="list"){
+     cont.var.interactions=factor.smooth.interactions$cont.vars
+     lin.var.interactions=factor.smooth.interactions$lin.vars
+     factor.smooth.interactions=factor.smooth.interactions$fact.vars
+
+     factor.smooth.interactions=pred.vars.fact[which(unlist(lapply(strsplit(pred.vars.fact,
+        split=".I."),function(x){
+        max(is.na(match(x,factor.smooth.interactions)))}))==0)]
+     # make the interaction terms between the factors and continuous predictors
+
+     if(length(na.omit(factor.smooth.interactions))>0){
+      all.interactions=expand.grid(cont.var.interactions,factor.smooth.interactions)
+      interaction.terms=paste(all.interactions$Var1,all.interactions$Var2,sep=".by.")
+
+      # now interactions between linear continous predictors and factors
+      if(length(na.omit(lin.var.interactions))>0){
+       linear.interactions=expand.grid(linear.var.interactions,factor.smooth.interactions)
+       linear.interaction.terms=paste(linear.interactions$Var1,linear.interactions$Var2,
+                                  sep=".t.")}
+      }
     }
 
    }
