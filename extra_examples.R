@@ -6,11 +6,6 @@ eval(parse(text = function_full_subsets_gam))
 function_check_correlations <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_check_correlations_v1.00.R")
 eval(parse(text = function_check_correlations))
 
-# load data
-dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/extra_examples_coral_data.csv"))
-colnames(dat)
-head(dat)
-str(dat)
 
 require(mgcv)
 require(MuMIn)
@@ -18,7 +13,14 @@ require(doParallel)
 require(plyr)
 
 
-# define the
+################################################################################
+### Example showing use of uGamm to allow fitting with gamm4  ##################
+# load data  coral data set
+dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/extra_examples_coral_data.csv"))
+colnames(dat)
+head(dat)
+str(dat)
+
 cat.preds=c("Survey","bleach.pres","dredge.pres","dhw.fact")
 null.vars=c("Site")
 cont.preds=c("av.wave","Depth")
@@ -49,8 +51,7 @@ mod.table=out.list$mod.data.out
 mod.table=mod.table[order(mod.table$AICc),]
 head(mod.table)
 
-
-### now example running across a range of response variables
+#--- now same example running across a range of response variables  ------------
 resp.vars=c("Acropora.spp.","Turbinaria.spp.","Pocillopora.spp.","Porites.spp.")
 # get rid of NA's and unused columns
 use.dat=na.omit(dat[,c(null.vars,cat.preds,cont.preds,resp.vars,"totalpoints")])
@@ -123,7 +124,7 @@ dev.off()
 write.csv(all.mod.fits,"all_model_fits.csv")
 write.csv(top.mod.fits,"top_model_fits.csv")
 
-
+################################################################################
 
 
 
