@@ -78,7 +78,7 @@ pred.vars=c("depth","X4mm","X2mm","X1mm","X500um","X250um","X125um","X63um",
 round(cor(dat[,pred.vars]),2)
 # nothing is highly correlated 
 
-# Plot of likely transformations
+# Plot of likely transformations - thanks to Anna Cresswell for this loop!
 par(mfrow=c(3,2))
 for (i in pred.vars) {
   x<-dat[ ,i]
@@ -110,7 +110,12 @@ for(i in 1:length(unique.vars)){
 }
 unique.vars.use     
 
+#"BDS" bivalve Dosina subrosea
+#"BMS" bivalve Myadora striata
+#"CPN" crustacean Pagrus novaezelandiae
+
 # Run the full subset model selection----
+setwd("~/GitHub/FSSgam/case_study2_model_out") #Set wd for example outputs - will differ on your computer
 resp.vars=unique.vars.use
 use.dat=dat
 factor.vars=c("Status")# Status as a Factor with two levels
@@ -166,19 +171,16 @@ write.csv(all.mod.fits[,-2],file=paste(name,"all.mod.fits.csv",sep="_"))
 write.csv(all.var.imp,file=paste(name,"all.var.imp.csv",sep="_"))
 
 # Generic importance plots-
-pdf(file=paste(name,"var_importance_heatmap.pdf",sep="_"),onefile=T)
 heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
           col=colorRampPalette(c("white","yellow","red"))(10),
           trace="none",key.title = "",keysize=2,
           notecol="black",key=T,
           sepcolor = "black",margins=c(12,8), lhei=c(4,15),Rowv=FALSE,Colv=FALSE)
-dev.off()
 
 
 # Part 2 - custom plot of importance scores----
 
-
-# Load the dataset
+# Load the importance score dataset produced above
 dat.taxa <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_all.var.imp.csv?token=AOSO6ma3MdgxTWJgICEtKgUVUGiZkRW0ks5ZbagowA%3D%3D"))%>%
   rename(resp.var=X)%>%
   gather(key=predictor,value=importance,2:ncol(.))%>%
@@ -221,8 +223,8 @@ dat.taxa.label<-dat.taxa%>%
   mutate(label=NA)%>%
   mutate(label=ifelse(predictor=="Distance"&resp.var=="BDS","X",ifelse(predictor=="Status"&resp.var=="BDS","X",ifelse(predictor=="sqrt.X500um"&resp.var=="BDS","X",label))))%>%
   mutate(label=ifelse(predictor=="lobster"&resp.var=="BMS","X",label))%>%
-  mutate(label=ifelse(predictor=="sqrt.X4mm"&resp.var=="CPN","X",ifelse(predictor=="lobster"&resp.var=="CPN","X",label)))
-head(dat.taxa.label,2)
+  mutate(label=ifelse(predictor=="sqrt.X4mm"&resp.var=="CPN","X",ifelse(predictor=="lobster"&resp.var=="CPN","X",label)))%>%
+  glimpse()
 
 # Plot gg.importance.scores ----
 gg.importance.scores <- ggplot(dat.taxa.label, aes(x=predictor,y=resp.var,fill=importance))+
@@ -291,7 +293,7 @@ Theme1 <-
     axis.line.y=element_line(colour="black", size=0.5,linetype='solid'),
     strip.background = element_blank())
 
-# Bring in and format the data----
+# Bring in and format the raw data----
 name<-"clams"
 
 dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_dataset.csv?token=AOSO6uyYhat9-Era46nbjALQpTydsTskks5ZY3vhwA%3D%3D"))%>%
@@ -302,8 +304,8 @@ dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam
   mutate(sqrt.X1mm=sqrt(X1mm))%>%
   mutate(sqrt.X500um=sqrt(X500um))%>%
   mutate(distance=as.numeric(as.character(Distance)))%>%
-  na.omit()
-head(dat,2)
+  na.omit()%>%
+  glimpse()
 
 # Manually make the most parsimonious GAM models for each taxa ----
 # MODEL Bivalve.Dosina.subrosea 500um + distance x Status ----
@@ -325,8 +327,8 @@ predicts.bds.status = testdata%>%data.frame(fits)%>%
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 write.csv(predicts.bds.status,"predicts.csv") #there is some BUG in dplyr - that this fixes
-predicts.bds.status<-read.csv("predicts.csv")
-head(predicts.bds.status,5)
+predicts.bds.status<-read.csv("predicts.csv")%>%
+  glimpse()
 
 # predict - distance.x.status from MODEL Bivalve.Dosina.subrosea----
 mod<-gamm
@@ -344,8 +346,8 @@ predicts.bds.distance.x.status = testdata%>%data.frame(fits)%>%
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 write.csv(predicts.bds.distance.x.status,"predicts.csv") #there is some BUG in dplyr - that this fixes
-predicts.bds.distance.x.status<-read.csv("predicts.csv")
-head(predicts.bds.distance.x.status,5)
+predicts.bds.distance.x.status<-read.csv("predicts.csv")%>%
+  glimpse()
 
 # predict 500um from MODEL Bivalve.Dosina.subrosea----
 mod<-gamm
@@ -363,8 +365,8 @@ predicts.bds.500um = testdata%>%data.frame(fits)%>%
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 write.csv(predicts.bds.500um,"predicts.csv") #there is some BUG in dplyr - that this fixes
-predicts.bds.500um<-read.csv("predicts.csv")
-head(predicts.bds.500um,5)
+predicts.bds.500um<-read.csv("predicts.csv")%>%
+  glimpse()
 
 # MODEL Bivalve.Myadora.striata  Lobster----
 dat.bms<-dat%>%filter(Taxa=="BMS")
@@ -386,8 +388,8 @@ predicts.bms.lobster = testdata%>%data.frame(fits)%>%
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 write.csv(predicts.bms.lobster,"predicts.csv") #there is some BUG in dplyr - that this fixes
-predicts.bms.lobster<-read.csv("predicts.csv")
-head(predicts.bms.lobster,5)
+predicts.bms.lobster<-read.csv("predicts.csv")%>%
+  glimpse()
 
 # MODEL Decapod.P.novazelandiae 4mm + Lobster----
 dat.cpn<-dat%>%filter(Taxa=="CPN")
@@ -409,8 +411,8 @@ predicts.cpn.4mm = testdata%>%data.frame(fits)%>%
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 write.csv(predicts.cpn.4mm,"predicts.csv") #there is some BUG in dplyr - that this fixes
-predicts.cpn.4mm<-read.csv("predicts.csv")
-head(predicts.cpn.4mm,5)
+predicts.cpn.4mm<-read.csv("predicts.csv")%>%
+  glimpse()
 
 # predict - lobster from model for Decapod.P.novazelandiae ----
 mod<-gamm
@@ -428,8 +430,8 @@ predicts.cpn.lobster = testdata%>%data.frame(fits)%>%
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 write.csv(predicts.cpn.lobster,"predicts.csv") #there is some BUG in dplyr - that this fixes
-predicts.cpn.lobster<-read.csv("predicts.csv")
-head(predicts.cpn.lobster,5)
+predicts.cpn.lobster<-read.csv("predicts.csv")%>%
+  glimpse()
 
 # PLOTS for Bivalve.Dosina.subrosea 500um + distance x Status ----
 ggmod.bds.status<- ggplot(aes(x=Status,y=response,fill=Status,colour=Status), data=predicts.bds.status) +
@@ -526,7 +528,7 @@ ggmod.cpn.4mm
 # combined.plot using grid() and gridExtra()------
 blank <- grid.rect(gp=gpar(col="white"))
 
-# To see what they will look like use grid.arrange()
+# To see what they will look like use grid.arrange() - make sure Plot window is large enough! - or will error!
 grid.arrange(ggmod.bds.status,ggmod.bds.distance.x.status,ggmod.bds.500um,
              ggmod.bms.lobster,blank,blank,
              ggmod.cpn.lobster,ggmod.cpn.4mm,blank,nrow=3,ncol=3)
