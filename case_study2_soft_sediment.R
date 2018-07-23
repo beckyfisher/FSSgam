@@ -4,7 +4,7 @@
 # S.K. Wilson
 # S.M. Sin
 # A.C. Lee
-# Tim J. Langlois
+# Dr Tim J. Langlois
 
 # Reproducible example for:
 # Case Study 2: The role of large reef-associated predators in structuring adjacent soft-sediment communities
