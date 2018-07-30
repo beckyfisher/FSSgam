@@ -52,16 +52,6 @@ dat$Piscivore.abundance[which(dat$Piscivore.abundance>150)]=NA
 dat$Piscivore.biomass[which(dat$Piscivore.biomass>40000)]=NA
 dat$Invertivore.biomass[which(dat$Invertivore.biomass>40000)]=NA
 
-new.dat=as.data.frame(dat[,c(cont.preds,cat.preds,null.vars)])
-new.dat$Herbivore.abundance=dat$Herb
-new.dat$Invertivore.abundance=dat$Invert
-new.dat$Piscivore.abundance=dat$Pisc
-new.dat$Planktivore.abundance=dat$Plank
-new.dat$Herbivore.biomass=dat$HerbB
-new.dat$Invertibovre.biomass=dat$InvertB
-new.dat$Piscivore.biomass=dat$PiscB
-new.dat$Planktivore.biomass=dat$PlankB
-
 resp.vars.fams=list("Herbivore.abundance"=tw(),
                     "Invertivore.abundance"=tw(),
                     "Piscivore.abundance"=tw(),
