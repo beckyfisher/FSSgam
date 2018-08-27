@@ -434,8 +434,10 @@ full.subsets.gam=function(use.dat,
            out=try(update(test.fit,formula=mod.formula[[l]]),silent=T)}
          if(length(grep("dsm",class(test.fit)))==0){
         out=try(update(test.fit,formula=mod.formula[[l]],data=use.dat),silent=T)}
-        out.dat=c(out.dat,list(out))}
+        out.dat=c(out.dat,list(out))
         setTxtProgressBar(pb,l)
+
+        }
   }
   close(pb)
   names(out.dat)=names(mod.formula[1:n.mods])
