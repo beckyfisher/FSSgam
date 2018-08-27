@@ -41,7 +41,8 @@ out.list=full.subsets.gam(use.dat=use.dat,
                           factor.factor.interactions=TRUE,
                           factor.smooth.interactions=NA,
                           smooth.smooth.interactions=TRUE,
-                          r2.type="r2")
+                          r2.type="r2",
+                          parallel=T)
 
 # examine the output
 names(out.list)
