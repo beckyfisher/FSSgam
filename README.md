@@ -1,7 +1,7 @@
 ### FSSgam
 Consists of two functions: full.subsets.gam and check.correlations
 
-Requires: doParallel, MuMIn, gamm4, mgcv, nnet
+Requires: doSNOW, MuMIn, gamm4, mgcv, nnet
 Last tested using R version 3.4.3
 
 ### Summary ################################################################
