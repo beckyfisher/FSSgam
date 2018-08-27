@@ -67,7 +67,7 @@ full.subsets.gam=function(use.dat,
 
   if(class(null.fit)[1]=="try-error"){
         stop(paste("Null model not successfully fitted, please check your inputs.
-                   If there are no random effects try using 'gam' instead of 'uGamm' 
+                   If there are no random effects try using 'gam' instead of 'uGamm'
                    in your test.fit model call.",
                    " ",
                    "The following error message was provided:  ",
@@ -76,7 +76,7 @@ full.subsets.gam=function(use.dat,
 
   # check for missing predictor values
   if(max(is.na(use.dat[,all.predictors]))==1){
-        stop("Predictor variables contain NA and AICc/BIC comparisons are invalid. 
+        stop("Predictor variables contain NA and AICc/BIC comparisons are invalid.
         Remove rows with NA from the input data or interpolate missing predictors.")}
 
   # make the interaction terms vector
@@ -408,35 +408,29 @@ full.subsets.gam=function(use.dat,
        }
 
   # now fit the models by updating the test fit (with or without parallel)
-  iterations=length(mod.formula)
   if(parallel==T){
-   require(doSNOW)
-   cl <- makeCluster(n.cores)
-   registerDoSNOW(cl)
-   pb <- txtProgressBar(max = iterations, style = 3)
-   progress <- function(n) setTxtProgressBar(pb, n)
-   opts <- list(progress = progress)
-   out.dat<-foreach(l = 1:iterations,
+   require(doParallel)
+   cl=makePSOCKcluster(n.cores)
+   registerDoParallel(cl)
+   out.dat<-foreach(l = 1:length(mod.formula),
                    .packages=c('mgcv','gamm4','MuMIn'),
-                   .errorhandling='pass',
-                   .options.snow = opts)%dopar%{
+                   .errorhandling='pass')%dopar%{
          if(length(grep("dsm",class(test.fit)))>0){
            out=update(test.fit,formula=mod.formula[[l]])}
          if(length(grep("dsm",class(test.fit)))==0){
         out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
    }
-   close(pb)
    stopCluster(cl)
+   registerDoSEQ()
            }else{
       out.dat=list()
-      for(l in 1:iterations){
+      for(l in 1:length(mod.formula)){
          if(length(grep("dsm",class(test.fit)))>0){
            out=try(update(test.fit,formula=mod.formula[[l]]),silent=T)}
          if(length(grep("dsm",class(test.fit)))==0){
         out=try(update(test.fit,formula=mod.formula[[l]],data=use.dat),silent=T)}
         out.dat=c(out.dat,list(out))}
   }
-
   names(out.dat)=names(mod.formula[1:n.mods])
 
   # find all the models that didn't fit and extract the error messages
