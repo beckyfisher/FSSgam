@@ -21,7 +21,8 @@ full.subsets.gam=function(use.dat,
                           factor.interactions="previous.arg",
                           smooth.interactions="previous.arg",
                           size="previous.arg"){
-
+  # make sure use.dat is a data.frame
+  use.dat=as.data.frame(use.dat)
   # manage previous version arguments
   if(factor.interactions!="previous.arg"){
      factor.factor.interactions=factor.interactions
