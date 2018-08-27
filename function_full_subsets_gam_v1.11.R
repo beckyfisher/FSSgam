@@ -409,9 +409,13 @@ full.subsets.gam=function(use.dat,
 
   # now fit the models by updating the test fit (with or without parallel)
   if(parallel==T){
-   require(doParallel)
+   require(doSNOW)
    cl=makePSOCKcluster(n.cores)
-   registerDoParallel(cl)
+   registerDoSNOW(cl)
+   require(progress)
+   pb <- txtProgressBar(title = "Fitted models",
+                        min = 1,
+                        max = length(mod.formula), style = 3)
    out.dat<-foreach(l = 1:length(mod.formula),
                    .packages=c('mgcv','gamm4','MuMIn'),
                    .errorhandling='pass')%dopar%{
@@ -421,7 +425,7 @@ full.subsets.gam=function(use.dat,
         out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
    }
    stopCluster(cl)
-   registerDoSEQ()
+   #registerDoSEQ()
            }else{
       out.dat=list()
       for(l in 1:length(mod.formula)){

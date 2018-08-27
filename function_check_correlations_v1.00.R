@@ -45,9 +45,9 @@ check.correlations=function(dat,parallel=F,n.cores=4){
   lm.grid=expand.grid(list(fact.var1=fact.vars,fact.var2=fact.vars))
   require(nnet)
   if(parallel==T){
-   require(doParallel)
+   require(doSNOW)
    cl=makePSOCKcluster(n.cores)
-   registerDoParallel(cl)
+   registerDoSNOW(cl)
    out.cor.dat<-foreach(r = 1:nrow(lm.grid),.packages=c('nnet'),.errorhandling='pass')%dopar%{
     var.1=as.character(lm.grid[r,1])
     var.2=as.character(lm.grid[r,2])
@@ -59,7 +59,8 @@ check.correlations=function(dat,parallel=F,n.cores=4){
       r.est=sqrt(1-(fit/null.fit))}
       c(var.1,var.2,r.est)}}
    stopCluster(cl)
-   registerDoSEQ()}else{
+   #registerDoSEQ()
+   }else{
     out.cor.dat=list()
     for(r in 1:nrow(lm.grid)){
           var.1=as.character(lm.grid[r,1])
