@@ -414,7 +414,7 @@ full.subsets.gam=function(use.dat,
    registerDoSNOW(cl)
    #require(progress)
    pb <- txtProgressBar(max = length(mod.formula), style = 3)
-   progress <- function(n) setTxtProgressBar(pb, n)
+   #progress <- function(n) setTxtProgressBar(pb, n)
    opts <- list(progress = progress)
    out.dat<-foreach(l = 1:length(mod.formula),
                    .packages=c('mgcv','gamm4','MuMIn'),
