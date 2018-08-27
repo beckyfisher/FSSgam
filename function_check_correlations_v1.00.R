@@ -59,7 +59,7 @@ check.correlations=function(dat,parallel=F,n.cores=4){
       r.est=sqrt(1-(fit/null.fit))}
       c(var.1,var.2,r.est)}}
    stopCluster(cl)
-   #registerDoSEQ()
+   registerDoSEQ()
    }else{
     out.cor.dat=list()
     for(r in 1:nrow(lm.grid)){

@@ -413,19 +413,21 @@ full.subsets.gam=function(use.dat,
    cl=makePSOCKcluster(n.cores)
    registerDoSNOW(cl)
    require(progress)
-   pb <- txtProgressBar(title = "Fitted models",
-                        min = 1,
-                        max = length(mod.formula), style = 3)
+   pb <- txtProgressBar(max = length(mod.formula), style = 3)
+   progress <- function(n) setTxtProgressBar(pb, n)
+   opts <- list(progress = progress)
    out.dat<-foreach(l = 1:length(mod.formula),
                    .packages=c('mgcv','gamm4','MuMIn'),
-                   .errorhandling='pass')%dopar%{
+                   .errorhandling='pass',
+                   .options.snow = opts)%dopar%{
          if(length(grep("dsm",class(test.fit)))>0){
            out=update(test.fit,formula=mod.formula[[l]])}
          if(length(grep("dsm",class(test.fit)))==0){
         out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
    }
+   close(pb)
    stopCluster(cl)
-   #registerDoSEQ()
+   registerDoSEQ()
            }else{
       out.dat=list()
       for(l in 1:length(mod.formula)){
