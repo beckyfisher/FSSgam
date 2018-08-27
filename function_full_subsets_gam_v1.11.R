@@ -412,7 +412,7 @@ full.subsets.gam=function(use.dat,
    require(doSNOW)
    cl=makePSOCKcluster(n.cores)
    registerDoSNOW(cl)
-   require(progress)
+   #require(progress)
    pb <- txtProgressBar(max = length(mod.formula), style = 3)
    progress <- function(n) setTxtProgressBar(pb, n)
    opts <- list(progress = progress)
