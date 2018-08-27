@@ -27,9 +27,12 @@ cont.preds=c("av.wave","Depth")
 
 # get rid of NA's and unused columns
 use.dat=na.omit(dat[,c(null.vars,cat.preds,cont.preds,"allcoral","totalpoints")])
+use.dat$successes=use.dat$allcoral
+use.dat$failures=use.dat$totalpoints-use.dat$allcoral
+use.dat$trials=use.dat$totalpoints
 
 #test.fit model for all coral, with total points as trials
-Model1=uGamm(cbind(use.dat$allcoral,use.dat$totalpoints-use.dat$allcoral)~s(Depth,k=4,bs='cr'),
+Model1=uGamm(cbind(successes,failures)~s(Depth,k=4,bs='cr'),
               family=binomial(), random=~(1|Site),
              data=use.dat,
              lme4=TRUE)
