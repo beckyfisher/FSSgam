@@ -408,29 +408,35 @@ full.subsets.gam=function(use.dat,
        }
 
   # now fit the models by updating the test fit (with or without parallel)
+  iterations=length(mod.formula)
   if(parallel==T){
-   require(doParallel)
-   cl=makePSOCKcluster(n.cores)
-   registerDoParallel(cl)
-   out.dat<-foreach(l = 1:length(mod.formula),
+   require(doSNOW)
+   cl <- makeCluster(n.cores)
+   registerDoSNOW(cl)
+   pb <- txtProgressBar(max = iterations, style = 3)
+   progress <- function(n) setTxtProgressBar(pb, n)
+   opts <- list(progress = progress)
+   out.dat<-foreach(l = 1:iterations,
                    .packages=c('mgcv','gamm4','MuMIn'),
-                   .errorhandling='pass')%dopar%{
+                   .errorhandling='pass',
+                   .options.snow = opts)%dopar%{
          if(length(grep("dsm",class(test.fit)))>0){
            out=update(test.fit,formula=mod.formula[[l]])}
          if(length(grep("dsm",class(test.fit)))==0){
         out=update(test.fit,formula=mod.formula[[l]],data=use.dat)}
    }
+   close(pb)
    stopCluster(cl)
-   registerDoSEQ()
            }else{
       out.dat=list()
-      for(l in 1:length(mod.formula)){
+      for(l in 1:iterations){
          if(length(grep("dsm",class(test.fit)))>0){
            out=try(update(test.fit,formula=mod.formula[[l]]),silent=T)}
          if(length(grep("dsm",class(test.fit)))==0){
         out=try(update(test.fit,formula=mod.formula[[l]],data=use.dat),silent=T)}
         out.dat=c(out.dat,list(out))}
   }
+
   names(out.dat)=names(mod.formula[1:n.mods])
 
   # find all the models that didn't fit and extract the error messages
