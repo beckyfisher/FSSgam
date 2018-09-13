@@ -181,7 +181,7 @@ full.subsets.gam=function(use.dat,
     }
    if(class(factor.smooth.interactions)=="list"){
      cont.var.interactions=factor.smooth.interactions$cont.vars
-     lin.var.interactions=factor.smooth.interactions$lin.vars
+     linear.var.interactions=factor.smooth.interactions$linear.vars
      factor.smooth.interactions=factor.smooth.interactions$fact.vars
 
      factor.smooth.interactions=pred.vars.fact[which(unlist(lapply(strsplit(pred.vars.fact,
