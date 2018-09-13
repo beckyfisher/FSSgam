@@ -194,7 +194,7 @@ full.subsets.gam=function(use.dat,
       interaction.terms=paste(all.interactions$Var1,all.interactions$Var2,sep=".by.")
 
       # now interactions between linear continous predictors and factors
-      if(length(na.omit(lin.var.interactions))>0){
+      if(length(na.omit(linear.var.interactions))>0){
        linear.interactions=expand.grid(linear.var.interactions,factor.smooth.interactions)
        linear.interaction.terms=paste(linear.interactions$Var1,linear.interactions$Var2,
                                   sep=".t.")}
