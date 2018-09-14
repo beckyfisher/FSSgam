@@ -48,7 +48,7 @@
 #' @return A list of the following output files:
 #'
 #' mod.data.out - A data.frame that contains the statistics associated with each model fit. This includes AICc and BIC, delta values (e.g. AICc-(min(AICc)), corresponding weight values (Burnham and Anderson 2003), an estimate of the model R2, and a column for each of the included predictor variables containing either 0 (variable not included in the model) or 1 (variable is present in the model).
-#' Use of BIC in information theoretic approaches has been heavily criticised because of the inherent assumption of BIC that there is a “true” model that is represented in the candidate set (Anderson & Burnham 2002). Rather than decide a-priori which model selection tool users should adopt, we supply both as part of the function outputs.
+#' Use of BIC in information theoretic approaches has been heavily criticised because of the inherent assumption of BIC that there is a true model that is represented in the candidate set (Anderson & Burnham 2002). Rather than decide a-priori which model selection tool users should adopt, we supply both as part of the function outputs.
 #' To simplify output, only AICc and AICc based model weights, rather than AIC, are included as these are asymptotically equivalent at large sample sizes, and for small sample sizes AICc should be used in any case.
 #' Calculating R2 values is non-trivial for mixed models, especially non-gaussian cases (and some argue should not be done at all). We have supplied a range of methods for estimating R2 (r2.type), as in our experience a single method rarely performs adequately across all scenarios.
 #'
