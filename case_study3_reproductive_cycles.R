@@ -17,13 +17,10 @@
 # Sex and Species are included as interaction terms with each other, and as
 # interaction terms between the two smoothers.
 
-# Source functions----
+# Install package----
 library(RCurl)
-function_full_subsets_gam <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_full_subsets_gam_v1.11.R?token=AOSO6tZYAozKTAZ1Kt-aqlQIsiKuxONjks5ZZCtiwA%3D%3D", ssl.verifypeer = FALSE)
-eval(parse(text = function_full_subsets_gam))
-
-function_check_correlations <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_check_correlations_v1.00.R?token=AOSO6uxF2ON3UFyXj10uqm_N_94ZSEM3ks5ZZCyCwA%3D%3D", ssl.verifypeer = FALSE)
-eval(parse(text = function_check_correlations))
+devtools::install_github("beckyfisher/FSSgam_package")
+library(FSSgam)
 
 # load data
 dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study3_dataset.csv?token=AcAXe29zQDbPndVaz6YZqJE0f5rV33VMks5ZaBIxwA%3D%3D"))

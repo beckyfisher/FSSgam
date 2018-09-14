@@ -10,13 +10,9 @@
 # Case Study 1: The relative influence of management and habitat on fish abundance and biomass
 
 # Source functions----
+devtools::install_github("beckyfisher/FSSgam_package")
+library(FSSgam)
 library(RCurl)
-function_full_subsets_gam <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_full_subsets_gam_v1.11.R?token=AOSO6tZYAozKTAZ1Kt-aqlQIsiKuxONjks5ZZCtiwA%3D%3D", ssl.verifypeer = FALSE)
-eval(parse(text = function_full_subsets_gam))
-
-function_check_correlations <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_check_correlations_v1.00.R?token=AOSO6uxF2ON3UFyXj10uqm_N_94ZSEM3ks5ZZCyCwA%3D%3D", ssl.verifypeer = FALSE)
-eval(parse(text = function_check_correlations))
-
 # load data
 dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study1_dataset.csv?token=AcAXe95Jzzp5XRZ1SJZBNm2d8fxXaJUOks5ZaBGbwA%3D%3D"))
 
