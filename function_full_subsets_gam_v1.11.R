@@ -288,6 +288,7 @@ full.subsets.gam=function(use.dat,
   for(i in 1:max.predictors){
     all.mods=c(all.mods,
      combn(na.omit(c(pred.vars.cont,pred.vars.fact,
+                     linear.vars,
                      interaction.terms,
                      linear.interaction.terms,
                      smooth.smooth.interaction.terms)),
