@@ -323,6 +323,8 @@ full.subsets.gam=function(use.dat,
      col.index=which(match(colnames(cor.matrix),unique(mod.terms))>0)
      cor.mat.m=cor.matrix[row.index,col.index]
      if(max(abs(cor.mat.m[upper.tri(cor.mat.m)]))>cov.cutoff){use.mods[[m]]=NA}
+     if(max(abs(cor.mat.m[lower.tri(cor.mat.m)]))>cov.cutoff){use.mods[[m]]=NA}
+
     }
 
     # remove the model if there are more than the number of terms specified in "max.predictors"
