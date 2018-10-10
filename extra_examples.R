@@ -1,17 +1,7 @@
-# Source functions----
+# Source the package
+devtools::install_github("beckyfisher/FSSgam_package")
+library(FSSgam)
 library(RCurl)
-function_full_subsets_gam <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_full_subsets_gam_v1.11.R")
-eval(parse(text = function_full_subsets_gam))
-
-function_check_correlations <- getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/function_check_correlations_v1.00.R")
-eval(parse(text = function_check_correlations))
-
-
-require(mgcv)
-require(MuMIn)
-require(doParallel)
-require(plyr)
-
 
 ################################################################################
 ### Example showing use of uGamm to allow fitting with gamm4  ##################
@@ -32,6 +22,7 @@ use.dat$failures=use.dat$totalpoints-use.dat$allcoral
 use.dat$trials=use.dat$totalpoints
 
 #test.fit model for all coral, with total points as trials
+require(MuMIn)
 Model1=uGamm(cbind(successes,failures)~s(Depth,k=4,bs='cr'),
               family=binomial(), random=~(1|Site),
              data=use.dat,
@@ -40,12 +31,7 @@ Model1=uGamm(cbind(successes,failures)~s(Depth,k=4,bs='cr'),
 out.list=full.subsets.gam(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
-                          pred.vars.fact=cat.preds,
-                          factor.factor.interactions=TRUE,
-                          factor.smooth.interactions=NA,
-                          smooth.smooth.interactions=TRUE,
-                          r2.type="r2",
-                          parallel=F)
+                          pred.vars.fact=cat.preds)
 
 # examine the output
 names(out.list)
@@ -55,7 +41,22 @@ mod.table=out.list$mod.data.out
 mod.table=mod.table[order(mod.table$AICc),]
 head(mod.table)
 
-#--- now same example running across a range of response variables  ------------
+# check the predictor correlation matrix
+out.list$predictor.correlations
+
+# now run the same thing using the non.linear correlation matrix
+out.list=full.subsets.gam(use.dat=use.dat,
+                          test.fit=Model1,
+                          pred.vars.cont=cont.preds,
+                          pred.vars.fact=cat.preds,
+                          non.linear.correlations=TRUE)
+out.list$predictor.correlations
+mod.table=out.list$mod.data.out
+mod.table=mod.table[order(mod.table$AICc),]
+head(mod.table)
+
+
+#--- now an example running across a range of response variables  ------------
 resp.vars=c("Acropora.spp.","Turbinaria.spp.","Pocillopora.spp.","Porites.spp.")
 # get rid of NA's and unused columns
 use.dat=na.omit(dat[,c(null.vars,cat.preds,cont.preds,resp.vars,"totalpoints")])
@@ -77,10 +78,8 @@ for(i in 1:length(resp.vars)){
  out.list=full.subsets.gam(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
-                          pred.vars.fact=cat.preds,
-                          factor.factor.interactions=TRUE,
-                          factor.smooth.interactions=NA,
-                          r2.type="r2")
+                          pred.vars.fact=cat.preds)
+
  fss.all=c(fss.all,list(out.list))
  mod.table=out.list$mod.data.out
  mod.table=mod.table[order(mod.table$AICc),]
@@ -118,7 +117,7 @@ require(RColorBrewer)
 
 pdf(file="var_importance.pdf",height=5,width=7,pointsize=10)
 heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
-                     col=colorRampPalette(c("white","yellow","orange","red"))(30),
+                     col=colorRampPalette(c("yellow","orange","red"))(30),
                      trace="none",key.title = "",keysize=2,
                      notecol="black",key=T,
                      sepcolor = "black",margins=c(12,14), lhei=c(3,10),lwid=c(3,10),
