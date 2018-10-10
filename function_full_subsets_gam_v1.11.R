@@ -416,7 +416,7 @@ full.subsets.gam=function(use.dat,
   progress <- function(n) setTxtProgressBar(pb, n)
   if(parallel==T){
    require(doSNOW)
-   cl=makePSOCKcluster(n.cores)
+   cl=makeCluster(n.cores)
    registerDoSNOW(cl)
    opts <- list(progress = progress)
    out.dat<-foreach(l = 1:length(mod.formula),
