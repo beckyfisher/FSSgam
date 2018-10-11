@@ -56,6 +56,19 @@ mod.table=mod.table[order(mod.table$AICc),]
 head(mod.table)
 
 
+#---- show an example of using fit.model.set instead of full subsets gam
+# this is to allow the option for not saving all fitted models (required for
+# large model sets, but also allows the model set to be interrogated before fitting.
+model.set=generate.model.set(use.dat=use.dat,
+                             test.fit=Model1,
+                             pred.vars.cont=cont.preds,
+                             pred.vars.fact=cat.preds,
+                             non.linear.correlations=TRUE)
+out.list=fit.model.set(model.set,save.model.fits=F,parallel=F)
+mod.table=out.list$mod.data.out
+mod.table=mod.table[order(mod.table$AICc),]
+head(mod.table)
+
 #--- now an example running across a range of response variables  ------------
 resp.vars=c("Acropora.spp.","Turbinaria.spp.","Pocillopora.spp.","Porites.spp.")
 # get rid of NA's and unused columns
