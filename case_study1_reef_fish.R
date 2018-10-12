@@ -9,6 +9,14 @@
 # Reproducible example for:
 # Case Study 1: The relative influence of management and habitat on fish abundance and biomass
 
+# note this example was updated on the 11th Oct 2018 to demonstrate useage of the replacement functions
+# generate.model.set and fit.model.set that have now superced full.subsets.gam in package FSSgam
+# Between them these functions carry out the same analysis, take the same arguments and return the same
+# outputs as full.subsets.gam with the only difference being that the model set generation and model
+# fitting procedures are separated into two steps. This was done to make the function easier to use,
+# because the model set can be interrogated, along with the correlation matrix of the predictors before model
+# fitting is even attempted.
+
 # Source functions----
 devtools::install_github("beckyfisher/FSSgam_package")
 library(FSSgam)
@@ -79,13 +87,16 @@ for(i in 1:length(resp.vars)){
  use.dat$response=use.dat[,resp.vars[i]]
  Model1=gam(response~s(complexity,k=4,bs='cr')+
                     +s(SQRTSA,bs='cr',k=4)+s(site,bs="re"),
-                    family=resp.vars.fams[[i]],
+                    family=tw(),
                     data=use.dat)
- out.list=full.subsets.gam(use.dat=use.dat,max.predictors=2,   # limit size here because null model already complex
-                           test.fit=Model1,k=3,
-                           pred.vars.cont=cont.preds,
-                           pred.vars.fact=cat.preds,
-                           null.terms="s(SQRTSA,bs='cr',k=3)+s(site,bs='re')+s(depth,bs='cr',k=3)")
+
+ model.set=generate.model.set(use.dat=use.dat,max.predictors=2,   # limit size here because null model already complex
+                             test.fit=Model1,k=3,
+                             pred.vars.cont=cont.preds,
+                             pred.vars.fact=cat.preds,
+                             null.terms="s(SQRTSA,bs='cr',k=3)+s(site,bs='re')+s(depth,bs='cr',k=3)")
+
+ out.list=fit.model.set(model.set)
  #names(out.list)
  # examine the list of failed models
  #out.list$failed.models
@@ -136,7 +147,7 @@ dev.off()
 
 write.csv(all.mod.fits[,-2],"all_model_fits_functional_biomass.csv")
 write.csv(top.mod.fits[,-2],"top_model_fits_functional_biomass.csv")
-write.csv(out.list$predictor.correlations,"predictor_correlations.csv")
+write.csv(model.set$predictor.correlations,"predictor_correlations.csv")
 
 #### pretty plots of best models -----------------------------------------------
 zones=levels(dat$ZONE)

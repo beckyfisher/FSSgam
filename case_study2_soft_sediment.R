@@ -12,6 +12,14 @@
 # A re-analysis of data presented in:
 #   Langlois, T. J., M. J. Anderson, and R. C. Babcock. 2005. Reef-associated predators influence adjacent soft-sediment communities. Ecology 86: 1508–1519.
 
+# note this example was updated on the 11th Oct 2018 to demonstrate useage of the replacement functions
+# generate.model.set and fit.model.set that have now superced full.subsets.gam in package FSSgam
+# Between them these functions carry out the same analysis, take the same arguments and return the same
+# outputs as full.subsets.gam with the only difference being that the model set generation and model
+# fitting procedures are separated into two steps. This was done to make the function easier to use,
+# because the model set can be interrogated, along with the correlation matrix of the predictors before model
+# fitting is even attempted.
+
 # Script information----
 
 # Part 1-FSS modeling----
@@ -125,15 +133,17 @@ for(i in 1:length(resp.vars)){
   
   Model1=gam(response~s(lobster,k=3,bs='cr')+ s(Location,Site,bs="re"),
              family=tw(),  data=use.dat)
-  out.list=full.subsets.gam(use.dat=use.dat,
+
+  model.set=generate.model.set(use.dat=use.dat,
                             test.fit=Model1,
                             pred.vars.cont=pred.vars,
                             pred.vars.fact=factor.vars,
                             linear.vars="Distance",
                             k=3,
-                            null.terms="s(Location,Site,bs='re')",
+                            null.terms="s(Location,Site,bs='re')")
+  out.list=fit.model.set(model.set,
                             max.models=600,
-                            parallel=T)  
+                            parallel=T)
   names(out.list)
   
   out.list$failed.models # examine the list of failed models
@@ -178,7 +188,7 @@ heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
 # Part 2 - custom plot of importance scores----
 
 # Load the importance score dataset produced above
-dat.taxa <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_all.var.imp.csv?token=AOSO6ma3MdgxTWJgICEtKgUVUGiZkRW0ks5ZbagowA%3D%3D"))%>%
+dat.taxa <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_all.var.imp.csv"))%>%
   rename(resp.var=X)%>%
   gather(key=predictor,value=importance,2:ncol(.))%>%
   glimpse()

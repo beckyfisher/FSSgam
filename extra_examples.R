@@ -28,11 +28,11 @@ Model1=uGamm(cbind(successes,failures)~s(Depth,k=4,bs='cr'),
              data=use.dat,
              lme4=TRUE)
 
-out.list=full.subsets.gam(use.dat=use.dat,
+model.set=generate.model.set(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds)
-
+out.list=fit.model.set(model.set)
 # examine the output
 names(out.list)
 out.list$failed.models
@@ -42,29 +42,16 @@ mod.table=mod.table[order(mod.table$AICc),]
 head(mod.table)
 
 # check the predictor correlation matrix
-out.list$predictor.correlations
+model.set$predictor.correlations
 
 # now run the same thing using the non.linear correlation matrix
-out.list=full.subsets.gam(use.dat=use.dat,
+model.set=generate.model.set(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds,
                           non.linear.correlations=TRUE)
-out.list$predictor.correlations
-mod.table=out.list$mod.data.out
-mod.table=mod.table[order(mod.table$AICc),]
-head(mod.table)
-
-
-#---- show an example of using fit.model.set instead of full subsets gam
-# this is to allow the option for not saving all fitted models (required for
-# large model sets, but also allows the model set to be interrogated before fitting.
-model.set=generate.model.set(use.dat=use.dat,
-                             test.fit=Model1,
-                             pred.vars.cont=cont.preds,
-                             pred.vars.fact=cat.preds,
-                             non.linear.correlations=TRUE)
-out.list=fit.model.set(model.set,save.model.fits=F,parallel=F)
+model.set$predictor.correlations
+out.list=fit.model.set(model.set)
 mod.table=out.list$mod.data.out
 mod.table=mod.table[order(mod.table$AICc),]
 head(mod.table)
@@ -88,11 +75,11 @@ for(i in 1:length(resp.vars)){
              data=use.dat,
              lme4=TRUE)
 
- out.list=full.subsets.gam(use.dat=use.dat,
+ model.set=generate.model.set(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds)
-
+ out.list=fit.model.set(model.set)
  fss.all=c(fss.all,list(out.list))
  mod.table=out.list$mod.data.out
  mod.table=mod.table[order(mod.table$AICc),]

@@ -17,6 +17,15 @@
 # Sex and Species are included as interaction terms with each other, and as
 # interaction terms between the two smoothers.
 
+# note this example was updated on the 11th Oct 2018 to demonstrate useage of the replacement functions
+# generate.model.set and fit.model.set that have now superced full.subsets.gam in package FSSgam
+# Between them these functions carry out the same analysis, take the same arguments and return the same
+# outputs as full.subsets.gam with the only difference being that the model set generation and model
+# fitting procedures are separated into two steps. This was done to make the function easier to use,
+# because the model set can be interrogated, along with the correlation matrix of the predictors before model
+# fitting is even attempted.
+
+
 # Install package----
 library(RCurl)
 devtools::install_github("beckyfisher/FSSgam_package")
@@ -46,14 +55,15 @@ use.dat=dat
 start.fit=gam(GSI~s(lunar.date,k=5,bs='cc'),
               family="Gamma",
               data=use.dat)
-out.list=full.subsets.gam(use.dat=use.dat,
+model.set=generate.model.set(use.dat=use.dat,
                          test.fit=start.fit,
                          pred.vars.cont=cont.vars,
                          pred.vars.fact=factor.vars,
                          cyclic.vars=cyclic.vars,k=5,
                          factor.factor.interactions=T,
                          smooth.smooth.interactions=T,
-                         parallel=T,max.predictors=4)
+                         max.predictors=4)
+out.list=fit.model.set(model.set,parallel=T)
 names(out.list)
 
 write.csv(out.list$predictor.correlations,"predictor_correlations.csv")
@@ -72,7 +82,7 @@ write.csv(mod.table[,-2],"modfits.csv")
 barplot(out.list$variable.importance$bic$variable.weights.raw,las=2,
         ylab="Relative variable importance")
 
-write.csv(out.list$predictor.correlations,"predictor_correlations.csv")
+write.csv(model.set$predictor.correlations,"predictor_correlations.csv")
 
 # extract the best model
 mod.table=mod.table[order(mod.table$AIC),]
@@ -86,7 +96,7 @@ summary(best.model)
 
 # make a pretty plot
 # get the data from the out.list object because this contains the interactions
-model.dat=out.list$used.data
+model.dat=model.set$used.data
 head(model.dat)
 str(model.dat)
 
