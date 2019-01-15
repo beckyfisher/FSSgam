@@ -1,3 +1,6 @@
+# To do: investigate using exclude= in the predict()
+
+
 # A simple function for full subsets multiple regression in ecology with R
 # 
 # R. Fisher
