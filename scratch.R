@@ -3,10 +3,10 @@ use.dat
 test.fit
 pred.vars.cont=NA
 pred.vars.fact=NA
-max.predictors=3
-k=5
 cyclic.vars=NA
 linear.vars=NA
+max.predictors=3
+k=5
 factor.smooth.interactions=pred.vars.fact
 factor.factor.interactions=F
 smooth.smooth.interactions=F
@@ -22,3 +22,4 @@ cor.matrix=NA
 factor.interactions="previous.arg"
 smooth.interactions="previous.arg"
 size="previous.arg"
+check.non.linear.correlations=F
