@@ -1,3 +1,6 @@
+# To do: investigate using exclude= in the predict()
+
+
 # A simple function for full subsets multiple regression in ecology with R
 # 
 # R. Fisher
@@ -47,7 +50,8 @@ library(car)
 library(doBy)
 library(gplots)
 library(RColorBrewer)
-library(doParallel)
+library(doParallel) #this can removed?
+library(doSNOW)
 library(gamm4)
 library(RCurl) #needed to download data from GitHub
 
@@ -55,14 +59,17 @@ rm(list=ls())
 
 
 # install package----
-devtools::install_github("beckyfisher/FSSgam_package")
+# devtools::install_github("beckyfisher/FSSgam_package") #run once
 library(FSSgam)
 
 # Bring in and format the data----
 name<-"clams"
 
-# Load the dataset
-dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_dataset.csv?token=AOSO6uyYhat9-Era46nbjALQpTydsTskks5ZY3vhwA%3D%3D"))%>%
+# Load the dataset - from github
+# dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_dataset.csv?token=AOSO6uyYhat9-Era46nbjALQpTydsTskks5ZY3vhwA%3D%3D"))%>%
+# Load the dataset - from local files
+dat <-read.csv("case_study2_dataset.csv")%>%
+  
   rename(response=Abundance)%>%
   #   Transform variables
   mutate(sqrt.X4mm=sqrt(X4mm))%>%
@@ -71,6 +78,9 @@ dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam
   mutate(sqrt.X500um=sqrt(X500um))%>%
   na.omit()%>%
   glimpse()
+
+
+
 
 # Set predictor variables---
 pred.vars=c("depth","X4mm","X2mm","X1mm","X500um","X250um","X125um","X63um",
@@ -188,11 +198,11 @@ heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
 # Part 2 - custom plot of importance scores----
 
 # Load the importance score dataset produced above
-dat.taxa <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_all.var.imp.csv"))%>%
+# dat.taxa <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_model_out/clams_all.var.imp.csv"))%>% #from github
+dat.taxa <-read.csv("clams_all.var.imp.csv")%>% #from local copy
   rename(resp.var=X)%>%
   gather(key=predictor,value=importance,2:ncol(.))%>%
   glimpse()
-
 
 
 # Plotting defaults----
@@ -300,10 +310,15 @@ Theme1 <-
     axis.line.y=element_line(colour="black", size=0.5,linetype='solid'),
     strip.background = element_blank())
 
+
 # Bring in and format the raw data----
+setwd("~/GitHub/FSSgam")
 name<-"clams"
 
-dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_dataset.csv?token=AOSO6uyYhat9-Era46nbjALQpTydsTskks5ZY3vhwA%3D%3D"))%>%
+# Load the dataset - from github
+# dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_dataset.csv?token=AOSO6uyYhat9-Era46nbjALQpTydsTskks5ZY3vhwA%3D%3D"))%>%
+# Load the dataset - from local files
+dat <-read.csv("case_study2_dataset.csv")%>%
   rename(response=Abundance)%>%
   #   Transform variables
   mutate(sqrt.X4mm=sqrt(X4mm))%>%
@@ -314,7 +329,13 @@ dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam
   na.omit()%>%
   glimpse()
 
+
+
+
 # Manually make the most parsimonious GAM models for each taxa ----
+setwd("~/GitHub/FSSgam/case_study2_model_out")
+
+
 # MODEL Bivalve.Dosina.subrosea 500um + distance x Status ----
 dat.bds<-dat%>%filter(Taxa=="BDS")
 gamm=gam(response~s(sqrt.X500um,k=3,bs='cr')+s(distance,k=1,bs='cr', by=Status)+ s(Location,Site,bs="re")+ Status, family=tw(),data=dat.bds)
@@ -325,8 +346,11 @@ testdata <- expand.grid(distance=mean(mod$model$distance),
                         sqrt.X500um=mean(mod$model$sqrt.X500um),
                         Location=(mod$model$Location),
                         Site=(mod$model$Site),
-                        Status = c("Fished","No-take"))
-head(testdata)
+                        Status = c("Fished","No-take"))%>%
+  distinct()%>%
+  glimpse()
+
+
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 #head(fits,2)
 predicts.bds.status = testdata%>%data.frame(fits)%>%
@@ -343,7 +367,9 @@ testdata <- expand.grid(distance=seq(min(dat$distance),max(dat$distance),length.
                         sqrt.X500um=mean(mod$model$sqrt.X500um),
                         Location=(mod$model$Location),
                         Site=(mod$model$Site),
-                        Status = c("Fished","No-take"))
+                        Status = c("Fished","No-take"))%>%
+  distinct()%>%
+  glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 #head(fits,2)
@@ -362,7 +388,9 @@ testdata <- expand.grid(sqrt.X500um=seq(min(dat$sqrt.X500um),max(dat$sqrt.X500um
                         distance=mean(mod$model$distance),
                         Location=(mod$model$Location),
                         Site=(mod$model$Site),
-                        Status = c("Fished","No-take"))
+                        Status = c("Fished","No-take"))%>%
+  distinct()%>%
+  glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 #head(fits,2)
@@ -385,7 +413,9 @@ mod<-gamm
 testdata <- expand.grid(lobster=seq(min(dat$lobster),max(dat$lobster),length.out = 20),
                         Location=(mod$model$Location),
                         Site=(mod$model$Site),
-                        Status = c("Fished","No-take"))
+                        Status = c("Fished","No-take"))%>%
+  distinct()%>%
+  glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 #head(fits,2)
@@ -409,7 +439,9 @@ testdata <- expand.grid(sqrt.X4mm=seq(min(dat$sqrt.X4mm),max(dat$sqrt.X4mm),leng
                         lobster=mean(mod$model$lobster),
                         Location=(mod$model$Location),
                         Site=(mod$model$Site),
-                        Status = c("Fished","No-take"))
+                        Status = c("Fished","No-take"))%>%
+  distinct()%>%
+  glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 head(fits,2)
@@ -427,7 +459,9 @@ testdata <- expand.grid(lobster=seq(min(dat$lobster),max(dat$lobster),length.out
                         sqrt.X4mm=mean(mod$model$sqrt.X4mm),
                         Location=(mod$model$Location),
                         Site=(mod$model$Site),
-                        Status = c("Fished","No-take"))
+                        Status = c("Fished","No-take"))%>%
+  distinct()%>%
+  glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 #head(fits,2)
