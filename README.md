@@ -24,3 +24,22 @@ This function assumes you know what you are doing. Non-gaussian mixed model
 gamm resorts to PQL meaning that AICc calls will not return the AIC of the
 actual model. Please thoroughly read the help files contained within the gamm4
 and mgcv packages, including information under details.
+
+
+### License
+
+The code is released under the Apache License 2.0
+
+    Copyright 2020 Australian Institute of Marine Science
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at 
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
