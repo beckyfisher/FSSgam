@@ -46,7 +46,8 @@ devtools::install_github("beckyfisher/FSSgam_package")
 library(FSSgam)
 
 # load data
-dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study3_dataset.csv?token=AcAXe29zQDbPndVaz6YZqJE0f5rV33VMks5ZaBIxwA%3D%3D"))
+download.file("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study3_dataset.csv", destfile = "/tmp/c3dat.csv")
+dat <-read.csv("/tmp/c3dat.csv")
 dim(dat)
 
 str(dat)

@@ -36,7 +36,9 @@ devtools::install_github("beckyfisher/FSSgam_package")
 library(FSSgam)
 library(RCurl)
 # load data
-dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study1_dataset.csv?token=AcAXe95Jzzp5XRZ1SJZBNm2d8fxXaJUOks5ZaBGbwA%3D%3D"))
+download.file("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study1_dataset.csv", destfile = "/tmp/c1dat.csv")
+dat <-read.csv("/tmp/c1dat.csv")
+dim(dat)
 
 require(mgcv)
 require(MuMIn)

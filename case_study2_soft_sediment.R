@@ -77,9 +77,9 @@ library(FSSgam)
 name<-"clams"
 
 # Load the dataset - from github
-# dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_dataset.csv?token=AOSO6uyYhat9-Era46nbjALQpTydsTskks5ZY3vhwA%3D%3D"))%>%
-# Load the dataset - from local files
-dat <-read.csv("case_study2_dataset.csv")%>%
+
+download.file("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study2_dataset.csv", destfile = "/tmp/c2dat.csv")
+dat <-read.csv("/tmp/c2dat.csv")%>%
   
   rename(response=Abundance)%>%
   #   Transform variables
