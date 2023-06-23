@@ -36,8 +36,8 @@ devtools::install_github("beckyfisher/FSSgam_package")
 library(FSSgam)
 library(RCurl)
 # load data
-download.file("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study1_dataset.csv", destfile = "/tmp/c1dat.csv")
-dat <-read.csv("/tmp/c1dat.csv")
+download.file("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study1_dataset.csv", destfile = "c1dat.csv")
+dat <-read.csv("c1dat.csv")
 dim(dat)
 
 require(mgcv)
@@ -71,6 +71,7 @@ dev.off()
 dat$Piscivore.abundance[which(dat$Piscivore.abundance>150)]=NA
 dat$Piscivore.biomass[which(dat$Piscivore.biomass>40000)]=NA
 dat$Invertivore.biomass[which(dat$Invertivore.biomass>40000)]=NA
+dat$site <- as.factor(dat$site)
 
 resp.vars.fams=list("Herbivore.abundance"=tw(),
                     "Invertivore.abundance"=tw(),
@@ -102,7 +103,7 @@ for(i in 1:length(resp.vars)){
  use.dat=na.omit(dat[,c(null.vars,cont.preds,cat.preds,resp.vars[i])])
  use.dat$response=use.dat[,resp.vars[i]]
  Model1=gam(response~s(complexity,k=4,bs='cr')+
-                    +s(SQRTSA,bs='cr',k=4)+s(site,bs="re"),
+                    +s(SQRTSA,bs='cr',k=4) +s(site,bs="re"),
                     family=tw(),
                     data=use.dat)
 
@@ -112,8 +113,8 @@ for(i in 1:length(resp.vars)){
                              pred.vars.fact=cat.preds,
                              null.terms="s(SQRTSA,bs='cr',k=3)+s(site,bs='re')+s(depth,bs='cr',k=3)")
 
- out.list=fit.model.set(model.set)
- #names(out.list)
+ out.list=fit.model.set(model.set, parallel = TRUE)
+ ?d#names(out.list)
  # examine the list of failed models
  #out.list$failed.models
  #out.list$success.models
