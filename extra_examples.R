@@ -28,7 +28,8 @@ library(RCurl)
 ################################################################################
 ### Example showing use of uGamm to allow fitting with gamm4  ##################
 # load data  coral data set
-dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/extra_examples_coral_data.csv"))
+#dat <-read.csv(text=getURL("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/extra_examples_coral_data.csv"))
+dat <- read.csv("extra_examples_coral_data.csv")
 colnames(dat)
 head(dat)
 str(dat)
@@ -54,7 +55,8 @@ model.set=generate.model.set(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds)
-out.list=fit.model.set(model.set)
+out.list=fit.model.set(model.set, parallel = TRUE, #r2.type = "dev", 
+                       report.unique.r2 = TRUE)
 # examine the output
 names(out.list)
 out.list$failed.models
