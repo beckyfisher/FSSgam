@@ -23,8 +23,8 @@
 # Reproducible example for:
 # Case Study 1: The relative influence of management and habitat on fish abundance and biomass
 
-# note this example was updated on the 11th Oct 2018 to demonstrate useage of the replacement functions
-# generate.model.set and fit.model.set that have now superced full.subsets.gam in package FSSgam
+# note this example was updated on the 11th Oct 2018 to demonstrate usage of the replacement functions
+# generate.model.set and fit.model.set that have now superseded full.subsets.gam in package FSSgam
 # Between them these functions carry out the same analysis, take the same arguments and return the same
 # outputs as full.subsets.gam with the only difference being that the model set generation and model
 # fitting procedures are separated into two steps. This was done to make the function easier to use,
@@ -36,6 +36,8 @@ devtools::install_github("beckyfisher/FSSgam_package")
 library(FSSgam)
 
 # load data
+
+download.file("https://raw.githubusercontent.com/beckyfisher/FSSgam/master/case_study1_dataset.csv", destfile = "c1dat.csv")
 dat <-read.csv("c1dat.csv")
 dim(dat)
 
