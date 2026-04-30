@@ -44,7 +44,6 @@ A generalised additive model with full subsets analyses was used to determine if
 library(FSSgam)
 library(mgcv)
 library(MuMIn)
-library(plyr)
 library(car)
 library(doBy)
 library(gplots)
