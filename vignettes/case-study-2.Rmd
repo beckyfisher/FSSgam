@@ -26,6 +26,7 @@ library(gamm4)
 library(FSSgam)
 library(gridExtra)
 library(grid)
+data("case_study2", package = "FSSgam")
 ```
 
 ## Overview

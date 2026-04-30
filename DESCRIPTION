@@ -21,6 +21,7 @@ Description:
 Depends:
     R (>= 4.5)
 SystemRequirements: pandoc (>= 2.0)
+BuildVignettes: false
 Imports:
     doSNOW,
     MuMIn,

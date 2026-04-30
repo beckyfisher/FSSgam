@@ -21,6 +21,7 @@ library(RColorBrewer)
 library(dplyr)
 library(tidyr)
 library(purrr)
+data("case_study1", package = "FSSgam")
 ```
 
 ## Overview

@@ -15,6 +15,7 @@ library(mgcv)
 library(MuMIn)
 library(FSSgam)
 library(tidyverse)
+data("case_study3", package = "FSSgam")
 ```
 
 ## Overview
