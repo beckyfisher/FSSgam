@@ -18,6 +18,7 @@ vignette: >
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 options(error = recover)
 library(tidyr)
+library(tibble)
 library(dplyr)
 library(mgcv)
 library(MuMIn)
