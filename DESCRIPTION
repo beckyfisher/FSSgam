@@ -18,17 +18,14 @@ Description:
     models with correlated predictors, and support for model sets that include 
     interactions between factors and smooth predictors, as well as smooth-by-smooth 
     interactions via te().
-
 Depends:
-    R (>= 3.5)
-
+    R (>= 4.5)
 Imports:
     doSNOW,
     MuMIn,
     gamm4,
     mgcv,
     nnet
-
 Suggests:
     car,
     doBy,
@@ -45,10 +42,8 @@ Suggests:
     rmarkdown,
     knitr,
     R.rsp
-
 VignetteBuilder:
     R.rsp
-
 License: Apache License (== 2.0)
 Encoding: UTF-8
 LazyData: true
