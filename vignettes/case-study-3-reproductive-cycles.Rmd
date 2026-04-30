@@ -104,7 +104,7 @@ model.set <- generate.model.set(
   max.predictors = 4
 )
 
-out.list <- fit.model.set(model.set, parallel = TRUE)
+out.list <- fit.model.set(model.set, parallel = FALSE)
 ```
 
 ## Model assessment

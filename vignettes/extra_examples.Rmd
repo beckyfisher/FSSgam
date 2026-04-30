@@ -78,7 +78,7 @@ model.set=generate.model.set(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds)
-out.list=fit.model.set(model.set, parallel = TRUE, 
+out.list=fit.model.set(model.set, parallel = FALSE, 
                        report.unique.r2 = TRUE)
 ```
 

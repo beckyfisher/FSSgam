@@ -44,7 +44,6 @@ A generalised additive model with full subsets analyses was used to determine if
 library(FSSgam)
 library(mgcv)
 library(MuMIn)
-library(doParallel)
 library(plyr)
 library(car)
 library(doBy)
@@ -171,7 +170,7 @@ for (rv in resp.vars) {
     null.terms = "s(SQRTSA,bs='cr',k=3)+s(site,bs='re')+s(depth,bs='cr',k=3)"
   )
 
-  out.list <- fit.model.set(model.set, parallel = TRUE) 
+  out.list <- fit.model.set(model.set, parallel = FALSE) 
 
   var.imp[[rv]] <- out.list$variable.importance$aic$variable.weights.raw
   out.all[[rv]] <- out.list$mod.data.out
