@@ -15,9 +15,9 @@ articles:
 
   - title: Case studies
     contents:
-      - case-study-1-reef-fish
-      - case-study-2-soft-sediment
-      - case-study-3-reproductive-cycles
+      - case-study-1
+      - case-study-2
+      - case-study-3
 
   - title: Extra examples
     contents:

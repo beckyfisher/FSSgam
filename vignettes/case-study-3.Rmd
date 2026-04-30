@@ -1,13 +1,8 @@
 ---
 title: "Case Study 3"
-author:
-  - R. Fisher
-  - S.K. Wilson
-  - S.M. Sin
-  - A.C. Lee
-  - Dr Tim J. Langlois
-
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+output_file: case-study-3.html
 vignette: >
   %\VignetteIndexEntry{Case Study 3}
   %\VignetteEngine{knitr::rmarkdown}

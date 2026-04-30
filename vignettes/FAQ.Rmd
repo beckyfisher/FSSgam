@@ -2,7 +2,9 @@
 title: "FAQ"
 author: "Rebecca Fisher"
 date: "04/05/2020"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+output_file: FAQ.html
 vignette: >
   %\VignetteIndexEntry{FAQ}
   %\VignetteEngine{knitr::rmarkdown}

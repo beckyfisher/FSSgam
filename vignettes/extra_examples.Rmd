@@ -1,13 +1,8 @@
 ---
 title: "Extra examples"
-author:
-  - R. Fisher
-  - S.K. Wilson
-  - S.M. Sin
-  - A.C. Lee
-  - Dr Tim J. Langlois
-
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+output_file: extra_examples.html
 vignette: >
   %\VignetteIndexEntry{Extra examples}
   %\VignetteEngine{knitr::rmarkdown}

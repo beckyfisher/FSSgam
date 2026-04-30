@@ -20,6 +20,7 @@ Description:
     interactions via te().
 Depends:
     R (>= 4.5)
+SystemRequirements: pandoc (>= 2.0)
 Imports:
     doSNOW,
     MuMIn,
@@ -43,7 +44,7 @@ Suggests:
     knitr,
     R.rsp
 VignetteBuilder:
-    R.rsp
+    knitr
 License: Apache License (== 2.0)
 Encoding: UTF-8
 LazyData: true
