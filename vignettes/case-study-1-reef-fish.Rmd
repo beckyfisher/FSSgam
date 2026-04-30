@@ -16,6 +16,16 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(FSSgam)
+library(mgcv)
+library(MuMIn)
+library(car)
+library(doBy)
+library(gplots)
+library(RColorBrewer)
+library(dplyr)
+library(tidyr)
+library(purrr)
 ```
 
 ## Overview
@@ -40,7 +50,7 @@ A generalised additive model with full subsets analyses was used to determine if
 
 ### R packages
 
-```{r packages}
+```{r packages, eval=FALSE}
 library(FSSgam)
 library(mgcv)
 library(MuMIn)
@@ -48,6 +58,9 @@ library(car)
 library(doBy)
 library(gplots)
 library(RColorBrewer)
+library(dplyr)
+library(tidyr)
+library(purrr)
 ```
 
 ### Data preparation
@@ -196,11 +209,7 @@ heatmap.2(
 
 ### Top model table
 
-
 ```{r collatemods}
-library(dplyr)
-library(tidyr)
-library(purrr)
 
 all.models <- imap_dfr(
   out.all,

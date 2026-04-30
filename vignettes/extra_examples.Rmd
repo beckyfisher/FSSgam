@@ -24,6 +24,9 @@ require(car)
 require(doBy)
 require(gplots)
 require(RColorBrewer)
+library(tibble)
+library(dplyr)
+library(tidyr)
 ```
 
 ## Overview
@@ -42,6 +45,9 @@ require(car)
 require(doBy)
 require(gplots)
 require(RColorBrewer)
+library(tibble)
+library(dplyr)
+library(tidyr)
 
 dat <- coral_data
 str(dat)
@@ -218,10 +224,6 @@ heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
 And present all the models, and all the top model tables.
 
 ```{r all mods}
-
-library(tibble)
-library(dplyr)
-library(tidyr)
 
 tab <- all.mod.fits |>
   rownames_to_column("row_id") |>
