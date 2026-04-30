@@ -1,0 +1,268 @@
+---
+title: "Case Study 3: Reproductive patterns of tropical intertidal invertebrates"
+author:
+  - R. Fisher
+  - S.K. Wilson
+  - S.M. Sin
+  - A.C. Lee
+  - Dr Tim J. Langlois
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(mgcv)
+library(MuMIn)
+library(FSSgam)
+library(tidyverse)
+```
+
+## Overview
+
+This case study examines reproductive patterns over multiple temporal scales in two tropical intertidal gastropods using **full subsets Generalised Additive Models (GAMs)**. The response variable is gonadosomatic index (GSI), modelled using a Gamma distribution.
+
+The example demonstrates how cyclic smoothers and factor interactions can be combined within the `FSSgam` framework to analyse lunar, semi‑lunar and seasonal reproductive patterns.
+
+
+## Background
+
+Many marine invertebrates exhibit reproductive cycles across multiple temporal scales, including seasonal, lunar and semi‑lunar rhythms. These cycles are difficult to analyse using traditional categorical approaches because both seasonality and lunarity are inherently cyclic processes.
+
+Generalised Additive Models (GAMs) provide a flexible framework for examining non‑linear, cyclic patterns and their interactions with biological factors such as sex and species. Here, GAMs with full subsets selection are used to disentangle monthly and lunar drivers of reproductive output in two common intertidal gastropods: *Patelloida saccharina* and *Monodonta labio*.
+
+## R packages
+
+```{r packages, eval=FALSE}
+library(mgcv)
+library(MuMIn)
+library(FSSgam)
+library(tidyverse)
+```
+
+## Data preparation
+
+Load the case study data and ensure year is treated as a factor.
+
+```{r data}
+dat <- case_study3 |> 
+  mutate(year = factor(year))
+```
+
+### Response variable distribution
+
+```{r response}
+hist(dat$GSI)
+range(dat$GSI)
+```
+
+GSI is a continuous, slightly right‑skewed variable without zeros, supporting the use of a **Gamma distribution**.
+
+## Predictor specification
+
+Both lunar.date and month are entered into the model as continous cyclic smooths. This ensures that that end tails of the smooths meet smoothly. For example, this means that the estimate for Dec smoothly links to estimates from January, in the case of month.
+
+Sex and Species are included as factors.
+
+```{r predictors}
+cyclic.vars <- c("lunar.date", "month")
+cont.vars   <- c("lunar.date", "month")
+factor.vars <- c("Sex", "Species")
+```
+
+Both month and lunar date are treated as **cyclic continuous predictors**, allowing smooth transitions at their boundaries.
+
+## Full subsets GAM analysis
+
+GSI is modelled as a Gamma distribution.
+
+Sex and Species are included as interaction terms with each other (via factor.factor.interactions = TRUE), 
+and as interaction terms between the two smoothers (this is default behaviour for FSSgam, see ?generate.model.set).
+
+```{r fss, include=FALSE}
+use.dat <- dat
+
+start.fit <- gam(
+  GSI ~ s(lunar.date, k = 5, bs = "cc"),
+  family = Gamma(),
+  data = use.dat
+)
+
+model.set <- generate.model.set(
+  use.dat = use.dat,
+  test.fit = start.fit,
+  pred.vars.cont = cont.vars,
+  pred.vars.fact = factor.vars,
+  cyclic.vars = cyclic.vars,
+  k = 5,
+  factor.factor.interactions = TRUE,
+  smooth.smooth.interactions = TRUE,
+  max.predictors = 4
+)
+
+out.list <- fit.model.set(model.set, parallel = TRUE)
+```
+
+## Model assessment
+
+Examine predictor correlations. This looks as would be expected. Note the function does estimate correlations between factors as well as continuous predictors. See ?generate.model.set for more details on how this is done.
+
+```{r predictorcors}
+model.set$predictor.correlations
+```
+Examine the model table. Note that the bet model includes all of the predictors, with interactions between lunar date and species, month and species, and an additive effect of Sex.
+
+```{r assessment}
+mod.table <- out.list$mod.data.out
+mod.table <- mod.table[order(mod.table$AICc), ]
+
+tab <- mod.table |>
+  as_tibble() |> 
+  select(modname, AICc, r2.vals, edf, delta.AICc, wi.AICc)
+
+knitr::kable(
+  tab,
+  digits = 3,
+  caption = "Model comparison summary based on AICc"
+)
+
+```
+
+Examine the variable importance scores. In this case study, variable importance is not particularly interesting because all predictors are in the top model, and they are therefore all 1.
+
+```{r importance}
+barplot(
+  out.list$variable.importance$bic$variable.weights.raw,
+  las = 2,
+  ylab = "Relative variable importance"
+)
+```
+
+Predictor correlations were minimal, and all candidate models were retained in the model set.
+
+## Best‑supported model
+
+We can extract and view the default gam plot of the "best" model using:
+
+```{r bestmodel}
+best.model <- out.list$success.models[[as.character(mod.table$modname[1])]]
+
+plot(best.model, all.terms = TRUE, pages = 1)
+```
+
+Model checks can also be done using the mgcv gam methods:
+
+```{r checks}
+gam.check(best.model)
+```
+
+And finally a summary of the best model using:
+
+```{r summaries}
+summary(best.model)
+```
+
+Note all predictors are highly significant in this model, which we would typically expect given it was selected by AICc.
+
+We can make a prettier plot to visualise the best model using some custom base R code.
+
+```{r prettyplot}
+model.dat=model.set$used.data
+head(model.dat)
+str(model.dat)
+
+x.seq=seq(from=1,to=30,length=100)
+
+best.mod.fact.vars=c("Sex","Species")
+fact.grid=unique(model.dat[,best.mod.fact.vars])
+sex.ltys=c(1,2)
+sex.pchs=c(19,21)
+sex.lvls=levels(model.dat$Sex)
+spp.lvls=levels(model.dat$Species)
+sex.cols=c("blue","red")
+
+# create some symbology and colour schemes for plotting
+model.dat$pchs=16
+for(a in 1:length(sex.lvls)){
+    model.dat$cols[which(model.dat$Sex==sex.lvls[a])]=sex.cols[a]}
+
+y.lim=c(0,ceiling(max(model.dat$GSI)))
+lunar.lim=range(model.dat$lunar.date)
+lunar.seq=seq(from=1,to=30,length=100)
+month.lim=range(model.dat$month)
+month.seq=seq(from=1,to=30,length=100)
+
+month.labels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+
+spp.labels=c("Monodonta labio", "Patelloida saccharina")
+
+par(mfcol=c(2,2),mar=c(0,0.5,0.5,0.5),oma=c(5,4,0.5,2))
+for(x in 1:length(spp.lvls)){
+# lunar
+spp=spp.lvls[x]
+fact.grid.plot=fact.grid[grep(spp,fact.grid$Species),]
+plot.dat=model.dat[grep(spp,model.dat$Species),]
+plot(NA,ylim=y.lim,xlim=lunar.lim,ylab="",xlab="",main="",xpd=NA,yaxt="n",xaxt="n")
+axis(side=2)
+if(x==2){axis(side=1)}
+for(r in 1:nrow(fact.grid.plot)){
+ pred.vals=predict(best.model,newdata=data.frame(
+                                      lunar.date=lunar.seq,
+                                      month=mean(model.dat$month),
+                                      Species=spp,
+                                      Sex=fact.grid.plot[r,"Sex"]),
+                                      type="response",se=T)
+ lines(x.seq,pred.vals$fit,lwd=1.5,
+       col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])
+ lines(x.seq,pred.vals$fit+1.96*pred.vals$se,lty=3,lwd=1.5,
+       col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])
+ lines(x.seq,pred.vals$fit-1.96*pred.vals$se, lty=3,lwd=1.5,
+       col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])}
+points(jitter(plot.dat$lunar.date),plot.dat$GSI,pch=16,col=plot.dat$cols)}
+# month
+for(x in 1:length(spp.lvls)){
+spp=spp.lvls[x]
+fact.grid.plot=fact.grid[grep(spp,fact.grid$Species),]
+plot.dat=model.dat[grep(spp,model.dat$Species),]
+plot(NA,ylim=y.lim,xlim=month.lim,ylab="",xlab="",main="",xpd=NA,yaxt="n",xaxt="n")
+#if(x==1){axis(side=2)}
+if(x==2){axis(side=1,at=c(2,4,6,8,10,12),labels=month.labels[c(2,4,6,8,10,12)])}
+for(r in 1:nrow(fact.grid.plot)){
+ pred.vals=predict(best.model,newdata=data.frame(
+                                      lunar.date=mean(model.dat$lunar.date),
+                                      month=month.seq,
+                                      Species=spp,
+                                      Sex=fact.grid.plot[r,"Sex"]),
+                                      type="response",se=T)
+ lines(x.seq,pred.vals$fit,lwd=1.5,
+       col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])
+ lines(x.seq,pred.vals$fit+1.96*pred.vals$se,lty=3,lwd=1.5,
+       col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])
+ lines(x.seq,pred.vals$fit-1.96*pred.vals$se, lty=3,lwd=1.5,
+       col=sex.cols[which(fact.grid.plot[r,"Sex"]==sex.lvls)])}
+points(jitter(plot.dat$month),plot.dat$GSI,pch=16,col=plot.dat$cols)}
+
+mtext(side=1,text=c("Lunar date","Month of the year"),at=c(0.25,0.75),outer=T,line=2.5)
+mtext(side=2,text="GSI",outer=T,line=2)
+mtext(side=4,text=spp.labels,at=c(0.75,0.25),outer=T)
+legend.dat=unique(model.dat[,c("Sex","cols")])
+legend.dat=legend.dat[order(legend.dat$Sex),]
+
+legend("bottom",legend=paste(legend.dat$Sex),bty="n",cex=1,
+       inset=-0.275,ncol=2,lty=1,col=legend.dat$cols,pch=16,xpd=NA)
+
+```
+
+## Results and discussion
+
+The most strongly supported model included cyclic smooths of both lunar date and month interacting with species, combined with a main effect of sex. This model explained approximately 28% of the variance in GSI.
+
+Strong semi‑lunar patterns were observed for *Patelloida saccharina*, with peaks occurring approximately twice per lunar cycle. In contrast, *Monodonta labio* exhibited weaker and phase‑shifted lunar responses. Seasonal patterns also differed between species, with peak reproductive output occurring at different times of the year.
+
+Overall, this case study demonstrates the value of GAMs with cyclic splines and interaction structures for dissecting complex reproductive rhythms across multiple temporal scales.
+
+
+

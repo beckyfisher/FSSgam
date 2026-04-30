@@ -2,7 +2,7 @@
 title: "FSSgam FAQs"
 author: "Rebecca Fisher"
 date: "04/05/2020"
-output: html_document
+output: rmarkdown::html_vignette
 ---
 
 ```{r setup, include=FALSE}

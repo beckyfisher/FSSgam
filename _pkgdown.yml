@@ -1,0 +1,22 @@
+url: https://beckyfisher.github.io/FSSgam
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+  left: [home, faq, case-studies]
+right: [github]
+
+components:
+  faq:
+  text: FAQ
+href: articles/FAQ.html
+
+case-studies:
+  text: Case studies
+menu:
+  - text: Example 1
+href: articles/case-study-1.html
+
+reference: []
