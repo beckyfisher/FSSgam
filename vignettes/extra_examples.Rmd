@@ -6,11 +6,12 @@ author:
   - S.M. Sin
   - A.C. Lee
   - Dr Tim J. Langlois
-output:
-  html_document:
-    toc: true
-    toc_depth: 2
-    number_sections: true
+
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Extra examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
@@ -210,7 +211,7 @@ heatmap.2(all.var.imp,notecex=0.4,  dendrogram ="none",
                      col=colorRampPalette(c("yellow","orange","red"))(30),
                      trace="none",key.title = "",keysize=2,
                      notecol="black",key=T,
-                     sepcolor = "black",margins=c(12,14), lhei=c(3,10),lwid=c(3,10),
+                     sepcolor = "black", 
                      Rowv=FALSE,Colv=FALSE)
 ```
 

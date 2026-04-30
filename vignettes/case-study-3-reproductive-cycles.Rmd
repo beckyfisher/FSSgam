@@ -1,16 +1,17 @@
 ---
-title: "Case Study 3: Reproductive patterns of tropical intertidal invertebrates"
+title: "Case Study 3"
 author:
   - R. Fisher
   - S.K. Wilson
   - S.M. Sin
   - A.C. Lee
   - Dr Tim J. Langlois
-output:
-  html_document:
-    toc: true
-    toc_depth: 2
-    number_sections: true
+
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study 3}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}

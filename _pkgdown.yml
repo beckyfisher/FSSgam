@@ -5,18 +5,22 @@ template:
 
 navbar:
   structure:
-  left: [home, faq, case-studies]
-right: [github]
+    left: [home, faq, case-studies]
+    right: [github]
+    
+articles:
+  - title: FAQ
+    contents:
+      - FAQ
 
-components:
-  faq:
-  text: FAQ
-href: articles/FAQ.html
+  - title: Case studies
+    contents:
+      - case-study-1-reef-fish
+      - case-study-2-soft-sediment
+      - case-study-3-reproductive-cycles
 
-case-studies:
-  text: Case studies
-menu:
-  - text: Example 1
-href: articles/case-study-1.html
+  - title: Extra examples
+    contents:
+      - extra_examples
 
-reference: []
+
