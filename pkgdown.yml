@@ -1,0 +1,6 @@
+pandoc: 3.8.3
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  FAQ: FAQ.html
+last_built: 2026-05-01T02:56Z
