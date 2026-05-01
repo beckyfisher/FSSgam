@@ -5,22 +5,8 @@ template:
 
 navbar:
   structure:
-    left: [home, faq, case-studies]
-    right: [github]
-    
-articles:
-  - title: FAQ
-    contents:
-      - FAQ
-
-  - title: Case studies
-    contents:
-      - case-study-1
-      - case-study-2
-      - case-study-3
-
-  - title: Extra examples
-    contents:
-      - extra_examples
-
-
+    left:
+      - home
+      - articles
+    right:
+      - github
