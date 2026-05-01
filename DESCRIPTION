@@ -1,4 +1,4 @@
-Package: FSSgam_docs
+Package: FSSgam.docs
 Title: Full Subsets Multiple Regression in R Using GAMs
 Version: 1.11
 Authors@R: 

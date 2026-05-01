@@ -26,7 +26,6 @@ jobs:
           extra-packages: |
             any::pkgdown
             any::remotes
-            local::.
 
       - name: Install FSSgam package from GitHub
         run: remotes::install_github("beckyfisher/FSSgam_package")
