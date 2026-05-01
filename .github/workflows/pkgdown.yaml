@@ -47,7 +47,7 @@ jobs:
         run: |
           pkgdown::build_site(
             pkg = "FSSgam",
-            site_path = "docs",
+            path = "docs",
             new_process = FALSE
           )
         shell: Rscript {0}
