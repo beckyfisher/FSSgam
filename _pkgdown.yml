@@ -1,6 +1,9 @@
 url: https://beckyfisher.github.io/FSSgam
 
-      
+home:
+  sidebar:
+    structure: []
+    
 build:
   reference: false
 
