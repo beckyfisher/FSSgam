@@ -56,7 +56,7 @@ library(purrr)
 
 In the original analysis PCA was used to summarise habitat information and scores from principal components 1 and 2 were included in the full subsets analysis. Principal component 1 was positively correlated with complexity and rugosity, but negatively correlated with percent macroalgal cover, while principal component 2 was positively correlated with HC, but negatively correlated with LC. In the revised analysis scores from both principal components (Score1 and Score2) were again included as explanatory variables, along with percent cover estimates from line intercept transects (HC, LC, Macro), complexity and rugosity measures. Zone (fished or NTR) was included as an assessment of fishing pressure. The motivation for including the original PCA scores in the revised analysis was that this should provide a means of comparing if the raw habitat predictors have a stronger relationship with the fish abundance and biomass variables than the PCA aggregate. 
 
-```{r data}
+```{r data, eval=FALSE}
 data("case_study1")
 ```
 Some transformations were applied to ensure the predictors were relatively evenly distribution without

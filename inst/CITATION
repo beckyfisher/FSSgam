@@ -1,0 +1,27 @@
+citHeader("Please cite the FSSgam method using the following publication:")
+
+citEntry(
+  entry    = "article",
+  title    = "A simple function for full-subsets multiple regression in ecology with R",
+  author   = personList(
+    person("Rebecca", "Fisher"),
+    person("Shaun", "K.", "Wilson"),
+    person("Tsai", "M.", "Sin"),
+    person("Ai", "C.", "Lee"),
+    person("Tim", "J.", "Langlois")
+  ),
+  journal  = "Ecology and Evolution",
+  year     = "2018",
+  volume   = "8",
+  number   = "12",
+  pages    = "6104--6113",
+  doi      = "10.1002/ece3.4134",
+  url      = "https://doi.org/10.1002/ece3.4134",
+  textVersion =
+    paste(
+      "Fisher R, Wilson SK, Sin TM, Lee AC, Langlois TJ (2018).",
+      "A simple function for full-subsets multiple regression in ecology with R.",
+      "Ecology and Evolution, 8(12), 6104–6113.",
+      "doi:10.1002/ece3.4134"
+    )
+)

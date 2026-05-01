@@ -1,5 +1,9 @@
 url: https://beckyfisher.github.io/FSSgam
 
+      
+build:
+  reference: false
+
 template:
   bootstrap: 5
 
@@ -10,3 +14,4 @@ navbar:
       - articles
     right:
       - github
+
