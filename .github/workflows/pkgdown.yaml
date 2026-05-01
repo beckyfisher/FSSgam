@@ -49,7 +49,7 @@ jobs:
         working-directory: FSSgam
 
       - name: Check pkgdown output
-        run: ls -R docs
+        run: ls -R FSSgam/docs
               
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
