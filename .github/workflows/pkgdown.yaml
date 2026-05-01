@@ -35,6 +35,10 @@ jobs:
         shell: Rscript {0}
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
 
       - name: Build pkgdown site
         run: pkgdown::build_site_github_pages(pkg = "FSSgam", new_process = FALSE)
