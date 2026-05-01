@@ -1,11 +1,14 @@
 ### Summary
 
-This repository accompanies the FSSgam software paper: *Fisher R, Wilson
-SK, Sin TM, Lee AC, Langlois TJ. A simple function for full-subsets
-multiple regression in ecology with R*, published in the journal Ecology
-and Evolution in 2018 (2018;8:6104–6113). Here we provide  
-documentation, FAQs, the case studies outlined in the original
-publication, as well as some additional examples of usage.
+This repository is a documentation repository that accompanies the
+FSSgam software paper: *Fisher R, Wilson SK, Sin TM, Lee AC, Langlois
+TJ. A simple function for full-subsets multiple regression in ecology
+with R*, published in the journal Ecology and Evolution in 2018
+(2018;8:6104–6113).
+
+Here we provide documentation, FAQs, R code to run the case studies
+outlined in the original publication, as well as some additional
+examples of usage.
 
 **Project website & documentation:**  
 <https://beckyfisher.github.io/FSSgam>
@@ -13,8 +16,40 @@ publication, as well as some additional examples of usage.
 **R package source code:**  
 <https://github.com/beckyfisher/FSSgam_package>
 
-**Publication:**  
+### Installation
+
+The **FSSgam** package depends on a number of standard R packages for
+generalised additive modelling and model selection.
+
+All examples on this site are built and tested using current versions of
+R and the package dependencies via continuous integration.
+
+To install the latest version from github use:
+
+``` r
+
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+remotes::install_github("beckyfisher/FSSgam_package")
+```
+
+### Citation
+
+If you use **FSSgam** or results derived from it, please cite:
+
+Fisher R, Wilson SK, Sin TM, Lee AC, Langlois TJ (2018).  
+*A simple function for full-subsets multiple regression in ecology with
+R.*  
+**Ecology and Evolution**, 8(12), 6104–6113.  
 <https://doi.org/10.1002/ece3.4134>
+
+### Bug reports
+
+If you find a bug, have a question, or would like to suggest an
+improvement,  
+please report it via the GitHub [issue
+tracker](https://github.com/beckyfisher/FSSgam/issues).
 
 ### Background
 
@@ -46,18 +81,6 @@ the maximum complexity allowed for smooth terms.
 The use of the package is demonstrated via case studies that highlight
 how appropriate model sets can be easily constructed, and the broader
 utility of the approach for exploratory ecology.
-
-### Installation
-
-Installation Requires: doSNOW, MuMIn, gamm4, mgcv, nnet Last tested
-using R version 4.0.5
-
-install.packages(“devtools”)
-
-``` r
-
-devtools::install_github("beckyfisher/FSSgam_package")
-```
 
 ### known issues
 

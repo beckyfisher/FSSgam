@@ -54,11 +54,34 @@
   <main id="main" class="col-md-9"><div class="section level3">
 <h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h3>
-<p>This repository accompanies the FSSgam software paper: <em>Fisher R, Wilson SK, Sin TM, Lee AC, Langlois TJ. A simple function for full-subsets multiple regression in ecology with R</em>, published in the journal Ecology and Evolution in 2018 (2018;8:6104–6113). Here we provide<br>
-documentation, FAQs, the case studies outlined in the original publication, as well as some additional examples of usage.</p>
+<p>This repository is a documentation repository that accompanies the FSSgam software paper: <em>Fisher R, Wilson SK, Sin TM, Lee AC, Langlois TJ. A simple function for full-subsets multiple regression in ecology with R</em>, published in the journal Ecology and Evolution in 2018 (2018;8:6104–6113).</p>
+<p>Here we provide documentation, FAQs, R code to run the case studies outlined in the original publication, as well as some additional examples of usage.</p>
 <p><strong>Project website &amp; documentation:</strong><br><a href="https://beckyfisher.github.io/FSSgam" class="uri">https://beckyfisher.github.io/FSSgam</a></p>
 <p><strong>R package source code:</strong><br><a href="https://github.com/beckyfisher/FSSgam_package" class="external-link uri">https://github.com/beckyfisher/FSSgam_package</a></p>
-<p><strong>Publication:</strong><br><a href="https://doi.org/10.1002/ece3.4134" class="external-link uri">https://doi.org/10.1002/ece3.4134</a></p>
+</div>
+<div class="section level3">
+<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h3>
+<p>The <strong>FSSgam</strong> package depends on a number of standard R packages for generalised additive modelling and model selection.</p>
+<p>All examples on this site are built and tested using current versions of R and the package dependencies via continuous integration.</p>
+<p>To install the latest version from github use:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"beckyfisher/FSSgam_package"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h3>
+<p>If you use <strong>FSSgam</strong> or results derived from it, please cite:</p>
+<p>Fisher R, Wilson SK, Sin TM, Lee AC, Langlois TJ (2018).<br><em>A simple function for full-subsets multiple regression in ecology with R.</em><br><strong>Ecology and Evolution</strong>, 8(12), 6104–6113.<br><a href="https://doi.org/10.1002/ece3.4134" class="external-link uri">https://doi.org/10.1002/ece3.4134</a></p>
+</div>
+<div class="section level3">
+<h3 id="bug-reports">Bug reports<a class="anchor" aria-label="anchor" href="#bug-reports"></a>
+</h3>
+<p>If you find a bug, have a question, or would like to suggest an improvement,<br>
+please report it via the GitHub <a href="https://github.com/beckyfisher/FSSgam/issues" class="external-link">issue tracker</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
@@ -69,14 +92,6 @@ documentation, FAQs, the case studies outlined in the original publication, as w
 <p>Advantages include the capacity to fit more predictors than there are replicates, automatic removal of models with correlated predictors, and model sets that include interactions between factors and smooth predictors, as well as smooth interactions with other smooths (via t2).</p>
 <p>The function(s) take a range of arguments that allow control over the model set being constructed, including specifying cyclic and linear continuous predictors, specification of the smoothing algorithm used and the maximum complexity allowed for smooth terms.</p>
 <p>The use of the package is demonstrated via case studies that highlight how appropriate model sets can be easily constructed, and the broader utility of the approach for exploratory ecology.</p>
-</div>
-<div class="section level3">
-<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h3>
-<p>Installation Requires: doSNOW, MuMIn, gamm4, mgcv, nnet Last tested using R version 4.0.5</p>
-<p>install.packages(“devtools”)</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"beckyfisher/FSSgam_package"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="known-issues">known issues<a class="anchor" aria-label="anchor" href="#known-issues"></a>
@@ -103,39 +118,7 @@ See the License for the specific language governing permissions and
 limitations under the License.</code></pre>
 </div>
 
-  </main><aside class="col-md-3"><div class="links">
-<h2 data-toc-skip>Links</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/beckyfisher/FSSgam_package/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/beckyfisher/FSSgam_package/issues" class="external-link">Report a bug</a></li>
-</ul>
-</div>
-
-<div class="license">
-<h2 data-toc-skip>License</h2>
-<ul class="list-unstyled">
-<li>Apache License (== 2.0)</li>
-</ul>
-</div>
-
-
-<div class="citation">
-<h2 data-toc-skip>Citation</h2>
-<ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing FSSgam.docs</a></li>
-</ul>
-</div>
-
-<div class="developers">
-<h2 data-toc-skip>Developers</h2>
-<ul class="list-unstyled">
-<li>Rebecca Fisher <br><small class="roles"> Author, maintainer </small>   </li>
-</ul>
-</div>
-
-
-
-  </aside>
+  </main><aside class="col-md-3"></aside>
 </div>
 
 
