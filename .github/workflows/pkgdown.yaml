@@ -46,7 +46,11 @@ jobs:
       - name: Build pkgdown site
         run: pkgdown::build_site(pkg = "FSSgam", new_process = FALSE)
         shell: Rscript {0}
+        working-directory: .
         
+      - name: Check pkgdown output
+        run: ls -R docs
+              
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
