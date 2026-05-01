@@ -10,7 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout docs repository
+        uses: actions/checkout@v4
+      
+      - name: Checkout FSSgam package repository
         uses: actions/checkout@v4
         with:
           repository: beckyfisher/FSSgam_package
