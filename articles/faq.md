@@ -1,4 +1,4 @@
-# faq
+# FAQs
 
 ## How do you choose which variables to include in **test.fit** (e.g. Model1)
 
