@@ -8,7 +8,7 @@ library(mgcv)
 library(MuMIn)
 library(FSSgam)
 library(tidyverse)
-case_study3 <- get("case_study3", envir = asNamespace("FSSgam"))
+data(case_study3, package = "FSSgam", envir = environment())
 ```
 
 ## Overview

@@ -19,7 +19,7 @@ library(gamm4)
 library(FSSgam)
 library(gridExtra)
 library(grid)
-case_study2 <- get("case_study2", envir = asNamespace("FSSgam"))
+data(case_study2, package = "FSSgam", envir = environment())
 ```
 
 ## Overview
