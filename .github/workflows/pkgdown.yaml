@@ -47,6 +47,9 @@ jobs:
         run: |
           mkdir -p FSSgam/articles
           cp -r articles/* FSSgam/articles/
+  
+      - name: Copy pkgdown config into package
+        run: cp _pkgdown.yml FSSgam/_pkgdown.yml
 
       - name: Build pkgdown site
         run: pkgdown::build_site(new_process = FALSE)
