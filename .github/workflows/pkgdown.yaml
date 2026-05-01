@@ -42,6 +42,11 @@ jobs:
       - name: Configure git
         run: |
           git config --global user.name "github-actions[bot]"
+          
+      - name: Copy articles into package for pkgdown
+        run: |
+          mkdir -p FSSgam/articles
+          cp -r articles/* FSSgam/articles/
 
       - name: Build pkgdown site
         run: pkgdown::build_site(new_process = FALSE)
