@@ -41,5 +41,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
 
       - name: Build pkgdown site
-        run: pkgdown::build_site_github_pages(pkg = "FSSgam", new_process = FALSE)
+        run: pkgdown::build_site(pkg = "FSSgam", new_process = FALSE)
         shell: Rscript {0}
+        
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
