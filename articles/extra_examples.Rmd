@@ -1,12 +1,5 @@
 ---
 title: "Extra examples"
-output:
-  rmarkdown::html_vignette:
-output_file: extra_examples.html
-vignette: >
-  %\VignetteIndexEntry{Extra examples}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}

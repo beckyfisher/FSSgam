@@ -1,12 +1,5 @@
 ---
 title: "Case Study 3"
-output:
-  rmarkdown::html_vignette:
-output_file: case-study-3.html
-vignette: >
-  %\VignetteIndexEntry{Case Study 3}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
