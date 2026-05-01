@@ -15,8 +15,7 @@ require(RColorBrewer)
 library(tibble)
 library(dplyr)
 library(tidyr)
-data("coral_data", package = "FSSgam")
-dat <- coral_data
+dat <- get("coral_data", envir = asNamespace("FSSgam"))
 ```
 
 ## Overview

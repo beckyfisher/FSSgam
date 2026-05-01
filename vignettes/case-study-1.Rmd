@@ -14,7 +14,7 @@ library(RColorBrewer)
 library(dplyr)
 library(tidyr)
 library(purrr)
-data("case_study1", package = "FSSgam")
+case_study1 <- get("case_study1", envir = asNamespace("FSSgam"))
 ```
 
 ## Overview
