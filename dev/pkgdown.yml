@@ -1,0 +1,15 @@
+pandoc: 3.8.3
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  case-study-1: case-study-1.html
+  case-study-2: case-study-2.html
+  case-study-3: case-study-3.html
+  extra-examples: extra-examples.html
+  faq: faq.html
+  function-arguments: function-arguments.html
+  function-outputs: function-outputs.html
+last_built: 2026-06-22T00:55Z
+urls:
+  reference: https://beckyfisher.github.io/FSSgam/reference
+  article: https://beckyfisher.github.io/FSSgam/articles

@@ -1,0 +1,109 @@
+# FAQs
+
+## How do you choose which variables to include in **test.fit** (e.g. Model1)
+
+The **generate_model_set** function must be supplied **test.fit**, which
+is a gam(m) model fitted to the desired response data, with the
+appropriate random effects structure (unless supplied as an **re**
+agument to **gam**, see below) and **family**. This **test.fit** is
+simply updated with new model formula by the **fit_model_set** function,
+so anything supplied in the formula of the **test.fit** is not actually
+used in the full subsets fitting procedure - rather just the underlying
+structure of the model set. This means it doesn’t actually matter what
+variables are included in **test.fit** as predictors, they must just be
+present in the data.frame supplied as **use.dat**. Fitting a sensible
+**test.fit** can be helpful to examine the assumptions of your model
+fits before you even get started, as this can save a lot of time in the
+long run compared to waiting for your “top model” or model set to
+examine the validity of the underlying model assumptions. I highly
+recommending fitting a reasonable **test.fit** and exploring this
+thoroughly to be confident the model has fit as you intend.
+
+There are two examples of generating **test.fit** in the supporting
+material. The first is in the case study 1 vignette
+<https://github.com/beckyfisher/FSSgam/blob/master/case_study1_reef_fish.R>).
+This example shows a **test.fit** calling the gam function in mgcv
+directly, which is necessary to use the **tw()** distribution in this
+example. The main things that need to be specified are the response
+variable (here called simply **response** - but this would be whatever
+variable you want to build the model set to predict), family - in this
+case **tw()**, and the data to use. Here we have fit one of the
+predictors that we think will be important (although that was not
+strictly necessary), as well as the two predictors that we are going to
+use in our null model (again, also not necessary, but **test.fit** is a
+good place to make sure your gam models are fitting as intended). Note
+our null model in this example consists of a random effect of **site**
+specified through **s(site, bs=“re”)**. Note that specifying the null
+terms in **test.fit** does not automatically mean the null terms are
+carried into the full subsets gam. They must also be specified as
+**null.terms** (see line 111 of the case_study1_reef_fish.R example).
+
+In the extra examples vignette
+<https://github.com/beckyfisher/FSSgam/blob/master/extra_examples.R> you
+can see an alternative specification of **test.fit** using the **uGamm**
+function from the **MuMIn**. **uGamm** is wrapper function that allows
+**gamm4** model fits to be updateable and therefore usable by
+**FSSgam**. Here we are fitting a binomial model using the **cbind**
+format for **successes** and **failures** which must be as labelled in
+the **use.dat** data.frame. With uGamm the random effects are specified
+outside the model formula, meaning they will not be updated by
+**FSSgam** and must be specified exactly in the **test.fit**. The random
+effect terms will not need to be specified explicitly as **null.terms**,
+but they will need to appear in **use.dat**.
+
+## What exactly is the r2.vals metric, and how is it derived.
+
+Some information on the R-squuared values reported by **FSSgam** can be
+found in the help file, type **?fit_model_set** into the R console. The
+default value supplied is an approximation based on the R-square value
+calculated for a model between the fitted values and the observed data.
+This approximation was used because R.sq is not always provided by the
+underlying **gam(m)** functions used, and may cause errors. If you set
+the argument **r2.type=”r2”** **FSSgam** will return the R-square as
+calculated by the underlying gam function, which in most cases is what
+should be reported. If you want an **R.sq** that represents that left
+over after random effects are removed, you can also set
+**report.unique.r2=TRUE** which will subtract the null model **R2** from
+each of the fitted models in the set. The **report.unique.r2** as
+defined can sometimes yield negative R.sq values, so may or may not be
+useful for reporting. There are more formal methods for calculating the
+R.sq for the fixed component of models as these cannot be easily
+generalised across all the model types handled by **FSSgam** this is not
+currently implemented in the package. Subtracting the null model R.sq is
+a simplification, but potentially still informative.
+
+## Do I need to include a Null intercept only model in **null.terms**?
+
+FSSgam automatically includes a null, intercept only model in the model
+set. This model will add any additional terms specified as
+**null.terms** to the model formula as well. The null model is useful to
+assess if any of the included predictors have explanatory value, thus if
+your null model is in the top set (say within 2AICc), it may be inferred
+that none of the predictors are useful beyond simply a mean value of the
+response.
+
+## When I use lm4=TRUE, so I need to include my random effect in **null.terms**?
+
+The FSSgam package only updates the model formula, everything else in
+the model remains the same and becomes part of the null model. When a
+gamm4 is fit using lme4 = TRUE, this is a separate argument to gamm4
+(“random”) - and so the specified random effect will be retained as part
+of the null model. SO the answer is NO, in this case you do not need to
+add your random effect to **null.terms**. The only reason random effects
+sometimes need to be specified in **null.terms** is when the formulation
+bs=‘re’ is used to specify them in gam from mgcv - because in that case
+they are part of the model formula and will be overwritten by the set of
+model formula as they are fit by FSSgam.
+
+## What happened to **generate.model.set** and **fit.model.set**?
+
+Those dot-case names have been renamed to **generate_model_set** and
+**fit_model_set** respectively, to follow modern snake_case R naming
+conventions. The old names still work exactly as before - they now
+simply emit a [`.Deprecated()`](https://rdrr.io/r/base/Deprecated.html)
+warning and forward all of their arguments straight on to the new
+functions - so existing scripts, including code from the original 2018
+paper, will keep running. No argument names changed as part of this
+rename, and **full.subsets.gam** was not renamed. New code should call
+**generate_model_set** and **fit_model_set** directly to avoid the
+deprecation warning.
