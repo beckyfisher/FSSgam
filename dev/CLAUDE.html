@@ -36,7 +36,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Project: FSSgam (documentation companion repo)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/beckyfisher/FSSgam_package/blob/master/CLAUDE.md" class="external-link"><code>CLAUDE.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/beckyfisher/FSSgam_package/blob/dev/CLAUDE.md" class="external-link"><code>CLAUDE.md</code></a></small>
     </div>
 
 <div id="project-fssgam-documentation-companion-repo" class="section level1">
@@ -60,6 +60,10 @@
 <p><code>FSSgam_package</code> was modernised for CRAN submission: <code>generate.model.set()</code> and <code>fit.model.set()</code> became deprecated aliases (each calls <code><a href="https://rdrr.io/r/base/Deprecated.html" class="external-link">.Deprecated()</a></code> then forwards) for <code>generate_model_set()</code> and <code>fit_model_set()</code>. <code>full.subsets.gam()</code> was <strong>not</strong> renamed. That rename has since been merged into <code>FSSgam_package</code>’s <code>master</code>, so the default <code>remotes::install_github("beckyfisher/FSSgam_package")</code> now picks it up — no branch pin needed to get the new functions.</p>
 <p>At the same time, all vignette code/prose was updated to the new names, the richer Background/Methods/Results &amp; Discussion write-ups from the original published Appendix S1–S5 were folded into the case-study vignettes (replacing the placeholder discussion that used to be there), and two new reference vignettes were added (<code>function-arguments.Rmd</code>, <code>function-outputs.Rmd</code>, from Appendix S1/S2). <code>references.bib</code> grew from 11 to 90 entries to support this. The site also gained a dual root/<code>dev</code> pkgdown deployment (see Section 3) and a “Reference” navbar link out to <code>FSSgam_package</code>’s own function reference site.</p>
 <p>Full detail of how/why is in <code>prompts/vignette-integration-rename.md</code> and the <code>dev</code> branch git history — check there before re-deriving any of this from scratch. If a future package update reintroduces deprecation warnings or renames something else, the same approach applies: re-grep the vignettes for the old name, update call-sites and prose, then render and verify (see Section 5).</p>
+</div>
+<div class="section level3">
+<h3 id="recently-fixed-root-site-going-stale-2026-06-22">Recently fixed: root site going stale (2026-06-22)<a class="anchor" aria-label="anchor" href="#recently-fixed-root-site-going-stale-2026-06-22"></a></h3>
+<p>At some point master/main’s <code>DESCRIPTION</code> <code>Version</code> was bumped to match dev’s 4-part dev-style value (<code>1.11.0.9000</code>). Because pkgdown’s <code>development: mode: auto</code> decides root-vs-<code>docs/dev/</code> purely from that version string — not from which branch is building — every push from <em>either</em> branch started landing in <code>docs/dev/</code>, and the root site (<a href="https://beckyfisher.github.io/FSSgam" class="uri">https://beckyfisher.github.io/FSSgam</a>) silently stopped rebuilding. It sat frozen on an older commit (missing the “Reference” navbar link and the <code>f33216f</code> case-study fixes) while <code>docs/dev/</code> kept updating correctly. Fixed by setting master/main’s <code>Version</code> back to a plain release-style number (<code>1.11.0</code>) and leaving dev’s <code>1.11.0.9000</code> alone. The same bug exists in <code>FSSgam_package</code> (both branches there also carry the same <code>1.0.0.9000</code>) — reported back to the user rather than fixed here, per Section 1.</p>
 <hr></div>
 </div>
 <div class="section level2">
@@ -76,10 +80,16 @@
   function-outputs.Rmd       # same, for Appendix S2 / function outputs
 R/zzz.R                  # @noRd placeholder; package exports nothing, exists only for pkgdown
 DESCRIPTION              # Package: FSSgam.docs (intentionally not "FSSgam") — do not rename.
-                          # Version is intentionally a dev-style 4-part number (currently
-                          # 1.11.0.9000) so pkgdown's `development: mode: auto` (see _pkgdown.yml)
-                          # routes dev-branch builds to docs/dev/ instead of the root site — don't
-                          # "fix" this back to a plain release-style version.
+                          # `development: mode: auto` (see _pkgdown.yml) decides root-vs-docs/dev/
+                          # purely from this file's Version string at build time — NOT from which
+                          # git branch triggered the build. A 4-part dev-style version (x.y.z.9000)
+                          # always builds to docs/dev/; a plain release-style version always builds
+                          # to root. For the intended split to work, master/main must carry a
+                          # release-style version (currently 1.11.0) and dev must carry the 4-part
+                          # one (currently 1.11.0.9000). If both branches ever end up with the same
+                          # Version (e.g. a version bump applied to both without checking this),
+                          # root silently stops rebuilding and goes stale while dev keeps updating —
+                          # this happened and was fixed on 2026-06-22 (see Section 2).
 NAMESPACE                # auto-generated, currently has no exports — do not hand-edit
 man/                      # empty — no exported functions to document
 _pkgdown.yml              # site nav/config — do not restructure without being asked. Has
@@ -112,7 +122,8 @@ publication/                # supplementary files from the original paper — re
 <h2 id="id_4-known-constraints-or-decisions">4. Known Constraints or Decisions<a class="anchor" aria-label="anchor" href="#id_4-known-constraints-or-decisions"></a></h2>
 <ul><li><p><strong>Do not rename the <code>FSSgam.docs</code> package id</strong>, and do not add exported functions to it. It exists purely so pkgdown has something to load.</p></li>
 <li><p><strong>Do not edit, clone into, or push to <code>beckyfisher/FSSgam_package</code></strong> from this repo’s session. This repo only consumes that package.</p></li>
-<li><p><strong>The site installs the real package from GitHub at build time</strong> (<code>.github/workflows/pkgdown.yaml</code>). The install step is branch-conditional: when <em>this</em> repo’s branch is <code>dev</code> it installs <code>FSSgam_package</code>’s <code>dev</code> ref; otherwise it installs <code>FSSgam_package</code>’s default branch. Since the snake_case rename is now merged into <code>FSSgam_package</code>’s <code>master</code>, both paths currently resolve to equivalent functions — the conditional isn’t load-bearing for the rename itself any more, but it’s still what makes the dual root/<code>dev</code> pkgdown-site setup work (see <code>_pkgdown.yml</code>’s <code>development: mode: auto</code> and <code>DESCRIPTION</code>’s dev-style <code>Version</code>). Don’t remove it without checking with the user first.</p></li>
+<li><p><strong>The site installs the real package from GitHub at build time</strong> (<code>.github/workflows/pkgdown.yaml</code>). The install step is branch-conditional: when <em>this</em> repo’s branch is <code>dev</code> it installs <code>FSSgam_package</code>’s <code>dev</code> ref; otherwise it installs <code>FSSgam_package</code>’s default branch. This is a separate mechanism from the root/<code>dev</code> site split below — it controls which package version vignettes are rendered against, not where the built site lands. Don’t remove it without checking with the user first.</p></li>
+<li><p><strong>The root-vs-<code>docs/dev/</code> site split is controlled by <code>DESCRIPTION</code>’s <code>Version</code> string alone, not by git branch</strong> (see the <code>DESCRIPTION</code> entry in Section 3 for the mechanics and the 2026-06-22 incident where both branches briefly carried the same version and root went stale). Keep master/main’s <code>Version</code> release-style and dev’s 4-part — don’t bump them to match each other.</p></li>
 <li><p><strong>Do not alter historical results, figures, or scientific conclusions</strong> in the case-study vignettes — a standing rule, not tied to any one task. Only function-call syntax and documentation-only text (prose, citations, cross-references) are ever in scope for changes here.</p></li>
 <li><p><strong>Vignettes here are R Markdown (<code>.Rmd</code>), not Quarto (<code>.qmd</code>) — this overrides the global CLAUDE.md preference for Quarto.</strong> <code>DESCRIPTION</code> declares <code>VignetteBuilder: knitr</code> and <code>SystemRequirements: pandoc</code>; the whole pkgdown pipeline is built around knitr/rmarkdown. Do not convert these to <code>.qmd</code> — that’s a much larger, unrequested structural change that would break the existing build.</p></li>
 <li><p><strong>Do not change <code>inst/CITATION</code>, the license text, or the DOI/citation block in <code>README.md</code>.</strong></p></li>
