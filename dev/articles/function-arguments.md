@@ -4,14 +4,14 @@
 
 This vignette is based on Appendix S1 of Fisher et al. (2018), which
 documented the full set of arguments accepted by the original combined
-[`full.subsets.gam()`](https://beckyfisher.github.io/FSSgam/reference/full.subsets.gam.html)
+[`full.subsets.gam()`](https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html)
 function. That function has since been split into two steps:
-[`generate_model_set()`](https://beckyfisher.github.io/FSSgam/reference/generate_model_set.html),
+[`generate_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html),
 which builds the candidate model set from a data set and a test model
 fit, and
-[`fit_model_set()`](https://beckyfisher.github.io/FSSgam/reference/fit_model_set.html),
+[`fit_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html),
 which fits every model in that set and summarises the results.
-[`full.subsets.gam()`](https://beckyfisher.github.io/FSSgam/reference/full.subsets.gam.html)
+[`full.subsets.gam()`](https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html)
 itself still exists and accepts the same combined argument list
 described here, but new code should call the two split functions
 directly (see the case study vignettes for worked examples). No argument
@@ -40,7 +40,7 @@ according to which of the two functions each argument is now passed to.
 | linear.vars | NA | NA if there are no continuous predictors to be treated as linear (not fitted as smooths). Only use this where variables are clearly continuous in nature, but you are confident a linear relationship is valid. It may also be useful for continuous predictors that are not well distributed along the x-axis (i.e., sampling was conducted in clumped distances from a feature of interest). |
 | null.terms | “” | A character vector indicating the form of any re smooths to be included in gam \[e.g. “s(site,bs=‘re’)”\] or any other fixed terms or smooths that the user wants to include in the null model. Use of bs=“re” is an alternative way of fitting simple random structures that avoids use of PQL and allows the greater range of families available in gam (mgcv) to be used. Note: make sure you use “gam” instead of uGamm to make sure PQL is not used. |
 
-[`generate_model_set()`](https://beckyfisher.github.io/FSSgam/reference/generate_model_set.html)
+[`generate_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html)
 also accepts `non.linear.correlations` (default `FALSE`), added after
 the original 2018 paper and not part of the table above. As shown in the
 extra examples vignette, setting it to `TRUE` runs the predictor
@@ -58,10 +58,10 @@ between predictors.”
 | r2.type | “r2.lm.est” | The value to extract from the gam model fit to use as the R squared value. Defaults to “r2.lm.est” which returns an estimated R squared value based on a linear regression between the observed and predicted values. “r2” will return the adjusted R.sq as reported by gam, gamm or gamm4. “dev” will return the deviance explained as reported by gam or gamm. Note gamm4 does not currently return a deviance. |
 | report.unique.r2 | F | The estimated null model R2 is subtracted from each model R2 to give an idea of the unique variance explained. This can be useful where null terms are included in the model set. |
 
-[`fit_model_set()`](https://beckyfisher.github.io/FSSgam/reference/fit_model_set.html)
+[`fit_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html)
 also accepts `save.model.fits` and `VI.mods`, added after the original
 2018 paper and not part of the table above — see
-[`?fit_model_set`](https://beckyfisher.github.io/FSSgam/reference/fit_model_set.html)
+[`?fit_model_set`](https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html)
 for details.
 
 ## References

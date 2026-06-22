@@ -4,13 +4,13 @@
 
 This vignette is based on Appendix S2 of Fisher et al. (2018), which
 documented the outputs returned by the original combined
-[`full.subsets.gam()`](https://beckyfisher.github.io/FSSgam/reference/full.subsets.gam.html)
+[`full.subsets.gam()`](https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html)
 function. That function has since been split into
-[`generate_model_set()`](https://beckyfisher.github.io/FSSgam/reference/generate_model_set.html),
+[`generate_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html),
 which builds and returns the candidate model set, and
-[`fit_model_set()`](https://beckyfisher.github.io/FSSgam/reference/fit_model_set.html),
+[`fit_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html),
 which fits every model in that set and returns the fitted results.
-[`full.subsets.gam()`](https://beckyfisher.github.io/FSSgam/reference/full.subsets.gam.html)
+[`full.subsets.gam()`](https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html)
 itself still exists and returns the same combined set of outputs
 described here.
 
@@ -18,9 +18,9 @@ The tables below reproduce the original output descriptions, split
 according to which of the two functions now returns each one — matching
 how they are accessed in the case study vignettes
 (e.g. `model.set$predictor.correlations` from
-[`generate_model_set()`](https://beckyfisher.github.io/FSSgam/reference/generate_model_set.html)’s
+[`generate_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html)’s
 return value, and `out.list$mod.data.out` from
-[`fit_model_set()`](https://beckyfisher.github.io/FSSgam/reference/fit_model_set.html)’s).
+[`fit_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html)’s).
 
 ## Outputs from `generate_model_set()`
 

@@ -177,6 +177,31 @@ factor.factor.interactions = TRUE), and as interaction terms between the
 two smoothers (this is default behaviour for FSSgam, see
 ?generate_model_set).
 
+``` r
+
+use.dat <- dat
+
+start.fit <- gam(
+  GSI ~ s(lunar.date, k = 5, bs = "cc"),
+  family = Gamma(),
+  data = use.dat
+)
+
+model.set <- generate_model_set(
+  use.dat = use.dat,
+  test.fit = start.fit,
+  pred.vars.cont = cont.vars,
+  pred.vars.fact = factor.vars,
+  cyclic.vars = cyclic.vars,
+  k = 5,
+  factor.factor.interactions = TRUE,
+  smooth.smooth.interactions = TRUE,
+  max.predictors = 4
+)
+
+out.list <- fit_model_set(model.set, parallel = FALSE)
+```
+
 ## Model assessment
 
 Examine predictor correlations. This looks as would be expected. Note

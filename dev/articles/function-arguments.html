@@ -72,11 +72,11 @@
 </h2>
 <p>This vignette is based on Appendix S1 of <span class="citation">Fisher et al. (2018)</span>, which documented the full
 set of arguments accepted by the original combined
-<code><a href="https://beckyfisher.github.io/FSSgam/reference/full.subsets.gam.html">full.subsets.gam()</a></code> function. That function has since been
-split into two steps: <code><a href="https://beckyfisher.github.io/FSSgam/reference/generate_model_set.html">generate_model_set()</a></code>, which builds
+<code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html">full.subsets.gam()</a></code> function. That function has since been
+split into two steps: <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set()</a></code>, which builds
 the candidate model set from a data set and a test model fit, and
-<code><a href="https://beckyfisher.github.io/FSSgam/reference/fit_model_set.html">fit_model_set()</a></code>, which fits every model in that set and
-summarises the results. <code><a href="https://beckyfisher.github.io/FSSgam/reference/full.subsets.gam.html">full.subsets.gam()</a></code> itself still
+<code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set()</a></code>, which fits every model in that set and
+summarises the results. <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html">full.subsets.gam()</a></code> itself still
 exists and accepts the same combined argument list described here, but
 new code should call the two split functions directly (see the case
 study vignettes for worked examples). No argument names changed as part
@@ -296,7 +296,7 @@ make sure PQL is not used.</td>
 </tr>
 </tbody>
 </table>
-<p><code><a href="https://beckyfisher.github.io/FSSgam/reference/generate_model_set.html">generate_model_set()</a></code> also accepts
+<p><code><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set()</a></code> also accepts
 <code>non.linear.correlations</code> (default <code>FALSE</code>), added
 after the original 2018 paper and not part of the table above. As shown
 in the extra examples vignette, setting it to <code>TRUE</code> runs the
@@ -360,10 +360,10 @@ terms are included in the model set.</td>
 </tr>
 </tbody>
 </table>
-<p><code><a href="https://beckyfisher.github.io/FSSgam/reference/fit_model_set.html">fit_model_set()</a></code> also accepts
+<p><code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set()</a></code> also accepts
 <code>save.model.fits</code> and <code>VI.mods</code>, added after the
 original 2018 paper and not part of the table above — see
-<code><a href="https://beckyfisher.github.io/FSSgam/reference/fit_model_set.html">?fit_model_set</a></code> for details.</p>
+<code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">?fit_model_set</a></code> for details.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
