@@ -42,7 +42,7 @@
 <div id="project-fssgam-documentation-companion-repo" class="section level1">
 
 <p>This file provides <strong>project-specific context only</strong> — repo structure, dependencies, the current task, and prompt logging. It does not impose personal style preferences on collaborators.</p>
-<p><strong>For Claude:</strong> If a <code>CLAUDE.md</code> exists in the parent directory of this repo, read it before proceeding — it may contain user-specific environment and style preferences. This repo-level file takes precedence over any parent-level file where they conflict, <strong>except</strong> where a parent-level default is explicitly overridden below (Section 5 notes one such override).</p>
+<p><strong>For Claude:</strong> If a <code>CLAUDE.md</code> exists in the parent directory of this repo, read it before proceeding — it may contain user-specific environment and style preferences. This repo-level file takes precedence over any parent-level file where they conflict, <strong>except</strong> where a parent-level default is explicitly overridden below (Section 4 notes one such override).</p>
 <hr><div class="section level2">
 <h2 id="id_1-repo-type">1. Repo Type<a class="anchor" aria-label="anchor" href="#id_1-repo-type"></a></h2>
 <p><strong>Documentation/pkgdown companion repo</strong>, not a deployable R package in the normal sense. <code>DESCRIPTION</code> declares <code>Package: FSSgam.docs</code> — that name is deliberate and distinct from the real <code>FSSgam</code> package. This repo’s R package scaffolding (<code>DESCRIPTION</code>, <code>NAMESPACE</code>, <code>R/zzz.R</code>, empty <code>man/</code>) exists solely so that <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> has a namespace to load while it renders the site; <code>R/zzz.R</code> exports nothing on purpose.</p>
@@ -54,58 +54,57 @@
 <blockquote>
 <p>Fisher R, Wilson SK, Sin TM, Lee AC, Langlois TJ (2018). A simple function for full-subsets multiple regression in ecology with R. <em>Ecology and Evolution</em>, 8(12), 6104–6113. <a href="https://doi.org/10.1002/ece3.4134" class="external-link uri">https://doi.org/10.1002/ece3.4134</a></p>
 </blockquote>
-<p>It hosts the pkgdown site at <a href="https://beckyfisher.github.io/FSSgam" class="uri">https://beckyfisher.github.io/FSSgam</a>: FAQs, case-study vignettes reproducing the published analyses, and extra usage examples. It is the reference researchers actually read and cite — treat its case-study <strong>scientific content</strong> (numbers, figures, conclusions) as a fixed historical record. Only the <em>syntax</em> used to call the package should ever change here, and only when the package itself changes.</p>
+<p>It hosts the pkgdown site at <a href="https://beckyfisher.github.io/FSSgam" class="uri">https://beckyfisher.github.io/FSSgam</a>: FAQs, case-study vignettes reproducing the published analyses, and extra usage examples. It is the reference researchers actually read and cite — treat its case-study <strong>scientific content</strong> (numbers, figures, conclusions) as a fixed historical record. Only the <em>syntax</em> used to call the package, and clearly documentation-only text, should ever change here.</p>
 <div class="section level3">
-<h3 id="current-task-update-vignettes-for-the-fssgam_package-v100-rename">Current task: update vignettes for the FSSgam_package v1.0.0 rename<a class="anchor" aria-label="anchor" href="#current-task-update-vignettes-for-the-fssgam_package-v100-rename"></a></h3>
-<p><code>FSSgam_package</code> was just modernised for CRAN submission. The headline change for this repo: <code>generate.model.set()</code> and <code>fit.model.set()</code> are now deprecated aliases (each calls <code><a href="https://rdrr.io/r/base/Deprecated.html" class="external-link">.Deprecated()</a></code> then forwards to the new name) for <code>generate_model_set()</code> and <code>fit_model_set()</code>. The old names still work, so nothing here is broken today — but every vignette currently calls the deprecated names, which means re-rendering any of them right now would emit <code><a href="https://rdrr.io/r/base/Deprecated.html" class="external-link">.Deprecated()</a></code> warnings into the published output. <code>full.subsets.gam()</code> was <strong>not</strong> renamed; leave every mention of it alone.</p>
-<p>Files that need updating (counts are call-sites of the old names found at the time this file was written — re-grep before relying on these):</p>
-<table class="table"><thead><tr><th>File</th>
-<th>Old-name occurrences</th>
-</tr></thead><tbody><tr><td><code>vignettes/case-study-1.Rmd</code></td>
-<td>2</td>
-</tr><tr><td><code>vignettes/case-study-2.Rmd</code></td>
-<td>4</td>
-</tr><tr><td><code>vignettes/case-study-3.Rmd</code></td>
-<td>4</td>
-</tr><tr><td><code>vignettes/extra-examples.Rmd</code></td>
-<td>6</td>
-</tr><tr><td><code>vignettes/faq.Rmd</code></td>
-<td>2</td>
-</tr></tbody></table><p>For each file:</p>
-<ol style="list-style-type: decimal"><li>
-<strong>Code chunks</strong> — replace <code>generate.model.set(</code> → <code>generate_model_set(</code> and <code>fit.model.set(</code> → <code>fit_model_set(</code>. Arguments are unchanged (the package kept all public argument names, e.g. <code>use.dat</code>, <code>test.fit</code>, <code>pred.vars.cont</code>, exactly as they were — only the function names changed). Do not touch variable names like <code>model.set</code> or <code>out.list</code>; those are local to the vignettes, not part of the package API.</li>
-<li>
-<strong>Prose</strong> — update inline bolded mentions (<code>**generate.model.set**</code>, <code>**fit.model.set**</code>) and cross-reference links (<code>?generate.model.set</code> → <code>?generate_model_set</code>) to the new names. <code>case-study-2.Rmd</code> has a short narrative passage (near the top) explaining why <code>generate.model.set</code>/ <code>fit.model.set</code> superseded <code>full.subsets.gam</code> — update the function names there too, but preserve the narrative.</li>
-<li>
-<strong><code>faq.Rmd</code></strong> — beyond the mechanical rename, consider adding a short new Q&amp;A entry explaining the rename itself (old names still work via deprecation warning; new code should call the snake_case names). This is genuinely useful content given the change, not just a find-and-replace.</li>
-<li>
-<strong>Render and verify</strong> — after editing, render each changed <code>.Rmd</code> (e.g. <code>rmarkdown::render("vignettes/case-study-1.Rmd")</code> or <code>devtools::build_rmd("vignettes/case-study-1.Rmd")</code>) and confirm: it renders without error, and the output contains <strong>no</strong> <code>'generate.model.set' is deprecated</code> / <code>'fit.model.set' is deprecated</code> warnings. A leftover warning means a call site was missed.</li>
-<li>
-<strong>This requires the updated package to actually be installed.</strong> See Section 4 — as of this writing the rename lives on the <code>dev</code> branch of <code>FSSgam_package</code>, not yet merged to <code>master</code>, so the default <code>remotes::install_github("beckyfisher/FSSgam_package")</code> will <strong>not</strong> pick it up. Install explicitly from the branch to test locally; don’t leave that branch pin in any committed workflow file without checking with the user first (see Section 4).</li>
-</ol><p>If rendering a case-study vignette ever produces <strong>different numeric results</strong> than before (not just a different deprecation warning), stop and flag it to the user rather than updating the published numbers — that would indicate a behavioural regression in <code>FSSgam_package</code>, which needs to be fixed in that repo, not papered over here.</p>
+<h3 id="recently-completed-v100-rename--appendix-integration-2026-06-22">Recently completed: v1.0.0 rename + appendix integration (2026-06-22)<a class="anchor" aria-label="anchor" href="#recently-completed-v100-rename--appendix-integration-2026-06-22"></a></h3>
+<p><code>FSSgam_package</code> was modernised for CRAN submission: <code>generate.model.set()</code> and <code>fit.model.set()</code> became deprecated aliases (each calls <code><a href="https://rdrr.io/r/base/Deprecated.html" class="external-link">.Deprecated()</a></code> then forwards) for <code>generate_model_set()</code> and <code>fit_model_set()</code>. <code>full.subsets.gam()</code> was <strong>not</strong> renamed. That rename has since been merged into <code>FSSgam_package</code>’s <code>master</code>, so the default <code>remotes::install_github("beckyfisher/FSSgam_package")</code> now picks it up — no branch pin needed to get the new functions.</p>
+<p>At the same time, all vignette code/prose was updated to the new names, the richer Background/Methods/Results &amp; Discussion write-ups from the original published Appendix S1–S5 were folded into the case-study vignettes (replacing the placeholder discussion that used to be there), and two new reference vignettes were added (<code>function-arguments.Rmd</code>, <code>function-outputs.Rmd</code>, from Appendix S1/S2). <code>references.bib</code> grew from 11 to 90 entries to support this. The site also gained a dual root/<code>dev</code> pkgdown deployment (see Section 3) and a “Reference” navbar link out to <code>FSSgam_package</code>’s own function reference site.</p>
+<p>Full detail of how/why is in <code>prompts/vignette-integration-rename.md</code> and the <code>dev</code> branch git history — check there before re-deriving any of this from scratch. If a future package update reintroduces deprecation warnings or renames something else, the same approach applies: re-grep the vignettes for the old name, update call-sites and prose, then render and verify (see Section 5).</p>
 <hr></div>
 </div>
 <div class="section level2">
 <h2 id="id_3-key-files-and-structure">3. Key Files and Structure<a class="anchor" aria-label="anchor" href="#id_3-key-files-and-structure"></a></h2>
 <pre><code>vignettes/
-  case-study-1.Rmd      # Ningaloo reef fish (zoning/habitat) — uses generate.model.set/fit.model.set
-  case-study-2.Rmd      # Langlois et al. soft-sediment reanalysis — same, plus narrative prose to update
-  case-study-3.Rmd      # intertidal gastropod reproductive patterns — same
-  extra-examples.Rmd    # binomial/uGamm example via gamm4 — same, 3 separate call sites
-  faq.Rmd                # FAQ; prose-only mentions, good place to add a rename note
+  case-study-1.Rmd          # Ningaloo reef fish (zoning/habitat) — calls generate_model_set/fit_model_set
+  case-study-2.Rmd          # Langlois et al. soft-sediment reanalysis — same; has a dated "** note **"
+                            # block tracking its own update history — append to it, don't replace it
+  case-study-3.Rmd          # intertidal gastropod reproductive patterns — same
+  extra-examples.Rmd        # binomial/uGamm example via gamm4 — same
+  faq.Rmd                    # FAQ; includes a Q&amp;A entry explaining the snake_case rename
+  function-arguments.Rmd     # reference vignette built from the original Appendix S1, split by
+                            # whether each argument belongs to generate_model_set() or fit_model_set()
+  function-outputs.Rmd       # same, for Appendix S2 / function outputs
 R/zzz.R                  # @noRd placeholder; package exports nothing, exists only for pkgdown
-DESCRIPTION              # Package: FSSgam.docs (intentionally not "FSSgam") — do not rename
+DESCRIPTION              # Package: FSSgam.docs (intentionally not "FSSgam") — do not rename.
+                          # Version is intentionally a dev-style 4-part number (currently
+                          # 1.11.0.9000) so pkgdown's `development: mode: auto` (see _pkgdown.yml)
+                          # routes dev-branch builds to docs/dev/ instead of the root site — don't
+                          # "fix" this back to a plain release-style version.
 NAMESPACE                # auto-generated, currently has no exports — do not hand-edit
 man/                      # empty — no exported functions to document
-_pkgdown.yml              # site nav/config — do not restructure without being asked
-.github/workflows/pkgdown.yaml  # installs FSSgam_package from GitHub, then builds + deploys the site
+_pkgdown.yml              # site nav/config — do not restructure without being asked. Has
+                          # `development: mode: auto`, and a custom "Reference" navbar component
+                          # linking out to FSSgam_package's own pkgdown reference site.
+.github/workflows/pkgdown.yaml  # builds + deploys the site. Triggers on push to main/master/dev.
+                          # Installs FSSgam_package from GitHub; the install step picks
+                          # FSSgam_package's `dev` ref only when *this* repo's branch is `dev` —
+                          # currently redundant now that FSSgam_package's dev is merged to its
+                          # master, but harmless; ask before removing it, since it exists to
+                          # support the dual root/dev pkgdown-site setup, not just the rename.
+                          # Deploys with `keep_files: true` so the root and /dev/ builds don't
+                          # clobber each other on gh-pages.
+references.bib            # bibtex entries cited from the case-study/function-reference vignettes.
+                          # Keyed `{Surname}{Year}{ShortCamelCaseTitle}`, e.g. `Wilson2012Ningaloo`.
 inst/CITATION              # paper citation metadata — do not change
-README.md                 # repo summary, install instructions, citation, license — function names
-                          # are not mentioned here, no change needed for this task
+README.md                 # repo summary, install instructions, citation, license. Now also has a
+                          # one-sentence pointer near the top to FSSgam_package's function
+                          # reference — the DOI/citation block itself is still off-limits.
 superceded/                # manual pre-edit backups for untracked files (already in active use —
                           # see x_function_check_correlations_v1.00.R); follow this existing
                           # convention for any other untracked file you edit
 ignore/                    # scratch workspace, gitignored
+scratch/                   # scratch workspace, gitignored — holds working material like source
+                          # appendix text or PR-description drafts; not part of the published site
 docs/                      # pkgdown build output, gitignored — never hand-edit or commit into this
 publication/                # supplementary files from the original paper — read-only, do not touch</code></pre>
 <hr></div>
@@ -113,20 +112,28 @@ publication/                # supplementary files from the original paper — re
 <h2 id="id_4-known-constraints-or-decisions">4. Known Constraints or Decisions<a class="anchor" aria-label="anchor" href="#id_4-known-constraints-or-decisions"></a></h2>
 <ul><li><p><strong>Do not rename the <code>FSSgam.docs</code> package id</strong>, and do not add exported functions to it. It exists purely so pkgdown has something to load.</p></li>
 <li><p><strong>Do not edit, clone into, or push to <code>beckyfisher/FSSgam_package</code></strong> from this repo’s session. This repo only consumes that package.</p></li>
-<li><p><strong>The site installs the real package from GitHub at build time</strong> (<code>.github/workflows/pkgdown.yaml</code> → <code>remotes::install_github("beckyfisher/FSSgam_package")</code>, no <code>ref=</code> pin, so it tracks that repo’s default branch). At the time of writing, the snake_case rename is on that repo’s <code>dev</code> branch, not yet merged to <code>master</code>. To render against the new functions locally, install with <code>remotes::install_github("beckyfisher/FSSgam_package", ref = "dev")</code> first. <strong>Do not commit a <code>ref = "dev"</code> pin into the workflow file</strong> — that’s a local testing step only; ask the user before changing what the CI workflow installs, since flipping it back at the wrong time would silently re-deploy docs built against the old function names.</p></li>
-<li><p><strong>Do not alter historical results, figures, or scientific conclusions</strong> in the case-study vignettes. Only function-call syntax and clearly documentation-only text (FAQ prose, cross-references) are in scope for the current task.</p></li>
-<li><p><strong>Vignettes here are R Markdown (<code>.Rmd</code>), not Quarto (<code>.qmd</code>) — this overrides the global CLAUDE.md preference for Quarto.</strong> <code>DESCRIPTION</code> declares <code>VignetteBuilder: knitr</code> and <code>SystemRequirements: pandoc</code>; the whole pkgdown pipeline is built around knitr/rmarkdown. Do not convert these to <code>.qmd</code> as part of this task or any other — that’s a much larger, unrequested structural change that would break the existing build.</p></li>
+<li><p><strong>The site installs the real package from GitHub at build time</strong> (<code>.github/workflows/pkgdown.yaml</code>). The install step is branch-conditional: when <em>this</em> repo’s branch is <code>dev</code> it installs <code>FSSgam_package</code>’s <code>dev</code> ref; otherwise it installs <code>FSSgam_package</code>’s default branch. Since the snake_case rename is now merged into <code>FSSgam_package</code>’s <code>master</code>, both paths currently resolve to equivalent functions — the conditional isn’t load-bearing for the rename itself any more, but it’s still what makes the dual root/<code>dev</code> pkgdown-site setup work (see <code>_pkgdown.yml</code>’s <code>development: mode: auto</code> and <code>DESCRIPTION</code>’s dev-style <code>Version</code>). Don’t remove it without checking with the user first.</p></li>
+<li><p><strong>Do not alter historical results, figures, or scientific conclusions</strong> in the case-study vignettes — a standing rule, not tied to any one task. Only function-call syntax and documentation-only text (prose, citations, cross-references) are ever in scope for changes here.</p></li>
+<li><p><strong>Vignettes here are R Markdown (<code>.Rmd</code>), not Quarto (<code>.qmd</code>) — this overrides the global CLAUDE.md preference for Quarto.</strong> <code>DESCRIPTION</code> declares <code>VignetteBuilder: knitr</code> and <code>SystemRequirements: pandoc</code>; the whole pkgdown pipeline is built around knitr/rmarkdown. Do not convert these to <code>.qmd</code> — that’s a much larger, unrequested structural change that would break the existing build.</p></li>
 <li><p><strong>Do not change <code>inst/CITATION</code>, the license text, or the DOI/citation block in <code>README.md</code>.</strong></p></li>
 <li><p><strong>Apache License 2.0</strong> — retain existing licence; do not change it.</p></li>
-<li><p><strong>Line endings:</strong> like <code>FSSgam_package</code>, files in this repo can show as locally modified with no real content change (CRLF vs. the LF committed history) — <code>git diff --stat</code> showing equal insertions/deletions across every line of a file is the signature. If you see this, check before editing: commit the line-ending normalization as its own separate commit first (same approach used in <code>FSSgam_package</code>), so it doesn’t get tangled with the content changes from this task.</p></li>
+<li><p><strong>Line endings:</strong> files in this repo can show as locally modified with no real content change (CRLF vs. the LF committed history) — <code>git diff --stat</code> showing close to equal insertions/deletions across every line of a file is the usual signature, but it isn’t reliable on its own: a genuinely tiny one-line edit can <em>also</em> render as a whole-file diff in this environment without any CRLF involved. Confirm with a byte-level check (<code>cmp</code>/<code>xxd</code> on a sampled unrelated line, or <code>diff &lt;(git show HEAD:file) file</code>) before assuming corruption either way. If real CRLF is found, strip it with <code>tr -d '\r' &lt; file &gt; tmp &amp;&amp; mv tmp file</code> run as an <strong>individual command per file</strong> — <code>for</code>/<code>while</code> loops in Bash have not reliably written files in this environment (they execute and report success but silently no-op on the actual write); single standalone commands do work.</p></li>
+<li><p><strong>Render each vignette in its own <code>Rscript</code> process when verifying changes.</strong> Calling <code><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">rmarkdown::render()</a></code> more than once inside the same R session has segfaulted in this environment.</p></li>
 <li><p><strong>Git awareness (same rule as the global CLAUDE.md):</strong> tracked-and-clean → edit freely; tracked-but-uncommitted → warn which files are affected and wait for confirmation; untracked → back up to <code>superceded/</code> first (preserving the original filename) before editing — this repo already uses that exact convention (see <code>superceded/x_function_check_correlations_v1.00.R</code>).</p></li>
 <li><p><strong>Ask before installing any new R package.</strong> Rendering the vignettes needs everything in <code>DESCRIPTION</code>’s <code>Imports</code>/<code>Suggests</code> (<code>doSNOW</code>, <code>MuMIn</code>, <code>gamm4</code>, <code>mgcv</code>, <code>nnet</code>, plus <code>car</code>, <code>doBy</code>, <code>dplyr</code>, <code>ggplot2</code>, <code>gplots</code>, <code>grid</code>, <code>gridExtra</code>, <code>purrr</code>, <code>RColorBrewer</code>, <code>tibble</code>, <code>tidyr</code>, <code>tidyverse</code>, <code>rmarkdown</code>, <code>knitr</code>, <code>R.rsp</code>) plus the <code>FSSgam</code> package itself (installed separately, see above) — check what’s actually installed before assuming a missing-package error means something is broken.</p></li>
+<li><p><strong>Show the diff/summary of what changed before committing</strong>, even when already asked to make the change — a confirmed preference, asked for explicitly more than once.</p></li>
 <li><p><strong>Never commit or push without being explicitly asked.</strong></p></li>
 </ul><hr></div>
 <div class="section level2">
-<h2 id="id_5-after-finishing-the-vignette-update">5. After finishing the vignette update<a class="anchor" aria-label="anchor" href="#id_5-after-finishing-the-vignette-update"></a></h2>
-<p>Summarise clearly: - Which files changed and what specifically moved (code call-sites vs. prose vs. new FAQ content). - Confirmation that every changed vignette re-rendered cleanly with no deprecation warnings. - Whether you tested against the package installed from <code>dev</code> or from <code>master</code> — and a reminder that the committed workflow still installs from <code>master</code>, so the rendered docs won’t reflect these changes on the live site until <code>FSSgam_package</code>’s <code>dev</code> branch is merged. - Anything you found that looks like a genuine behavioural difference (not just a renamed function) between the old and new package — flag, don’t fix here.</p>
-<hr></div>
+<h2 id="id_5-verifying-changes-when-the-package-updates">5. Verifying changes when the package updates<a class="anchor" aria-label="anchor" href="#id_5-verifying-changes-when-the-package-updates"></a></h2>
+<p>When <code>FSSgam_package</code> changes in a way that affects this repo (a rename, a new argument, a behavioural change), the workflow that worked for the v1.0.0 rename:</p>
+<ol style="list-style-type: decimal"><li>Re-grep the vignettes for the old name/usage — don’t trust a past session’s call-site counts without re-checking.</li>
+<li>Update call-sites and prose (bolded mentions, <code>?old.name</code> → <code>?new_name</code> cross-references), leaving argument names and local variable names alone unless the package itself changed them.</li>
+<li>Check what’s actually installed locally first (<code>packageVersion("FSSgam")</code>, <code>ls(getNamespace("FSSgam"))</code>) — a missing-function error usually just means the wrong branch/version is installed, not that something is broken in this repo.</li>
+<li>Render each changed <code>.Rmd</code> in its <strong>own</strong> <code>Rscript</code> process (see Section 4) and confirm: no errors, no deprecation warnings, and — for any vignette with a <code>bibliography:</code> field — no unresolved <code>[@key]</code> citations in the rendered HTML.</li>
+<li>If rendering ever produces <strong>different numeric results</strong> than before (not just a different warning), stop and flag it to the user rather than updating the published numbers — that indicates a behavioural regression in <code>FSSgam_package</code>, to be fixed there, not papered over here.</li>
+<li>Summarise afterwards: which files changed and what moved (code vs. prose vs. new content), confirmation every changed vignette re-rendered cleanly, which package branch you tested against vs. what the committed CI workflow actually installs, and anything that looked like a genuine behavioural difference rather than a cosmetic rename.</li>
+</ol><hr></div>
 <div class="section level2">
 <h2 id="id_6-prompt-log">6. Prompt Log<a class="anchor" aria-label="anchor" href="#id_6-prompt-log"></a></h2>
 <p>Session logs for this project are in <code>prompts/</code>. Create the folder if it does not exist. Use a short kebab-case descriptor as the filename for each session (e.g. <code>vignette-rename-update.md</code>). If a file with that name already exists, append to it.</p>
