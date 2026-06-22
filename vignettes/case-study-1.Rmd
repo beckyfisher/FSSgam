@@ -143,7 +143,7 @@ The models are then implemented via a call to gam (mgcv) with the random effect 
 
 Given the complexity of the null model, the maximum number of additional predictors were limited to only an additional two terms (max.predictors=2) and k was limited to 3 to enforce strictly monotonic relationships. 
 
-```{r fss, include=TRUE, echo=FALSE}
+```{r fss, include=TRUE, echo=TRUE}
 out.all <- list()
 var.imp <- list()
 fss.all <- list()
