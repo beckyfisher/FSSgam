@@ -2,7 +2,7 @@ name: pkgdown
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, dev]
   workflow_dispatch:
 
 jobs:
@@ -26,11 +26,17 @@ jobs:
           extra-packages: |
             any::pkgdown
             any::remotes
+            local::.
 
       # Optional but recommended: install the real package
-      # so examples in articles/reference can run
+      # so examples in articles/reference can run.
+      # The dev branch builds against FSSgam_package's dev branch (where the
+      # snake_case generate_model_set/fit_model_set rename lives); main/master
+      # build against FSSgam_package's default branch.
       - name: Install FSSgam package from GitHub
-        run: remotes::install_github("beckyfisher/FSSgam_package")
+        run: |
+          ref <- if (Sys.getenv("GITHUB_REF_NAME") == "dev") "dev" else NULL
+          remotes::install_github("beckyfisher/FSSgam_package", ref = ref)
         shell: Rscript {0}
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -41,7 +47,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Build pkgdown site
-        run: pkgdown::build_site(new_process = FALSE)
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
       - name: Check pkgdown output
@@ -52,3 +58,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
+          keep_files: true

@@ -69,11 +69,11 @@ Model1=uGamm(cbind(successes,failures)~s(Depth,k=4,bs='cr'),
              data=use.dat,
              lme4=TRUE)
 
-model.set=generate.model.set(use.dat=use.dat,
+model.set=generate_model_set(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds)
-out.list=fit.model.set(model.set, parallel = FALSE, 
+out.list=fit_model_set(model.set, parallel = FALSE, 
                        report.unique.r2 = TRUE)
 ```
 
@@ -112,7 +112,7 @@ model.set$predictor.correlations
 We can run the same thing using the non.linear correlation matrix, which can be useful if you think there might be strong non-linear dependencies between predictors.
 
 ```{r nonlincors}
-model.set=generate.model.set(use.dat=use.dat,
+model.set=generate_model_set(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds,
@@ -121,7 +121,7 @@ model.set$predictor.correlations
 ```
 
 ```{r nonlinfit}
-out.list=fit.model.set(model.set)
+out.list=fit_model_set(model.set)
 mod.table=out.list$mod.data.out
 mod.table=mod.table[order(mod.table$AICc),]
 tab <- mod.table |>
@@ -164,11 +164,11 @@ for(i in 1:length(resp.vars)){
              data=use.dat,
              lme4=TRUE)
 
- model.set=generate.model.set(use.dat=use.dat,
+ model.set=generate_model_set(use.dat=use.dat,
                           test.fit=Model1,
                           pred.vars.cont=cont.preds,
                           pred.vars.fact=cat.preds)
- out.list=fit.model.set(model.set)
+ out.list=fit_model_set(model.set)
  fss.all=c(fss.all,list(out.list))
  mod.table=out.list$mod.data.out
  mod.table=mod.table[order(mod.table$AICc),]

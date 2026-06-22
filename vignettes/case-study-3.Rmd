@@ -1,5 +1,6 @@
 ---
 title: "Case Study 3"
+bibliography: ../references.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -20,9 +21,19 @@ The example demonstrates how cyclic smoothers and factor interactions can be com
 
 ## Background
 
-Many marine invertebrates exhibit reproductive cycles across multiple temporal scales, including seasonal, lunar and semi‑lunar rhythms. These cycles are difficult to analyse using traditional categorical approaches because both seasonality and lunarity are inherently cyclic processes.
+Studies of reproductive biology are fundamental to understanding resource allocation, larval recruitment and population dynamics [@Underwood2001SupplySideEcology]. Moreover, these studies provide valuable insights into life history strategies, uncovering important interactions with environmental conditions and habitats, therefore supporting the development of appropriate measures for conservation and management. In addition, for species of commercial importance, these studies also provide in situ parameters critical for population modelling and prediction, underpinning efforts to ensure sustainable fishing.
 
-Generalised Additive Models (GAMs) provide a flexible framework for examining non‑linear, cyclic patterns and their interactions with biological factors such as sex and species. Here, GAMs with full subsets selection are used to disentangle monthly and lunar drivers of reproductive output in two common intertidal gastropods: *Patelloida saccharina* and *Monodonta labio*.
+Reproductive cycles can occur at a number of scales, ranging (in decreasing frequency) from circadian, semi-lunar and lunar to seasonal. Despite an apparent lack of pronounced seasonality in climate in the tropics, many organisms display seasonal peaks in reproductive activity [@Brown2006TropicalSeasonality], the most striking example being that of annual or bi-annual synchronous spawning in scleractinian corals [e.g. @Babcock1994MassSpawning]. In marine systems, lunar and semi-lunar cycles are an obvious cue for reproduction, particularly for broadcast spawners, for which synchronicity is critical for fertilization success [@Babcock1992SpawningEvents]. Few studies have concurrently examined effects of annual and lunar patterns on the spawning of marine invertebrates in the tropics in a manner that elucidates relative reproductive output at both scales, since sampling timing for intertidal organisms often coincides with both tide height and lunarity, which can confound conclusions about reproductive biorhythmicity.
+
+Both lunar and seasonal patterns are cyclical in nature, which is a challenge for conventional/traditional analyses. Calendar month is frequently denoted as a categorical factor and statistically evaluated via Analyses of Variance (ANOVA) or similar techniques [e.g. @Liu1994HongKongLimpets; @EttingerEpstein2007SpongeGametogenesis]. Formal elucidation of lunar and semilunar cycles mostly take two major forms in the literature: (a) factorial analyses in which moon phase is distributed into two to four categories [e.g. @Iliffe1982SeaUrchinRhythms]; and (b) periodic regression where analyses are conducted on sine and cosine angular terms that prescribe lunar days [e.g. @Cavraro2014LunarKillifish]. Categorized moon phase is usually analysed via ANOVA, although alternative methods applied include Chi-squared contingency tests [@Battaglene2002SpawningInduction], and paired t-tests (within months) have also been applied to two-level categorization of moon phases [e.g. @Iliffe1982SeaUrchinRhythms]. Periodic regression [see @deBruyn2001LunarCycles] models the response as a function of sine and cosine terms of lunar day (in radians), with separate terms to detect semi-lunar cycles, and is beneficial in that it correctly captures the cyclical nature of lunar days rather than constraining this temporal element to categories. The parameter estimates for lunar day are coefficients which define phase shift and amplitude [@Batschelet1981CircularStatistics]. The downside of applying either categorical ANOVAs or periodic regression to the elucidation of biorhythmic cycles in reproduction is the number of parameters that implicitly must be estimated, although a model-building approach could lead to the exclusion of semi-lunar cycles, if appropriate.
+
+In this case study, Generalised Additive Models (GAMs) were used to elucidate reproductive patterns at multiple temporal scales in two species of broadcast spawning gastropods. GAMs were first proposed by @Hastie1990GeneralizedAdditiveModels, and are able to deal with non-linear relationships between an independent variable and multiple, potentially interactive predictors in the same model. GAMs have been widely used to model intra-annual trends in the abundances [e.g. @Bellido2001SquidGAM], condition and reproductive activity [@Dunn2011OrangeRoughy] of commercially important species, but remain relatively rarely applied to non-fishery species [but see @Guijarro2012PandalidShrimps]. The full subsets gam function also allows other factors (e.g. sex) to be examined as both interactions (e.g. a different relationship with lunar day within each level), and as main effects (i.e. a shift in the overall relationship up or down within each level). *Patelloida saccharina* and *Monodonta labio* are common in the rocky intertidal, and are among the most abundant gastropods inhabiting artificial seawalls and breakwaters in Singapore [@Lee2009IntertidalAssemblages]. To examine this, the reproductive cycles of these two gastropods, determined by gonadosomatic index, were assessed across three temporal scales: among years, among months (i.e. yearly pattern), and within month (i.e. lunar and semi-lunar cycle).
+
+## Methods
+
+Samples were collected from St. John's Island (southern island complex), Singapore (1°16.8'N, 103°52.2'E). Reproductive cycles for *Patelloida saccharina* and *Monodonta labio* were determined from 10-15 individuals (shell length 7-25 mm for *P. saccharina* and 10-30 mm for *M. labio*) that were collected from July 2003 to July 2004, every three days for the first five months and every seven days for the following eight months. A total of 744 individuals of *P. saccharina* and 549 individuals of *M. labio* were collected.
+
+Specimens were relaxed in 1:1 7.5% MgCl:seawater solution and then preserved in 4% buffered seawater formalin. After preservation, individuals were removed from their shells and gonadal material removed, and the wet weight of gonadal and somatic tissues were obtained, giving the Gonadosomatic Index (GSI = wet weight gonad / wet weight somatic x 100). Histology sections were also prepared for female gonads, staged following the oocyte categories of @Orton1956PatellaBreeding, @Underwood1974ProsobranchsReproductive and @Liu1994HongKongLimpets, to validate the use of GSI as a measure of reproductive output. Histological examination showed a strong relationship between GSI and gonad maturity for both species, supporting GSI as an appropriate proxy for reproductive output, although the relationship was less clear-cut for *M. labio* than for *P. saccharina*.
 
 ## R packages
 
@@ -70,9 +81,9 @@ Both month and lunar date are treated as **cyclic continuous predictors**, allow
 GSI is modelled as a Gamma distribution.
 
 Sex and Species are included as interaction terms with each other (via factor.factor.interactions = TRUE), 
-and as interaction terms between the two smoothers (this is default behaviour for FSSgam, see ?generate.model.set).
+and as interaction terms between the two smoothers (this is default behaviour for FSSgam, see ?generate_model_set).
 
-```{r fss, include=FALSE}
+```{r fss, echo=TRUE, results='hide'}
 use.dat <- dat
 
 start.fit <- gam(
@@ -81,7 +92,7 @@ start.fit <- gam(
   data = use.dat
 )
 
-model.set <- generate.model.set(
+model.set <- generate_model_set(
   use.dat = use.dat,
   test.fit = start.fit,
   pred.vars.cont = cont.vars,
@@ -93,12 +104,12 @@ model.set <- generate.model.set(
   max.predictors = 4
 )
 
-out.list <- fit.model.set(model.set, parallel = FALSE)
+out.list <- fit_model_set(model.set, parallel = FALSE)
 ```
 
 ## Model assessment
 
-Examine predictor correlations. This looks as would be expected. Note the function does estimate correlations between factors as well as continuous predictors. See ?generate.model.set for more details on how this is done.
+Examine predictor correlations. This looks as would be expected. Note the function does estimate correlations between factors as well as continuous predictors. See ?generate_model_set for more details on how this is done.
 
 ```{r predictorcors}
 model.set$predictor.correlations
@@ -248,11 +259,12 @@ legend("bottom",legend=paste(legend.dat$Sex),bty="n",cex=1,
 
 ## Results and discussion
 
-The most strongly supported model included cyclic smooths of both lunar date and month interacting with species, combined with a main effect of sex. This model explained approximately 28% of the variance in GSI.
+A model with both lunar date and month as interactions with species, along with an intercept effect of sex, showed the highest ranking according to both AICc and BIC, explaining 28% of the variance in GSI for these species (see the model comparison table above). Plots of this top model (see the best-model plot above) indicated that the strong interactions observed for lunar day and month were due to markedly different trends for each of these predictors across the two species. A strong semi-lunar pattern was detected in *P. saccharina*, with fairly equal peaks in GSI occurring around lunar days 7 and 23, and minima around days 0 and 15; this pattern correlates with minimal tidal range over the sampling period. Lunar patterns were generally much weaker for *M. labio* GSI, and were also reversed relative to those observed in *P. saccharina*, with peaks centred on lunar days 0 and 15 and bimodal minima around days 5 and 23. The magnitude of lunar periodicity on GSI was also markedly less pronounced in *M. labio* than in *P. saccharina*, in which lunar effects were several times that of seasonal effects.
 
-Strong semi‑lunar patterns were observed for *Patelloida saccharina*, with peaks occurring approximately twice per lunar cycle. In contrast, *Monodonta labio* exhibited weaker and phase‑shifted lunar responses. Seasonal patterns also differed between species, with peak reproductive output occurring at different times of the year.
+Initial examinations suggest that both *Patelloida saccharina* and *Monodonta labio* are continuous breeders, indicated by GSI values that do not drop below five throughout the year. Near continuous or extended breeding, with slight peaks in intensity during specific times/seasons, have previously been reported in trochids [see @Hickman1992TrochaceanGastropods for a review] and acmaeids [@Creese1980LimpetFecundities; @Catalan1993LimpetReproductiveCycle]. However, there were differences in the timing of peak reproduction between the two species throughout the year, with *M. labio* showing the highest output during February and March, and *P. saccharina* showing peak output in July. February/March denote the end of the Northeast monsoon, with increasing seawater temperatures over the following months, reaching annual peaks around August [@Sin2016UrbanMarineSingapore]. Changes in temperature are known proximate indicators of reproductive seasonality in both limpets as well as trochaceans [@Morton1983SeaShoreEcology]. However, additional factors such as the seasonal availability of food resources may also contribute to the trigger of gametogenesis [@Hickman1992TrochaceanGastropods], but were not examined in this study. Values of GSI were higher in males compared to females for both species, regardless of lunar day or time of year, which is a common phenomenon in intertidal gastropods [@Creese1980LimpetFecundities; @Creese1983CellanaRadians; @Liu1994HongKongLimpets].
 
 Overall, this case study demonstrates the value of GAMs with cyclic splines and interaction structures for dissecting complex reproductive rhythms across multiple temporal scales.
 
+## References
 
-
+<div id="refs"></div>

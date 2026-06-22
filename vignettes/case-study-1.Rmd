@@ -1,5 +1,6 @@
 ---
 title: "Case Study 1"
+bibliography: ../references.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -23,15 +24,15 @@ This case study examines how management zoning and habitat structure influence a
 
 ## Background
 
-Coral reef fish are highly diverse assemblages that provide important ecosystem services for millions of people (Pratchett et al. 2014). These services are however threatened by overfishing (Newton et al. 2007; MacNeil et al. 2015) and a loss of habitat, in particular corals (Wilson et al. 2006) and the structure they provide (Rogers et al. 2014). No-take reserves (NTR) promote higher abundance and biomass of fish (Russ 2002; McClanahan et al. 2009) and conserve ecosystem function (Graham et al. 2011). It is clear that NTR cannot prevent large scale disturbances, such as heat stress that cause extensive coral loss and decline in fish (Jones et al. 2004; Graham et al. 2008), however a reduction in local pressures in NTR may facilitate greater resilience of coral reefs (Hughes et al. 2010). 
+Coral reef fish are highly diverse assemblages that provide important ecosystem services for millions of people [@Pratchett2014ReefDegradation]. These services are however threatened by overfishing [@Newton2007IslandFisheries; @MacNeil2015RecoveryPotential] and a loss of habitat, in particular corals [@Wilson2006MultipleDisturbances] and the structure they provide [@Rogers2014StructuralComplexity]. No-take reserves (NTR) promote higher abundance and biomass of fish [@Russ2002MarineReserves; @McClanahan2009FisheriesClosure] and conserve ecosystem function [@Graham2011MicrobesToPeople]. It is clear that NTR cannot prevent large scale disturbances, such as heat stress that cause extensive coral loss and decline in fish [@Jones2004CoralDecline; @Graham2008ClimateMPAs], however a reduction in local pressures in NTR may facilitate greater resilience of coral reefs [@Hughes2010ReefResilience].
 
-By examining patch reefs of differing habitat quality inside and outside of NTR within the Ningaloo marine park, Wilson et al. (2012) explored how habitat degradation and fishing influenced the abundance and biomass of fish from different functional groups. Explanatory variables in the original analyses were summarised using the scores from the two axes of a principal components analysis (PCA), making it was impossible to tease apart the relative importance of variables that were correlated along the axis. The revised analyses here based on a full subsets multiple regression approach allows the influence of habitat variables to be assessed independently.
+By examining patch reefs of differing habitat quality inside and outside of NTR within the Ningaloo marine park, @Wilson2012Ningaloo explored how habitat degradation and fishing influenced the abundance and biomass of fish from different functional groups. Explanatory variables in the original analyses were summarised using the scores from the two axes of a principal components analysis (PCA), making it impossible to tease apart the relative importance of variables that were correlated along the axis. The revised analyses here based on a full subsets multiple regression approach allows the influence of habitat variables to be assessed independently.
 
 ## Methods
 
-Benthic and fish communities on patch reefs within fished (n=35) and NTR (n=33) of the Ningaloo lagoon were surveyed to investigate the influence of habitat and fishing on coral reef fish. On each patch the seascape level of reef structure (complexity) was assessed using a six point scale, where 0 represents no vertical relief and 5 represents highly complex reefs with small overhangs and caves (Polunin & Roberts 1993). Finer scale physical reef structure (rugosity) was measured as the linear distance covered by a 3m length of chain fitted to the reef contour (Risk 1972). Benthic cover was quantified along a 5m line intercept transect using the categories: high complex corals such as Branching morphologies (HC), low complexity corals such as massive and encrusting morphologies (LC), and macroalgae (Macro). 
+Benthic and fish communities on patch reefs within fished (n=35) and NTR (n=33) of the Ningaloo lagoon were surveyed to investigate the influence of habitat and fishing on coral reef fish. On each patch the seascape level of reef structure (complexity) was assessed using a six point scale, where 0 represents no vertical relief and 5 represents highly complex reefs with small overhangs and caves [@Polunin1993CaribbeanReserves]. Finer scale physical reef structure (rugosity) was measured as the linear distance covered by a 3m length of chain fitted to the reef contour [@Risk1972FishDiversity]. Benthic cover was quantified along a 5m line intercept transect using the categories: high complex corals such as Branching morphologies (HC), low complexity corals such as massive and encrusting morphologies (LC), and macroalgae (Macro).
 
-Abundance and size of adult fish was estimated by a diver using a point count method. Large mobile fish were initially counted from the perimeter of the patch, after which the entire patch was surveyed for smaller site attached species. Fish were placed into broad functional groups based on their diets and biomass calculated from length weight relationships (Froese & Pauly 2011).
+Abundance and size of adult fish was estimated by a diver using a point count method. Large mobile fish were initially counted from the perimeter of the patch, after which the entire patch was surveyed for smaller site attached species. Fish were placed into broad functional groups based on their diets and biomass calculated from length weight relationships [@FroesePauly2011FishBase].
 
 ## Data analysis
 
@@ -142,7 +143,7 @@ The models are then implemented via a call to gam (mgcv) with the random effect 
 
 Given the complexity of the null model, the maximum number of additional predictors were limited to only an additional two terms (max.predictors=2) and k was limited to 3 to enforce strictly monotonic relationships. 
 
-```{r fss, include=FALSE, echo=FALSE}
+```{r fss, include=TRUE, echo=TRUE}
 out.all <- list()
 var.imp <- list()
 fss.all <- list()
@@ -161,7 +162,7 @@ for (rv in resp.vars) {
     data = use.dat
   )
 
-  model.set <- generate.model.set(
+  model.set <- generate_model_set(
     use.dat = use.dat,
     test.fit = base.mod,
     max.predictors = 2,
@@ -171,7 +172,7 @@ for (rv in resp.vars) {
     null.terms = "s(SQRTSA,bs='cr',k=3)+s(site,bs='re')+s(depth,bs='cr',k=3)"
   )
 
-  out.list <- fit.model.set(model.set, parallel = FALSE) 
+  out.list <- fit_model_set(model.set, parallel = FALSE)
 
   var.imp[[rv]] <- out.list$variable.importance$aic$variable.weights.raw
   out.all[[rv]] <- out.list$mod.data.out
@@ -239,7 +240,8 @@ It can also be a good idea to check your predictor correlations.
 knitr::kable(
   model.set$predictor.correlations,
   digits = 2,
-  caption = "Predictor correlations"
+  caption = "Predictor correlations",
+  row.names = FALSE
 )
 ```
 
@@ -289,9 +291,14 @@ legend("bottom",legend= zones,bty="n",ncol=2,col=c(1,2),pch=c(16,16),
 
 ## Results and discussion
 
-Across functional feeding groups, reef structural complexity consistently emerged as a dominant predictor of both abundance and biomass. Management zoning effects were comparatively weaker, although some responses showed interactions between habitat structure and zoning.
+Seascape measures of patch reef complexity were generally the best predictor of both fish abundance and biomass (see the model comparison table above). Fish abundance and biomass were low on reefs with no relief and were higher on structurally complex reefs (see the predictor plots above). These findings are consistent with other studies that show measures of seascape complexity are positively correlated with fish abundance, and often outperform other measures of complexity [@Wilson2007VisualAssessments; @Collins2016StereoVideo]. The results generally support the original findings of @Wilson2012Ningaloo that there are strong relationships with habitat and only weak evidence for an effect of the zoning status. However, here we were able to tease apart the influence of correlated habitat variables. For example, the revised analysis found herbivore abundance was positively correlated with complexity, which is similar to recent studies at Ningaloo that also found abundance of these fish is not closely related to macroalgal cover [@Wilson2014SeasonalHabitat] and is better explained by reef structure [@Downie2013HerbivorousFish]. Conversely, @Wilson2012Ningaloo identified scores from principal component 1 as the best predictor of herbivore abundances, which inferred a positive effect of both rugosity and complexity and a negative effect of macroalgal cover.
+
+Interestingly, the abundance of planktivores and piscivores was positively related to scores from principal component 1 (see the variable importance heatmap and predictor plots above), suggesting summarised metrics of habitat from PCA may still be relevant to some components of the fish assemblage. A habitat descriptor that incorporates multiple correlated factors may be more important if there is a diverse array of habitat associations among fish within a trophic guild. For example, the planktivores include small bodied damselfish that have close associations with complex corals [@Coker2014LiveCoralHabitat], cardinalfish that are often found in caves or branching corals [@Marnane2002Cardinalfishes], and larger fish that are likely transient and more associated with seascape measures of habitat [@Friedlander1998HawaiianReef]. As large bodied fish also typically contribute more to community biomass than their small counterparts [@Ackerman2000ReefFishAssemblages] it is not surprising that planktivore biomass is more closely aligned with seascape complexity than other measures of habitat.
+
+Overall the results of the revised analysis are similar to those from the original study based on the use of data-reduction via PCA. However, by including the underlying habitat information, the new analysis provides a clearer picture of which elements of the benthic assemblage are most important to fish. This additional information is useful for building scientific hypotheses and parametric functional models for how such fishes may be influenced by changes in habitat (such as is expected due to ocean warming and climate change, see [@Pratchett2015ClimateChange]), as well as informing which elements of the habitat should be a focus for management targets.
 
 This example demonstrates how full subsets GAMMs can be used to synthesise drivers across multiple response variables in ecological datasets.
 
+## References
 
-
+<div id="refs"></div>
