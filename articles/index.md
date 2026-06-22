@@ -11,3 +11,7 @@
 - [Extra
   Examples](https://beckyfisher.github.io/FSSgam/articles/extra-examples.md):
 - [FAQs](https://beckyfisher.github.io/FSSgam/articles/faq.md):
+- [Function
+  Arguments](https://beckyfisher.github.io/FSSgam/articles/function-arguments.md):
+- [Function
+  Outputs](https://beckyfisher.github.io/FSSgam/articles/function-outputs.md):

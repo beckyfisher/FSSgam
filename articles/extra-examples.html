@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Extra Examples • FSSgam.docs</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Extra Examples">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">FSSgam.docs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,8 +37,11 @@
     <li><a class="dropdown-item" href="../articles/case-study-3.html">Case Study 3</a></li>
     <li><a class="dropdown-item" href="../articles/extra-examples.html">Extra Examples</a></li>
     <li><a class="dropdown-item" href="../articles/faq.html">FAQs</a></li>
+    <li><a class="dropdown-item" href="../articles/function-arguments.html">Function Arguments</a></li>
+    <li><a class="dropdown-item" href="../articles/function-outputs.html">Function Outputs</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="https://beckyfisher.github.io/FSSgam_package/reference/">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/beckyfisher/FSSgam_package/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -78,7 +81,7 @@ which none of the original case studies were able to do.</p>
 identified as points scores on individual images, with a small number of
 potential predictors.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://beckyfisher.github.io/FSSgam">FSSgam</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/beckyfisher/FSSgam_package" class="external-link">FSSgam</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mgcv</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MuMIn</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bprice2652/car_repo" class="external-link">car</a></span><span class="op">)</span></span>
@@ -237,10 +240,10 @@ trials, and run the FSSgam approach.</p>
 </tr>
 <tr class="even">
 <td align="left">Depth.by.Survey+Survey</td>
-<td align="right">5804.053</td>
-<td align="right">0.121</td>
+<td align="right">5804.118</td>
+<td align="right">0.117</td>
 <td align="right">30.00</td>
-<td align="right">77.981</td>
+<td align="right">78.047</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
@@ -451,7 +454,7 @@ trials, and run the FSSgam approach.</p>
 which can be useful if you think there might be strong non-linear
 dependencies between predictors.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model.set</span><span class="op">=</span><span class="fu"><a href="https://beckyfisher.github.io/FSSgam/reference/generate.model.set.html">generate.model.set</a></span><span class="op">(</span>use.dat<span class="op">=</span><span class="va">use.dat</span>,</span>
+<code class="sourceCode R"><span><span class="va">model.set</span><span class="op">=</span><span class="fu"><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set</a></span><span class="op">(</span>use.dat<span class="op">=</span><span class="va">use.dat</span>,</span>
 <span>                          test.fit<span class="op">=</span><span class="va">Model1</span>,</span>
 <span>                          pred.vars.cont<span class="op">=</span><span class="va">cont.preds</span>,</span>
 <span>                          pred.vars.fact<span class="op">=</span><span class="va">cat.preds</span>,</span>
@@ -465,7 +468,7 @@ dependencies between predictors.</p>
 <span><span class="co">## dredge.pres 0.003165949 0.07859835 0.5198438  0.21105312 1.000000000 0.3239795</span></span>
 <span><span class="co">## dhw.fact    0.383415381 0.34328105 0.5850417  0.17197695 0.247240075 1.0000000</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out.list</span><span class="op">=</span><span class="fu"><a href="https://beckyfisher.github.io/FSSgam/reference/fit.model.set.html">fit.model.set</a></span><span class="op">(</span><span class="va">model.set</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">out.list</span><span class="op">=</span><span class="fu"><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set</a></span><span class="op">(</span><span class="va">model.set</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   4%  |                                                                              |=====                                                                 |   8%  |                                                                              |========                                                              |  12%  |                                                                              |===========                                                           |  15%  |                                                                              |=============                                                         |  19%  |                                                                              |================                                                      |  23%  |                                                                              |===================                                                   |  27%  |                                                                              |======================                                                |  31%  |                                                                              |========================                                              |  35%  |                                                                              |===========================                                           |  38%  |                                                                              |==============================                                        |  42%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  58%  |                                                                              |===========================================                           |  62%  |                                                                              |==============================================                        |  65%  |                                                                              |================================================                      |  69%  |                                                                              |===================================================                   |  73%  |                                                                              |======================================================                |  77%  |                                                                              |=========================================================             |  81%  |                                                                              |===========================================================           |  85%  |                                                                              |==============================================================        |  88%  |                                                                              |=================================================================     |  92%  |                                                                              |===================================================================   |  96%  |                                                                              |======================================================================| 100%</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod.table</span><span class="op">=</span><span class="va">out.list</span><span class="op">$</span><span class="va">mod.data.out</span></span>
@@ -508,10 +511,10 @@ dependencies between predictors.</p>
 </tr>
 <tr class="even">
 <td align="left">Depth.by.Survey+Survey</td>
-<td align="right">5804.053</td>
-<td align="right">0.121</td>
+<td align="right">5804.118</td>
+<td align="right">0.117</td>
 <td align="right">30.00</td>
-<td align="right">77.981</td>
+<td align="right">78.047</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
@@ -1248,7 +1251,7 @@ looping through the response variables.</p>
 <tr class="even">
 <td align="left">Acropora</td>
 <td align="left">Depth.by.Survey+Survey</td>
-<td align="right">3234.482</td>
+<td align="right">3234.481</td>
 <td align="right">0.176</td>
 <td align="right">30.00</td>
 <td align="right">17.997</td>

@@ -7,7 +7,9 @@ articles:
   case-study-3: case-study-3.html
   extra-examples: extra-examples.html
   faq: faq.html
-last_built: 2026-05-01T07:14Z
+  function-arguments: function-arguments.html
+  function-outputs: function-outputs.html
+last_built: 2026-06-22T05:26Z
 urls:
   reference: https://beckyfisher.github.io/FSSgam/reference
   article: https://beckyfisher.github.io/FSSgam/articles

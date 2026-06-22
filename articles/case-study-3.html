@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Case Study 3 • FSSgam.docs</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Case Study 3">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">FSSgam.docs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,8 +37,11 @@
     <li><a class="dropdown-item" href="../articles/case-study-3.html">Case Study 3</a></li>
     <li><a class="dropdown-item" href="../articles/extra-examples.html">Extra Examples</a></li>
     <li><a class="dropdown-item" href="../articles/faq.html">FAQs</a></li>
+    <li><a class="dropdown-item" href="../articles/function-arguments.html">Function Arguments</a></li>
+    <li><a class="dropdown-item" href="../articles/function-outputs.html">Function Outputs</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="https://beckyfisher.github.io/FSSgam_package/reference/">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/beckyfisher/FSSgam_package/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -78,17 +81,106 @@ lunar, semi‑lunar and seasonal reproductive patterns.</p>
 <div class="section level2">
 <h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
 </h2>
-<p>Many marine invertebrates exhibit reproductive cycles across multiple
-temporal scales, including seasonal, lunar and semi‑lunar rhythms. These
-cycles are difficult to analyse using traditional categorical approaches
-because both seasonality and lunarity are inherently cyclic
-processes.</p>
-<p>Generalised Additive Models (GAMs) provide a flexible framework for
-examining non‑linear, cyclic patterns and their interactions with
-biological factors such as sex and species. Here, GAMs with full subsets
-selection are used to disentangle monthly and lunar drivers of
-reproductive output in two common intertidal gastropods: <em>Patelloida
-saccharina</em> and <em>Monodonta labio</em>.</p>
+<p>Studies of reproductive biology are fundamental to understanding
+resource allocation, larval recruitment and population dynamics <span class="citation">(Underwood and Keough 2001)</span>. Moreover, these
+studies provide valuable insights into life history strategies,
+uncovering important interactions with environmental conditions and
+habitats, therefore supporting the development of appropriate measures
+for conservation and management. In addition, for species of commercial
+importance, these studies also provide in situ parameters critical for
+population modelling and prediction, underpinning efforts to ensure
+sustainable fishing.</p>
+<p>Reproductive cycles can occur at a number of scales, ranging (in
+decreasing frequency) from circadian, semi-lunar and lunar to seasonal.
+Despite an apparent lack of pronounced seasonality in climate in the
+tropics, many organisms display seasonal peaks in reproductive activity
+<span class="citation">(Brown and Shine 2006)</span>, the most striking
+example being that of annual or bi-annual synchronous spawning in
+scleractinian corals <span class="citation">(e.g. Babcock et al.
+1994)</span>. In marine systems, lunar and semi-lunar cycles are an
+obvious cue for reproduction, particularly for broadcast spawners, for
+which synchronicity is critical for fertilization success <span class="citation">(Babcock et al. 1992)</span>. Few studies have
+concurrently examined effects of annual and lunar patterns on the
+spawning of marine invertebrates in the tropics in a manner that
+elucidates relative reproductive output at both scales, since sampling
+timing for intertidal organisms often coincides with both tide height
+and lunarity, which can confound conclusions about reproductive
+biorhythmicity.</p>
+<p>Both lunar and seasonal patterns are cyclical in nature, which is a
+challenge for conventional/traditional analyses. Calendar month is
+frequently denoted as a categorical factor and statistically evaluated
+via Analyses of Variance (ANOVA) or similar techniques <span class="citation">(e.g. Liu 1994; Ettinger-Epstein et al. 2007)</span>.
+Formal elucidation of lunar and semilunar cycles mostly take two major
+forms in the literature: (a) factorial analyses in which moon phase is
+distributed into two to four categories <span class="citation">(e.g.
+Iliffe and Pearse 1982)</span>; and (b) periodic regression where
+analyses are conducted on sine and cosine angular terms that prescribe
+lunar days <span class="citation">(e.g. Cavraro et al. 2014)</span>.
+Categorized moon phase is usually analysed via ANOVA, although
+alternative methods applied include Chi-squared contingency tests <span class="citation">(Battaglene et al. 2002)</span>, and paired t-tests
+(within months) have also been applied to two-level categorization of
+moon phases <span class="citation">(e.g. Iliffe and Pearse 1982)</span>.
+Periodic regression <span class="citation">(see <span class="nocase">deBruyn and Meeuwig</span> 2001)</span> models the
+response as a function of sine and cosine terms of lunar day (in
+radians), with separate terms to detect semi-lunar cycles, and is
+beneficial in that it correctly captures the cyclical nature of lunar
+days rather than constraining this temporal element to categories. The
+parameter estimates for lunar day are coefficients which define phase
+shift and amplitude <span class="citation">(Batschelet 1981)</span>. The
+downside of applying either categorical ANOVAs or periodic regression to
+the elucidation of biorhythmic cycles in reproduction is the number of
+parameters that implicitly must be estimated, although a model-building
+approach could lead to the exclusion of semi-lunar cycles, if
+appropriate.</p>
+<p>In this case study, Generalised Additive Models (GAMs) were used to
+elucidate reproductive patterns at multiple temporal scales in two
+species of broadcast spawning gastropods. GAMs were first proposed by
+<span class="citation">Hastie and Tibshirani (1990)</span>, and are able
+to deal with non-linear relationships between an independent variable
+and multiple, potentially interactive predictors in the same model. GAMs
+have been widely used to model intra-annual trends in the abundances
+<span class="citation">(e.g. Bellido et al. 2001)</span>, condition and
+reproductive activity <span class="citation">(Dunn and Forman
+2011)</span> of commercially important species, but remain relatively
+rarely applied to non-fishery species <span class="citation">(but see
+Guijarro et al. 2012)</span>. The full subsets gam function also allows
+other factors (e.g. sex) to be examined as both interactions (e.g. a
+different relationship with lunar day within each level), and as main
+effects (i.e. a shift in the overall relationship up or down within each
+level). <em>Patelloida saccharina</em> and <em>Monodonta labio</em> are
+common in the rocky intertidal, and are among the most abundant
+gastropods inhabiting artificial seawalls and breakwaters in Singapore
+<span class="citation">(<span class="nocase">Lee et al.</span>
+2009)</span>. To examine this, the reproductive cycles of these two
+gastropods, determined by gonadosomatic index, were assessed across
+three temporal scales: among years, among months (i.e. yearly pattern),
+and within month (i.e. lunar and semi-lunar cycle).</p>
+</div>
+<div class="section level2">
+<h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
+</h2>
+<p>Samples were collected from St. John’s Island (southern island
+complex), Singapore (1°16.8’N, 103°52.2’E). Reproductive cycles for
+<em>Patelloida saccharina</em> and <em>Monodonta labio</em> were
+determined from 10-15 individuals (shell length 7-25 mm for <em>P.
+saccharina</em> and 10-30 mm for <em>M. labio</em>) that were collected
+from July 2003 to July 2004, every three days for the first five months
+and every seven days for the following eight months. A total of 744
+individuals of <em>P. saccharina</em> and 549 individuals of <em>M.
+labio</em> were collected.</p>
+<p>Specimens were relaxed in 1:1 7.5% MgCl:seawater solution and then
+preserved in 4% buffered seawater formalin. After preservation,
+individuals were removed from their shells and gonadal material removed,
+and the wet weight of gonadal and somatic tissues were obtained, giving
+the Gonadosomatic Index (GSI = wet weight gonad / wet weight somatic x
+100). Histology sections were also prepared for female gonads, staged
+following the oocyte categories of <span class="citation">Orton et al.
+(1956)</span>, <span class="citation">Underwood (1974)</span> and <span class="citation">Liu (1994)</span>, to validate the use of GSI as a
+measure of reproductive output. Histological examination showed a strong
+relationship between GSI and gonad maturity for both species, supporting
+GSI as an appropriate proxy for reproductive output, although the
+relationship was less clear-cut for <em>M. labio</em> than for <em>P.
+saccharina</em>.</p>
 </div>
 <div class="section level2">
 <h2 id="r-packages">R packages<a class="anchor" aria-label="anchor" href="#r-packages"></a>
@@ -96,7 +188,7 @@ saccharina</em> and <em>Monodonta labio</em>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mgcv</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MuMIn</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://beckyfisher.github.io/FSSgam">FSSgam</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/beckyfisher/FSSgam_package" class="external-link">FSSgam</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -142,16 +234,38 @@ boundaries.</p>
 <p>Sex and Species are included as interaction terms with each other
 (via factor.factor.interactions = TRUE), and as interaction terms
 between the two smoothers (this is default behaviour for FSSgam, see
-?generate.model.set).</p>
+?generate_model_set).</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">use.dat</span> <span class="op">&lt;-</span> <span class="va">dat</span></span>
+<span></span>
+<span><span class="va">start.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span></span>
+<span>  <span class="va">GSI</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">lunar.date</span>, k <span class="op">=</span> <span class="fl">5</span>, bs <span class="op">=</span> <span class="st">"cc"</span><span class="op">)</span>,</span>
+<span>  family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">Gamma</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">use.dat</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model.set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set</a></span><span class="op">(</span></span>
+<span>  use.dat <span class="op">=</span> <span class="va">use.dat</span>,</span>
+<span>  test.fit <span class="op">=</span> <span class="va">start.fit</span>,</span>
+<span>  pred.vars.cont <span class="op">=</span> <span class="va">cont.vars</span>,</span>
+<span>  pred.vars.fact <span class="op">=</span> <span class="va">factor.vars</span>,</span>
+<span>  cyclic.vars <span class="op">=</span> <span class="va">cyclic.vars</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  factor.factor.interactions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  smooth.smooth.interactions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  max.predictors <span class="op">=</span> <span class="fl">4</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">out.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set</a></span><span class="op">(</span><span class="va">model.set</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="model-assessment">Model assessment<a class="anchor" aria-label="anchor" href="#model-assessment"></a>
 </h2>
 <p>Examine predictor correlations. This looks as would be expected. Note
 the function does estimate correlations between factors as well as
-continuous predictors. See ?generate.model.set for more details on how
+continuous predictors. See ?generate_model_set for more details on how
 this is done.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model.set</span><span class="op">$</span><span class="va">predictor.correlations</span></span></code></pre></div>
 <pre><code><span><span class="co">##                lunar.date      month         Sex    Species Sex.I.Species</span></span>
 <span><span class="co">## lunar.date    1.000000000 0.03997010 0.002458829 0.03577236    0.03618006</span></span>
@@ -162,7 +276,7 @@ this is done.</p>
 <p>Examine the model table. Note that the bet model includes all of the
 predictors, with interactions between lunar date and species, month and
 species, and an additive effect of Sex.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod.table</span> <span class="op">&lt;-</span> <span class="va">out.list</span><span class="op">$</span><span class="va">mod.data.out</span></span>
 <span><span class="va">mod.table</span> <span class="op">&lt;-</span> <span class="va">mod.table</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">mod.table</span><span class="op">$</span><span class="va">AICc</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
@@ -615,7 +729,7 @@ species, and an additive effect of Sex.</p>
 <p>Examine the variable importance scores. In this case study, variable
 importance is not particularly interesting because all predictors are in
 the top model, and they are therefore all 1.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span></span>
 <span>  <span class="va">out.list</span><span class="op">$</span><span class="va">variable.importance</span><span class="op">$</span><span class="va">bic</span><span class="op">$</span><span class="va">variable.weights.raw</span>,</span>
 <span>  las <span class="op">=</span> <span class="fl">2</span>,</span>
@@ -630,19 +744,19 @@ retained in the model set.</p>
 </h2>
 <p>We can extract and view the default gam plot of the “best” model
 using:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">best.model</span> <span class="op">&lt;-</span> <span class="va">out.list</span><span class="op">$</span><span class="va">success.models</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">mod.table</span><span class="op">$</span><span class="va">modname</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">best.model</span>, all.terms <span class="op">=</span> <span class="cn">TRUE</span>, pages <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="case-study-3_files/figure-html/bestmodel-1.png" class="r-plt" alt="" width="700"></p>
 <p>Model checks can also be done using the mgcv gam methods:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.check.html" class="external-link">gam.check</a></span><span class="op">(</span><span class="va">best.model</span><span class="op">)</span></span></code></pre></div>
 <p><img src="case-study-3_files/figure-html/checks-1.png" class="r-plt" alt="" width="700"></p>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Method: GCV   Optimizer: outer newton</span></span>
 <span><span class="co">## full convergence after 8 iterations.</span></span>
-<span><span class="co">## Gradient range [6.886352e-11,6.377734e-07]</span></span>
+<span><span class="co">## Gradient range [6.886353e-11,6.377734e-07]</span></span>
 <span><span class="co">## (score 0.3332369 &amp; scale 0.3350731).</span></span>
 <span><span class="co">## Hessian positive definite, eigenvalue range [7.71641e-06,0.0001997042].</span></span>
 <span><span class="co">## Model rank =  15 / 15 </span></span>
@@ -658,7 +772,7 @@ using:</p>
 <span><span class="co">## ---</span></span>
 <span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre>
 <p>And finally a summary of the best model using:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">best.model</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Family: Gamma </span></span>
@@ -691,7 +805,7 @@ using:</p>
 would typically expect given it was selected by AICc.</p>
 <p>We can make a prettier plot to visualise the best model using some
 custom base R code.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model.dat</span><span class="op">=</span><span class="va">model.set</span><span class="op">$</span><span class="va">used.data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model.dat</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##         GSI Species    Sex year month.label month act.date       date</span></span>
@@ -708,7 +822,7 @@ custom base R code.</p>
 <span><span class="co">## 4          9 27.84 299.23     41   female mono</span></span>
 <span><span class="co">## 5          9 50.41 313.94     44   female mono</span></span>
 <span><span class="co">## 6          9 42.88 561.54     46   female mono</span></span></code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">model.dat</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 'data.frame':    1110 obs. of  13 variables:</span></span>
 <span><span class="co">##  $ GSI          : num  7.69 7.02 18.36 9.3 16.06 ...</span></span>
@@ -724,7 +838,7 @@ custom base R code.</p>
 <span><span class="co">##  $ swt          : num  237 505 273 299 314 ...</span></span>
 <span><span class="co">##  $ rep.id       : int  28 30 37 41 44 46 47 50 51 53 ...</span></span>
 <span><span class="co">##  $ Sex.I.Species: Factor w/ 4 levels "female mono",..: 1 1 1 1 1 1 1 3 1 3 ...</span></span></code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x.seq</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from<span class="op">=</span><span class="fl">1</span>,to<span class="op">=</span><span class="fl">30</span>,length<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">best.mod.fact.vars</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sex"</span>,<span class="st">"Species"</span><span class="op">)</span></span>
@@ -809,19 +923,181 @@ custom base R code.</p>
 <div class="section level2">
 <h2 id="results-and-discussion">Results and discussion<a class="anchor" aria-label="anchor" href="#results-and-discussion"></a>
 </h2>
-<p>The most strongly supported model included cyclic smooths of both
-lunar date and month interacting with species, combined with a main
-effect of sex. This model explained approximately 28% of the variance in
-GSI.</p>
-<p>Strong semi‑lunar patterns were observed for <em>Patelloida
-saccharina</em>, with peaks occurring approximately twice per lunar
-cycle. In contrast, <em>Monodonta labio</em> exhibited weaker and
-phase‑shifted lunar responses. Seasonal patterns also differed between
-species, with peak reproductive output occurring at different times of
-the year.</p>
+<p>A model with both lunar date and month as interactions with species,
+along with an intercept effect of sex, showed the highest ranking
+according to both AICc and BIC, explaining 28% of the variance in GSI
+for these species (see the model comparison table above). Plots of this
+top model (see the best-model plot above) indicated that the strong
+interactions observed for lunar day and month were due to markedly
+different trends for each of these predictors across the two species. A
+strong semi-lunar pattern was detected in <em>P. saccharina</em>, with
+fairly equal peaks in GSI occurring around lunar days 7 and 23, and
+minima around days 0 and 15; this pattern correlates with minimal tidal
+range over the sampling period. Lunar patterns were generally much
+weaker for <em>M. labio</em> GSI, and were also reversed relative to
+those observed in <em>P. saccharina</em>, with peaks centred on lunar
+days 0 and 15 and bimodal minima around days 5 and 23. The magnitude of
+lunar periodicity on GSI was also markedly less pronounced in <em>M.
+labio</em> than in <em>P. saccharina</em>, in which lunar effects were
+several times that of seasonal effects.</p>
+<p>Initial examinations suggest that both <em>Patelloida saccharina</em>
+and <em>Monodonta labio</em> are continuous breeders, indicated by GSI
+values that do not drop below five throughout the year. Near continuous
+or extended breeding, with slight peaks in intensity during specific
+times/seasons, have previously been reported in trochids <span class="citation">(see Hickman 1992 for a review)</span> and acmaeids
+<span class="citation">(Creese 1980; Catalan and Yamamoto 1993)</span>.
+However, there were differences in the timing of peak reproduction
+between the two species throughout the year, with <em>M. labio</em>
+showing the highest output during February and March, and <em>P.
+saccharina</em> showing peak output in July. February/March denote the
+end of the Northeast monsoon, with increasing seawater temperatures over
+the following months, reaching annual peaks around August <span class="citation">(Sin et al. 2016)</span>. Changes in temperature are
+known proximate indicators of reproductive seasonality in both limpets
+as well as trochaceans <span class="citation">(Morton and Morton
+1983)</span>. However, additional factors such as the seasonal
+availability of food resources may also contribute to the trigger of
+gametogenesis <span class="citation">(Hickman 1992)</span>, but were not
+examined in this study. Values of GSI were higher in males compared to
+females for both species, regardless of lunar day or time of year, which
+is a common phenomenon in intertidal gastropods <span class="citation">(Creese 1980; Creese and Ballantine 1983; Liu
+1994)</span>.</p>
 <p>Overall, this case study demonstrates the value of GAMs with cyclic
 splines and interaction structures for dissecting complex reproductive
 rhythms across multiple temporal scales.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Babcock1994MassSpawning" class="csl-entry">
+Babcock, R. C., B. L. Wills, and C. J. Simpson. 1994. <span>“Mass
+Spawning of Corals on a High Latitude Coral Reef.”</span> <em>Coral
+Reefs</em> 13: 161–69.
+</div>
+<div id="ref-Babcock1992SpawningEvents" class="csl-entry">
+Babcock, R., C. Mundy, J. Keesing, and J. Oliver. 1992.
+<span>“Predictable and Unpredictable Spawning Events: In Situ
+Behavioural Data from Free-Spawning Coral Reef Invertebrates.”</span>
+<em>Invertebrate Reproduction &amp; Development</em> 22: 213–27.
+</div>
+<div id="ref-Batschelet1981CircularStatistics" class="csl-entry">
+Batschelet, E. 1981. <em>Circular Statistics in Biology</em>. Academic
+Press.
+</div>
+<div id="ref-Battaglene2002SpawningInduction" class="csl-entry">
+Battaglene, S. C., J. E. Seymour, C. Ramofafia, and I. Lane. 2002.
+<span>“Spawning Induction of Three Tropical Sea Cucumbers, Holothuria
+Scabra, h. Fuscogilva and Actinopyga Mauritiana.”</span>
+<em>Aquaculture</em> 207: 29–47.
+</div>
+<div id="ref-Bellido2001SquidGAM" class="csl-entry">
+Bellido, J. M., G. J. Pierce, and J. Wang. 2001. <span>“Modelling
+Intra-Annual Variation in Abundance of Squid Loligo Forbesi in Scottish
+Waters Using Generalised Additive Models.”</span> <em>Fisheries
+Research</em> 52: 23–39.
+</div>
+<div id="ref-Brown2006TropicalSeasonality" class="csl-entry">
+Brown, G. P., and R. Shine. 2006. <span>“Why Do Most Tropical Animals
+Reproduce Seasonally? Testing Hypotheses on an Australian Snake.”</span>
+<em>Ecology</em> 87: 133–43.
+</div>
+<div id="ref-Catalan1993LimpetReproductiveCycle" class="csl-entry">
+Catalan, M. A. A. B., and M. Yamamoto. 1993. <span>“Annual Reproductive
+Cycle of the Prosobranch Limpet, Cellana Nigrolineata (Reeves).”</span>
+<em>Invertebrate Reproduction &amp; Development</em> 24: 127–36.
+</div>
+<div id="ref-Cavraro2014LunarKillifish" class="csl-entry">
+Cavraro, F., C. Varin, and S. Malavasi. 2014. <span>“Lunar-Induced
+Reproductive Patterns in Transitional Habitats: Insights from a
+Mediterranean Killifish Inhabiting Northern Adriatic
+Saltmarshes.”</span> <em>Estuarine, Coastal and Shelf Science</em> 139:
+60–66.
+</div>
+<div id="ref-Creese1980LimpetFecundities" class="csl-entry">
+Creese, R. G. 1980. <span>“Reproductive Cycles and Fecundities of Four
+Common Eastern Australian Archaeogastropod Limpets (Mollusca:
+Gastropoda).”</span> <em>Marine and Freshwater Research</em>.
+</div>
+<div id="ref-Creese1983CellanaRadians" class="csl-entry">
+Creese, R. G., and W. J. Ballantine. 1983. <span>“An Assessment of
+Breeding in the Intertidal Limpet, Cellana Radians (Gmelin).”</span>
+<em>Journal of Experimental Marine Biology and Ecology</em> 67: 43–59.
+</div>
+<div id="ref-deBruyn2001LunarCycles" class="csl-entry">
+<span class="nocase">deBruyn, A. M. H., and J. J. Meeuwig</span>. 2001.
+<span>“Detecting Lunar Cycles in Marine Ecology: Periodic Regression
+Versus Categorical ANOVA.”</span> <em>Marine Ecology Progress
+Series</em> 214: 307–10.
+</div>
+<div id="ref-Dunn2011OrangeRoughy" class="csl-entry">
+Dunn, M. R., and J. S. Forman. 2011. <span>“Hypotheses of Spatial Stock
+Structure in Orange Roughy Hoplostethus Atlanticus Inferred from Diet,
+Feeding, Condition, and Reproductive Activity.”</span> <em>PloS One</em>
+6: e26704.
+</div>
+<div id="ref-EttingerEpstein2007SpongeGametogenesis" class="csl-entry">
+Ettinger-Epstein, P., S. W. Whalan, C. N. Battershill, and R. de Nys.
+2007. <span>“Temperature Cues Gametogenesis and Larval Release in a
+Tropical Sponge.”</span> <em>Marine Biology</em> 153: 171–78.
+</div>
+<div id="ref-Guijarro2012PandalidShrimps" class="csl-entry">
+Guijarro, B., E. Fanelli, J. Moranta, J. E. Cartes, and E. Massutí.
+2012. <span>“Small-Scale Differences in the Distribution and Population
+Dynamics of Pandalid Shrimps in the Western Mediterranean in Relation to
+Environmental Factors.”</span> <em>Fisheries Research</em> 119: 33–47.
+</div>
+<div id="ref-Hastie1990GeneralizedAdditiveModels" class="csl-entry">
+Hastie, T. J., and R. J. Tibshirani. 1990. <em>Generalized Additive
+Models</em>. CRC Press.
+</div>
+<div id="ref-Hickman1992TrochaceanGastropods" class="csl-entry">
+Hickman, C. S. 1992. <span>“Reproduction and Development of Trochacean
+Gastropods.”</span> <em>The Veliger</em> 35: 245–72.
+</div>
+<div id="ref-Iliffe1982SeaUrchinRhythms" class="csl-entry">
+Iliffe, T. M., and J. S. Pearse. 1982. <span>“Annual and Lunar
+Reproductive Rhythms of the Sea Urchin, Diadema Antillarum (Philippi) in
+Bermuda.”</span> <em>International Journal of Invertebrate
+Reproduction</em> 5: 139–48.
+</div>
+<div id="ref-Lee2009IntertidalAssemblages" class="csl-entry">
+<span class="nocase">Lee, A. C., T. M. Sin, et al.</span> 2009.
+<span>“Intertidal Assemblages on Coastal Defence Structures in Singapore
+II: Contrasts Between Islands and the Mainland.”</span> <em>The Raffles
+Bulletin of Zoology</em> 22: 255–68.
+</div>
+<div id="ref-Liu1994HongKongLimpets" class="csl-entry">
+Liu, J. H. 1994. <span>“The Ecology of the Hong Kong Limpets Cellana
+Grata (Gould 1859) and Patelloida Pygmaea (Dunker 1860): Reproductive
+Biology.”</span> <em>The Journal of Molluscan Studies</em>.
+</div>
+<div id="ref-Morton1983SeaShoreEcology" class="csl-entry">
+Morton, B., and J. Morton. 1983. <em>The Sea Shore Ecology of Hong
+Kong</em>. Hong Kong University Press.
+</div>
+<div id="ref-Orton1956PatellaBreeding" class="csl-entry">
+Orton, J. H., A. J. Southward, and J. M. Dodd. 1956. <span>“Studies on
+the Biology of Limpets: II. The Breeding of Patella Vulgata l. In
+Britain.”</span> <em>Journal of the Marine Biological Association of the
+United Kingdom</em> 35: 149–76.
+</div>
+<div id="ref-Sin2016UrbanMarineSingapore" class="csl-entry">
+Sin, T. M., H. P. Ang, J. Buurman, et al. 2016. <span>“The Urban Marine
+Environment of Singapore.”</span> <em>Regional Studies in Marine
+Science</em> 8: 331–39.
+</div>
+<div id="ref-Underwood1974ProsobranchsReproductive" class="csl-entry">
+Underwood, A. J. 1974. <span>“The Reproductive Cycles and Geographical
+Distribution of Some Common Eastern Australian Prosobranchs (Mollusca:
+Gastropoda).”</span> <em>Marine and Freshwater Research</em> 25: 63–88.
+</div>
+<div id="ref-Underwood2001SupplySideEcology" class="csl-entry">
+Underwood, A. J., and M. J. Keough. 2001. <span>“Supply-Side Ecology:
+The Nature and Consequences of Variations in Recruitment of Intertidal
+Organisms.”</span> In <em>Marine Community Ecology</em>. Sinauer
+Associates Inc.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -2,11 +2,11 @@
 
 ## How do you choose which variables to include in **test.fit** (e.g. Model1)
 
-The **generate.model.set** function must be supplied **test.fit**, which
+The **generate_model_set** function must be supplied **test.fit**, which
 is a gam(m) model fitted to the desired response data, with the
 appropriate random effects structure (unless supplied as an **re**
 agument to **gam**, see below) and **family**. This **test.fit** is
-simply updated with new model formula by the **fit.model.set** function,
+simply updated with new model formula by the **fit_model_set** function,
 so anything supplied in the formula of the **test.fit** is not actually
 used in the full subsets fitting procedure - rather just the underlying
 structure of the model set. This means it doesn’t actually matter what
@@ -54,7 +54,7 @@ but they will need to appear in **use.dat**.
 ## What exactly is the r2.vals metric, and how is it derived.
 
 Some information on the R-squuared values reported by **FSSgam** can be
-found in the help file, type **?fit.model.set** into the R console. The
+found in the help file, type **?fit_model_set** into the R console. The
 default value supplied is an approximation based on the R-square value
 calculated for a model between the fitted values and the observed data.
 This approximation was used because R.sq is not always provided by the
@@ -94,3 +94,16 @@ sometimes need to be specified in **null.terms** is when the formulation
 bs=‘re’ is used to specify them in gam from mgcv - because in that case
 they are part of the model formula and will be overwritten by the set of
 model formula as they are fit by FSSgam.
+
+## What happened to **generate.model.set** and **fit.model.set**?
+
+Those dot-case names have been renamed to **generate_model_set** and
+**fit_model_set** respectively, to follow modern snake_case R naming
+conventions. The old names still work exactly as before - they now
+simply emit a [`.Deprecated()`](https://rdrr.io/r/base/Deprecated.html)
+warning and forward all of their arguments straight on to the new
+functions - so existing scripts, including code from the original 2018
+paper, will keep running. No argument names changed as part of this
+rename, and **full.subsets.gam** was not renamed. New code should call
+**generate_model_set** and **fit_model_set** directly to avoid the
+deprecation warning.

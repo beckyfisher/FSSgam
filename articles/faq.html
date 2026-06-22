@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>FAQs • FSSgam.docs</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="FAQs">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">FSSgam.docs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,8 +37,11 @@
     <li><a class="dropdown-item" href="../articles/case-study-3.html">Case Study 3</a></li>
     <li><a class="dropdown-item" href="../articles/extra-examples.html">Extra Examples</a></li>
     <li><a class="dropdown-item" href="../articles/faq.html">FAQs</a></li>
+    <li><a class="dropdown-item" href="../articles/function-arguments.html">Function Arguments</a></li>
+    <li><a class="dropdown-item" href="../articles/function-outputs.html">Function Outputs</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="https://beckyfisher.github.io/FSSgam_package/reference/">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/beckyfisher/FSSgam_package/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -68,13 +71,13 @@
 <h2 id="how-do-you-choose-which-variables-to-include-in-test-fit-e-g--model1">How do you choose which variables to include in
 <strong>test.fit</strong> (e.g. Model1)<a class="anchor" aria-label="anchor" href="#how-do-you-choose-which-variables-to-include-in-test-fit-e-g--model1"></a>
 </h2>
-<p>The <strong>generate.model.set</strong> function must be supplied
+<p>The <strong>generate_model_set</strong> function must be supplied
 <strong>test.fit</strong>, which is a gam(m) model fitted to the desired
 response data, with the appropriate random effects structure (unless
 supplied as an <strong>re</strong> agument to <strong>gam</strong>, see
 below) and <strong>family</strong>. This <strong>test.fit</strong> is
 simply updated with new model formula by the
-<strong>fit.model.set</strong> function, so anything supplied in the
+<strong>fit_model_set</strong> function, so anything supplied in the
 formula of the <strong>test.fit</strong> is not actually used in the
 full subsets fitting procedure - rather just the underlying structure of
 the model set. This means it doesn’t actually matter what variables are
@@ -126,7 +129,7 @@ to appear in <strong>use.dat</strong>.</p>
 </h2>
 <p>Some information on the R-squuared values reported by
 <strong>FSSgam</strong> can be found in the help file, type
-<strong>?fit.model.set</strong> into the R console. The default value
+<strong>?fit_model_set</strong> into the R console. The default value
 supplied is an approximation based on the R-square value calculated for
 a model between the fitted values and the observed data. This
 approximation was used because R.sq is not always provided by the
@@ -173,6 +176,22 @@ random effects sometimes need to be specified in
 specify them in gam from mgcv - because in that case they are part of
 the model formula and will be overwritten by the set of model formula as
 they are fit by FSSgam.</p>
+</div>
+<div class="section level2">
+<h2 id="what-happened-to-generate-model-set-and-fit-model-set">What happened to <strong>generate.model.set</strong> and
+<strong>fit.model.set</strong>?<a class="anchor" aria-label="anchor" href="#what-happened-to-generate-model-set-and-fit-model-set"></a>
+</h2>
+<p>Those dot-case names have been renamed to
+<strong>generate_model_set</strong> and <strong>fit_model_set</strong>
+respectively, to follow modern snake_case R naming conventions. The old
+names still work exactly as before - they now simply emit a
+<code><a href="https://rdrr.io/r/base/Deprecated.html" class="external-link">.Deprecated()</a></code> warning and forward all of their arguments
+straight on to the new functions - so existing scripts, including code
+from the original 2018 paper, will keep running. No argument names
+changed as part of this rename, and <strong>full.subsets.gam</strong>
+was not renamed. New code should call
+<strong>generate_model_set</strong> and <strong>fit_model_set</strong>
+directly to avoid the deprecation warning.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

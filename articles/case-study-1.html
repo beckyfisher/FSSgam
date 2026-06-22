@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Case Study 1 • FSSgam.docs</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Case Study 1">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">FSSgam.docs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,8 +37,11 @@
     <li><a class="dropdown-item" href="../articles/case-study-3.html">Case Study 3</a></li>
     <li><a class="dropdown-item" href="../articles/extra-examples.html">Extra Examples</a></li>
     <li><a class="dropdown-item" href="../articles/faq.html">FAQs</a></li>
+    <li><a class="dropdown-item" href="../articles/function-arguments.html">Function Arguments</a></li>
+    <li><a class="dropdown-item" href="../articles/function-outputs.html">Function Outputs</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="https://beckyfisher.github.io/FSSgam_package/reference/">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/beckyfisher/FSSgam_package/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -77,27 +80,29 @@ important predictors across multiple response variables.</p>
 <h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
 </h2>
 <p>Coral reef fish are highly diverse assemblages that provide important
-ecosystem services for millions of people (Pratchett et al. 2014). These
-services are however threatened by overfishing (Newton et al. 2007;
-MacNeil et al. 2015) and a loss of habitat, in particular corals (Wilson
-et al. 2006) and the structure they provide (Rogers et al. 2014).
-No-take reserves (NTR) promote higher abundance and biomass of fish
-(Russ 2002; McClanahan et al. 2009) and conserve ecosystem function
-(Graham et al. 2011). It is clear that NTR cannot prevent large scale
+ecosystem services for millions of people <span class="citation">(Pratchett et al. 2014)</span>. These services are
+however threatened by overfishing <span class="citation">(Newton et al.
+2007; MacNeil et al. 2015)</span> and a loss of habitat, in particular
+corals <span class="citation">(Wilson et al. 2006)</span> and the
+structure they provide <span class="citation">(Rogers et al.
+2014)</span>. No-take reserves (NTR) promote higher abundance and
+biomass of fish <span class="citation">(Russ 2002; McClanahan et al.
+2009)</span> and conserve ecosystem function <span class="citation">(<span class="nocase">Graham et al.</span>
+2011)</span>. It is clear that NTR cannot prevent large scale
 disturbances, such as heat stress that cause extensive coral loss and
-decline in fish (Jones et al. 2004; Graham et al. 2008), however a
-reduction in local pressures in NTR may facilitate greater resilience of
-coral reefs (Hughes et al. 2010).</p>
+decline in fish <span class="citation">(Jones et al. 2004; <span class="nocase">Graham et al.</span> 2008)</span>, however a reduction in
+local pressures in NTR may facilitate greater resilience of coral reefs
+<span class="citation">(Hughes et al. 2010)</span>.</p>
 <p>By examining patch reefs of differing habitat quality inside and
-outside of NTR within the Ningaloo marine park, Wilson et al. (2012)
-explored how habitat degradation and fishing influenced the abundance
-and biomass of fish from different functional groups. Explanatory
-variables in the original analyses were summarised using the scores from
-the two axes of a principal components analysis (PCA), making it was
-impossible to tease apart the relative importance of variables that were
-correlated along the axis. The revised analyses here based on a full
-subsets multiple regression approach allows the influence of habitat
-variables to be assessed independently.</p>
+outside of NTR within the Ningaloo marine park, <span class="citation">Wilson et al. (2012)</span> explored how habitat
+degradation and fishing influenced the abundance and biomass of fish
+from different functional groups. Explanatory variables in the original
+analyses were summarised using the scores from the two axes of a
+principal components analysis (PCA), making it impossible to tease apart
+the relative importance of variables that were correlated along the
+axis. The revised analyses here based on a full subsets multiple
+regression approach allows the influence of habitat variables to be
+assessed independently.</p>
 </div>
 <div class="section level2">
 <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
@@ -107,19 +112,18 @@ NTR (n=33) of the Ningaloo lagoon were surveyed to investigate the
 influence of habitat and fishing on coral reef fish. On each patch the
 seascape level of reef structure (complexity) was assessed using a six
 point scale, where 0 represents no vertical relief and 5 represents
-highly complex reefs with small overhangs and caves (Polunin &amp;
-Roberts 1993). Finer scale physical reef structure (rugosity) was
-measured as the linear distance covered by a 3m length of chain fitted
-to the reef contour (Risk 1972). Benthic cover was quantified along a 5m
-line intercept transect using the categories: high complex corals such
-as Branching morphologies (HC), low complexity corals such as massive
-and encrusting morphologies (LC), and macroalgae (Macro).</p>
+highly complex reefs with small overhangs and caves <span class="citation">(Polunin and Roberts 1993)</span>. Finer scale physical
+reef structure (rugosity) was measured as the linear distance covered by
+a 3m length of chain fitted to the reef contour <span class="citation">(Risk 1972)</span>. Benthic cover was quantified along
+a 5m line intercept transect using the categories: high complex corals
+such as Branching morphologies (HC), low complexity corals such as
+massive and encrusting morphologies (LC), and macroalgae (Macro).</p>
 <p>Abundance and size of adult fish was estimated by a diver using a
 point count method. Large mobile fish were initially counted from the
 perimeter of the patch, after which the entire patch was surveyed for
 smaller site attached species. Fish were placed into broad functional
 groups based on their diets and biomass calculated from length weight
-relationships (Froese &amp; Pauly 2011).</p>
+relationships <span class="citation">(Froese and Pauly 2011)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="data-analysis">Data analysis<a class="anchor" aria-label="anchor" href="#data-analysis"></a>
@@ -132,7 +136,7 @@ groups.</p>
 <h3 id="r-packages">R packages<a class="anchor" aria-label="anchor" href="#r-packages"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://beckyfisher.github.io/FSSgam">FSSgam</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/beckyfisher/FSSgam_package" class="external-link">FSSgam</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mgcv</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MuMIn</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bprice2652/car_repo" class="external-link">car</a></span><span class="op">)</span></span>
@@ -246,11 +250,54 @@ null.terms argument of the full subsets gam function.</p>
 additional predictors were limited to only an additional two terms
 (max.predictors=2) and k was limited to 3 to enforce strictly monotonic
 relationships.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out.all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">var.imp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">fss.all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">rv</span> <span class="kw">in</span> <span class="va">resp.vars</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span>  <span class="va">use.dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">case_study1</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">null.vars</span>, <span class="va">cont.preds</span>, <span class="va">cat.preds</span>, <span class="va">rv</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">use.dat</span><span class="op">$</span><span class="va">response</span> <span class="op">&lt;-</span> <span class="va">use.dat</span><span class="op">[</span>, <span class="va">rv</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="va">base.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span></span>
+<span>    <span class="va">response</span> <span class="op">~</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">complexity</span>, k <span class="op">=</span> <span class="fl">4</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">SQRTSA</span>, k <span class="op">=</span> <span class="fl">4</span>, bs <span class="op">=</span> <span class="st">"cr"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">site</span>, bs <span class="op">=</span> <span class="st">"re"</span><span class="op">)</span>,</span>
+<span>    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/Tweedie.html" class="external-link">tw</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">use.dat</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">model.set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set</a></span><span class="op">(</span></span>
+<span>    use.dat <span class="op">=</span> <span class="va">use.dat</span>,</span>
+<span>    test.fit <span class="op">=</span> <span class="va">base.mod</span>,</span>
+<span>    max.predictors <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    k <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>    pred.vars.cont <span class="op">=</span> <span class="va">cont.preds</span>,</span>
+<span>    pred.vars.fact <span class="op">=</span> <span class="va">cat.preds</span>,</span>
+<span>    null.terms <span class="op">=</span> <span class="st">"s(SQRTSA,bs='cr',k=3)+s(site,bs='re')+s(depth,bs='cr',k=3)"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">out.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set</a></span><span class="op">(</span><span class="va">model.set</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">var.imp</span><span class="op">[[</span><span class="va">rv</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">out.list</span><span class="op">$</span><span class="va">variable.importance</span><span class="op">$</span><span class="va">aic</span><span class="op">$</span><span class="va">variable.weights.raw</span></span>
+<span>  <span class="va">out.all</span><span class="op">[[</span><span class="va">rv</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">out.list</span><span class="op">$</span><span class="va">mod.data.out</span></span>
+<span>  <span class="va">fss.all</span><span class="op">[[</span><span class="va">rv</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">out.list</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<pre><code><span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   4%  |                                                                              |=====                                                                 |   7%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  18%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  25%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |============================                                          |  39%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  61%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  75%  |                                                                              |=======================================================               |  79%  |                                                                              |==========================================================            |  82%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  96%  |                                                                              |======================================================================| 100%</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="variable-importance">Variable importance<a class="anchor" aria-label="anchor" href="#variable-importance"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all.var.imp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">var.imp</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://talgalili.github.io/gplots/reference/heatmap.2.html" class="external-link">heatmap.2</a></span><span class="op">(</span></span>
@@ -268,7 +315,7 @@ relationships.</p>
 <div class="section level3">
 <h3 id="top-model-table">Top model table<a class="anchor" aria-label="anchor" href="#top-model-table"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all.models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">imap_dfr</a></span><span class="op">(</span></span>
 <span>  <span class="va">out.all</span>,</span>
 <span>  <span class="op">~</span> <span class="va">.x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>response <span class="op">=</span> <span class="va">.y</span><span class="op">)</span></span>
@@ -287,7 +334,7 @@ relationships.</p>
 <span>    <span class="va">AICc</span>,</span>
 <span>    <span class="va">delta_AICc</span>,</span>
 <span>    <span class="va">wi.AICc</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="va">top.models</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -440,27 +487,16 @@ within each response</caption>
 <h3 id="predictor-correlations">Predictor correlations<a class="anchor" aria-label="anchor" href="#predictor-correlations"></a>
 </h3>
 <p>It can also be a good idea to check your predictor correlations.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="va">model.set</span><span class="op">$</span><span class="va">predictor.correlations</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  caption <span class="op">=</span> <span class="st">"Predictor correlations"</span></span>
+<span>  caption <span class="op">=</span> <span class="st">"Predictor correlations"</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
+<table class="table">
 <caption>Predictor correlations</caption>
-<colgroup>
-<col width="14%">
-<col width="14%">
-<col width="12%">
-<col width="9%">
-<col width="9%">
-<col width="13%">
-<col width="9%">
-<col width="9%">
-<col width="6%">
-</colgroup>
 <thead><tr class="header">
-<th align="left"></th>
 <th align="right">complexity</th>
 <th align="right">sqrt.rug</th>
 <th align="right">sqrtLC</th>
@@ -472,7 +508,6 @@ within each response</caption>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">complexity</td>
 <td align="right">1.00</td>
 <td align="right">0.75</td>
 <td align="right">0.51</td>
@@ -483,7 +518,6 @@ within each response</caption>
 <td align="right">0.01</td>
 </tr>
 <tr class="even">
-<td align="left">sqrt.rug</td>
 <td align="right">0.75</td>
 <td align="right">1.00</td>
 <td align="right">0.33</td>
@@ -494,7 +528,6 @@ within each response</caption>
 <td align="right">0.09</td>
 </tr>
 <tr class="odd">
-<td align="left">sqrtLC</td>
 <td align="right">0.51</td>
 <td align="right">0.33</td>
 <td align="right">1.00</td>
@@ -505,7 +538,6 @@ within each response</caption>
 <td align="right">0.14</td>
 </tr>
 <tr class="even">
-<td align="left">sqrtHC</td>
 <td align="right">0.32</td>
 <td align="right">0.40</td>
 <td align="right">-0.07</td>
@@ -516,7 +548,6 @@ within each response</caption>
 <td align="right">0.01</td>
 </tr>
 <tr class="odd">
-<td align="left">sqrtMacro</td>
 <td align="right">-0.62</td>
 <td align="right">-0.58</td>
 <td align="right">-0.37</td>
@@ -527,7 +558,6 @@ within each response</caption>
 <td align="right">0.03</td>
 </tr>
 <tr class="even">
-<td align="left">SCORE1</td>
 <td align="right">0.89</td>
 <td align="right">0.85</td>
 <td align="right">0.57</td>
@@ -538,7 +568,6 @@ within each response</caption>
 <td align="right">0.07</td>
 </tr>
 <tr class="odd">
-<td align="left">SCORE2</td>
 <td align="right">-0.12</td>
 <td align="right">0.10</td>
 <td align="right">-0.66</td>
@@ -549,7 +578,6 @@ within each response</caption>
 <td align="right">0.10</td>
 </tr>
 <tr class="even">
-<td align="left">ZONE</td>
 <td align="right">0.01</td>
 <td align="right">0.09</td>
 <td align="right">0.14</td>
@@ -565,7 +593,7 @@ within each response</caption>
 <div class="section level3">
 <h3 id="pretty-plots">Pretty plots<a class="anchor" aria-label="anchor" href="#pretty-plots"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">case_study1</span> <span class="op">&lt;-</span> <span class="va">case_study1</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ZONE<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ZONE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">zones</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">case_study1</span><span class="op">$</span><span class="va">ZONE</span><span class="op">)</span></span>
@@ -610,14 +638,191 @@ within each response</caption>
 <div class="section level2">
 <h2 id="results-and-discussion">Results and discussion<a class="anchor" aria-label="anchor" href="#results-and-discussion"></a>
 </h2>
-<p>Across functional feeding groups, reef structural complexity
-consistently emerged as a dominant predictor of both abundance and
-biomass. Management zoning effects were comparatively weaker, although
-some responses showed interactions between habitat structure and
-zoning.</p>
+<p>Seascape measures of patch reef complexity were generally the best
+predictor of both fish abundance and biomass (see the model comparison
+table above). Fish abundance and biomass were low on reefs with no
+relief and were higher on structurally complex reefs (see the predictor
+plots above). These findings are consistent with other studies that show
+measures of seascape complexity are positively correlated with fish
+abundance, and often outperform other measures of complexity <span class="citation">(Wilson et al. 2007; Collins et al. 2016)</span>. The
+results generally support the original findings of <span class="citation">Wilson et al. (2012)</span> that there are strong
+relationships with habitat and only weak evidence for an effect of the
+zoning status. However, here we were able to tease apart the influence
+of correlated habitat variables. For example, the revised analysis found
+herbivore abundance was positively correlated with complexity, which is
+similar to recent studies at Ningaloo that also found abundance of these
+fish is not closely related to macroalgal cover <span class="citation">(Wilson et al. 2014)</span> and is better explained by
+reef structure <span class="citation">(Downie et al. 2013)</span>.
+Conversely, <span class="citation">Wilson et al. (2012)</span>
+identified scores from principal component 1 as the best predictor of
+herbivore abundances, which inferred a positive effect of both rugosity
+and complexity and a negative effect of macroalgal cover.</p>
+<p>Interestingly, the abundance of planktivores and piscivores was
+positively related to scores from principal component 1 (see the
+variable importance heatmap and predictor plots above), suggesting
+summarised metrics of habitat from PCA may still be relevant to some
+components of the fish assemblage. A habitat descriptor that
+incorporates multiple correlated factors may be more important if there
+is a diverse array of habitat associations among fish within a trophic
+guild. For example, the planktivores include small bodied damselfish
+that have close associations with complex corals <span class="citation">(Coker et al. 2014)</span>, cardinalfish that are often
+found in caves or branching corals <span class="citation">(Marnane and
+Bellwood 2002)</span>, and larger fish that are likely transient and
+more associated with seascape measures of habitat <span class="citation">(Friedlander and Parrish 1998)</span>. As large bodied
+fish also typically contribute more to community biomass than their
+small counterparts <span class="citation">(Ackerman and Bellwood
+2000)</span> it is not surprising that planktivore biomass is more
+closely aligned with seascape complexity than other measures of
+habitat.</p>
+<p>Overall the results of the revised analysis are similar to those from
+the original study based on the use of data-reduction via PCA. However,
+by including the underlying habitat information, the new analysis
+provides a clearer picture of which elements of the benthic assemblage
+are most important to fish. This additional information is useful for
+building scientific hypotheses and parametric functional models for how
+such fishes may be influenced by changes in habitat (such as is expected
+due to ocean warming and climate change, see <span class="citation">(Pratchett et al. 2015)</span>), as well as informing
+which elements of the habitat should be a focus for management
+targets.</p>
 <p>This example demonstrates how full subsets GAMMs can be used to
 synthesise drivers across multiple response variables in ecological
 datasets.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Ackerman2000ReefFishAssemblages" class="csl-entry">
+Ackerman, J. L., and D. R. Bellwood. 2000. <span>“Reef Fish Assemblages:
+A Re-Evaluation Using Enclosed Rotenone Stations.”</span> <em>Marine
+Ecology Progress Series</em> 206: 11–18.
+</div>
+<div id="ref-Coker2014LiveCoralHabitat" class="csl-entry">
+Coker, D. J., S. K. Wilson, and M. S. Pratchett. 2014. <span>“Importance
+of Live Coral Habitat for Reef Fishes.”</span> <em>Reviews in Fish
+Biology and Fisheries</em> 24: 89–126.
+</div>
+<div id="ref-Collins2016StereoVideo" class="csl-entry">
+Collins, D. L., T. J. Langlois, T. Bond, et al. 2016. <span>“A Novel
+Stereo-Video Method to Investigate Fish-Habitat Relationships.”</span>
+<em>Methods in Ecology and Evolution</em> 8: 116–25.
+</div>
+<div id="ref-Downie2013HerbivorousFish" class="csl-entry">
+Downie, R. A., R. C. Babcock, D. P. Thomson, and M. A. Vanderklift.
+2013. <span>“Density of Herbivorous Fish and Intensity of Herbivory Are
+Influenced by Proximity to Coral Reefs.”</span> <em>Marine Ecology
+Progress Series</em> 482: 217–25.
+</div>
+<div id="ref-Friedlander1998HawaiianReef" class="csl-entry">
+Friedlander, A. M., and J. D. Parrish. 1998. <span>“Habitat
+Characteristics Affecting Fish Assemblages on a Hawaiian Coral
+Reef.”</span> <em>Journal of Experimental Marine Biology and
+Ecology</em> 224: 1–30.
+</div>
+<div id="ref-FroesePauly2011FishBase" class="csl-entry">
+Froese, R., and D. Pauly. 2011. <em>FishBase</em>.
+</div>
+<div id="ref-Graham2011MicrobesToPeople" class="csl-entry">
+<span class="nocase">Graham, N. A. J., T. D. Ainsworth, A. H. Baird, et
+al.</span> 2011. <span>“From Microbes to People: Tractable Benefits of
+No-Take Areas for Coral Reefs.”</span> <em>Oceanography and Marine
+Biology-an Annual Review</em> 49: 105.
+</div>
+<div id="ref-Graham2008ClimateMPAs" class="csl-entry">
+<span class="nocase">Graham, N. A. J., T. R. McClanahan, M. A. MacNeil,
+et al.</span> 2008. <span>“Climate Warming, Marine Protected Areas and
+the Ocean-Scale Integrity of Coral Reef Ecosystems.”</span> <em>PLoS
+ONE</em> 3: e3039.
+</div>
+<div id="ref-Hughes2010ReefResilience" class="csl-entry">
+Hughes, T. P., N. A. J. Graham, J. B. C. Jackson, P. J. Mumby, and R. S.
+Steneck. 2010. <span>“Rising to the Challenge of Sustaining Coral Reef
+Resilience.”</span> <em>Trends in Ecology &amp; Evolution</em> 25:
+633–42.
+</div>
+<div id="ref-Jones2004CoralDecline" class="csl-entry">
+Jones, G. P., M. I. McCormick, M. Srinivasan, and J. V. Eagle. 2004.
+<span>“Coral Decline Threatens Fish Biodiversity in Marine
+Reserves.”</span> <em>Proceedings of the National Academy of Sciences of
+the United States of America</em> 101: 8251–53.
+</div>
+<div id="ref-MacNeil2015RecoveryPotential" class="csl-entry">
+MacNeil, M. A., N. A. J. Graham, J. E. Cinner, et al. 2015.
+<span>“Recovery Potential of the World’s Coral Reef Fishes.”</span>
+<em>Nature</em> 520: 341–44.
+</div>
+<div id="ref-Marnane2002Cardinalfishes" class="csl-entry">
+Marnane, M. J., and D. R. Bellwood. 2002. <span>“Diet and Nocturnal
+Foraging in Cardinalfishes (Apogonidae) at One Tree Reef, Great Barrier
+Reef, Australia.”</span> <em>Marine Ecology Progress Series</em> 231:
+261–68.
+</div>
+<div id="ref-McClanahan2009FisheriesClosure" class="csl-entry">
+McClanahan, T. R., N. A. J. Graham, S. K. Wilson, Y. Letourneur, and R.
+Fisher. 2009. <span>“Effects of Fisheries Closure Size, Age, and History
+of Compliance on Coral Reef Fish Communities in the Western Indian
+Ocean.”</span> <em>Marine Ecology Progress Series</em> 396: 99–109.
+</div>
+<div id="ref-Newton2007IslandFisheries" class="csl-entry">
+Newton, K., I. M. Côté, G. M. Pilling, S. Jennings, and N. K. Dulvy.
+2007. <span>“Current and Future Sustainability of Island Coral Reef
+Fisheries.”</span> <em>Current Biology</em> 17: 655–58.
+</div>
+<div id="ref-Polunin1993CaribbeanReserves" class="csl-entry">
+Polunin, N., and C. M. Roberts. 1993. <span>“Greater Biomass and Value
+of Target Coral-Reef Fishes in Two Small Caribbean Marine
+Reserves.”</span> <em>Marine Ecology Progress Series</em> 100: 167–76.
+</div>
+<div id="ref-Pratchett2014ReefDegradation" class="csl-entry">
+Pratchett, M. S., A. S. Hoey, and S. K. Wilson. 2014. <span>“Reef
+Degradation and the Loss of Critical Ecosystem Goods and Services
+Provided by Coral Reef Fishes.”</span> <em>Current Opinion in
+Environmental Sustainability</em> 7: 37–43.
+</div>
+<div id="ref-Pratchett2015ClimateChange" class="csl-entry">
+Pratchett, M. S., S. K. Wilson, and P. L. Munday. 2015. <span>“Effects
+of Climate Change on Coral Reef Fishes.”</span> In <em>Ecology of Fishes
+on Coral Reefs</em>. Cambridge University Press.
+</div>
+<div id="ref-Risk1972FishDiversity" class="csl-entry">
+Risk, M. J. 1972. <span>“Fish Diversity on a Coral Reef in the Virgin
+Islands.”</span> <em>Atoll Research Bulletin</em> 153: 1–6.
+</div>
+<div id="ref-Rogers2014StructuralComplexity" class="csl-entry">
+Rogers, A., J. L. Blanchard, and P. J. Mumby. 2014. <span>“Vulnerability
+of Coral Reef Fisheries to a Loss of Structural Complexity.”</span>
+<em>Current Biology</em> 24: 1000–1005.
+</div>
+<div id="ref-Russ2002MarineReserves" class="csl-entry">
+Russ, G. R. 2002. <span>“Yet Another Review of Marine Reserves as Reef
+Fishery Management Tools.”</span> In <em>Coral Reef Fishes</em>.
+Elsevier Science.
+</div>
+<div id="ref-Wilson2012Ningaloo" class="csl-entry">
+Wilson, S. K., R. C. Babcock, R. Fisher, T. H. Holmes, J. A. Y. Moore,
+and D. P. Thomson. 2012. <span>“Relative and Combined Effects of Habitat
+and Fishing on Reef Fish Communities Across a Limited Fishing Gradient
+at Ningaloo.”</span> <em>Marine Environmental Research</em> 81: 1–11.
+</div>
+<div id="ref-Wilson2014SeasonalHabitat" class="csl-entry">
+Wilson, S. K., C. J. Fulton, M. Depczynski, et al. 2014. <span>“Seasonal
+Changes in Habitat Structure Underpin Shifts in Macroalgae-Associated
+Tropical Fish Communities.”</span> <em>Marine Biology</em> 161:
+2597–607.
+</div>
+<div id="ref-Wilson2007VisualAssessments" class="csl-entry">
+Wilson, S. K., N. A. J. Graham, and N. V. C. Polunin. 2007.
+<span>“Appraisal of Visual Assessments of Habitat Complexity and Benthic
+Composition on Coral Reefs.”</span> <em>Marine Biology</em> 151:
+1069–76.
+</div>
+<div id="ref-Wilson2006MultipleDisturbances" class="csl-entry">
+Wilson, S. K., N. Graham, and M. S. Pratchett. 2006. <span>“Multiple
+Disturbances and the Global Degradation of Coral Reefs: Are Reef Fishes
+at Risk or Resilient?”</span> <em>Global Change Biology</em> 12:
+2220–34.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
