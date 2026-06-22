@@ -83,7 +83,7 @@ GSI is modelled as a Gamma distribution.
 Sex and Species are included as interaction terms with each other (via factor.factor.interactions = TRUE), 
 and as interaction terms between the two smoothers (this is default behaviour for FSSgam, see ?generate_model_set).
 
-```{r fss, include=FALSE}
+```{r fss, echo=TRUE, results='hide'}
 use.dat <- dat
 
 start.fit <- gam(

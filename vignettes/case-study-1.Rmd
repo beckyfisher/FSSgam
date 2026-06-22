@@ -240,7 +240,8 @@ It can also be a good idea to check your predictor correlations.
 knitr::kable(
   model.set$predictor.correlations,
   digits = 2,
-  caption = "Predictor correlations"
+  caption = "Predictor correlations",
+  row.names = FALSE
 )
 ```
 
