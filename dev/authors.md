@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/beckyfisher/FSSgam_package/blob/dev/inst/CITATION)
+[`inst/CITATION`](https://github.com/beckyfisher/FSSgam_package/blob/master/inst/CITATION)
 
 Fisher R, Wilson SK, Sin TM, Lee AC, Langlois TJ (2018). A simple
 function for full-subsets multiple regression in ecology with R. Ecology
