@@ -1,5 +1,6 @@
 ---
 title: "Case Study 2"
+bibliography: ../references.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -24,17 +25,47 @@ data(case_study2, package = "FSSgam", envir = environment())
 
 ## Overview
 
-This case study reanalyses data from **Langlois et al. (2005)** to examine whether large reef-associated predators (rock lobster and snapper) structure adjacent soft‑sediment communities. The analysis demonstrates the use of **full subsets GAMMs** in the `FSSgam` package, accounting for nested random effects and zero‑inflated abundance data.
+This case study reanalyses data from @Langlois2005ReefAssociatedPredators to examine whether large reef-associated predators (rock lobster and snapper) structure adjacent soft‑sediment communities. The analysis demonstrates the use of **full subsets GAMMs** in the `FSSgam` package, accounting for nested random effects and zero‑inflated abundance data.
 
 ## Background
 
-In temperate reef ecosystems, reduced densities of soft‑sediment infauna have been observed adjacent to reefs, forming so‑called *infaunal haloes*. These patterns are hypothesised to arise from foraging by reef‑associated predators such as snapper (*Pagrus auratus*) and rock lobster (*Jasus edwardsii*), which occur at higher densities inside no‑take reserves.
+In ecology, 'haloes' have been described in many contexts [@Suchanek1978MytilusEdulis; @Fairweather1988PredationHaloes] and generally are thought to result from a predator or herbivore foraging given distances from a 'shelter habitat' out into a 'food habitat'. Studies in temperate marine ecosystems have found 'infaunal haloes', areas of decreased density of soft-sediment fauna adjacent to reefs, at a variety of scales (0-30 m, [@Davis1982ManMadeStructures]; 0-70 m, [@Posey1994OffshoreReef]). The model suggesting reef-associated predators are responsible for haloes is supported by studies of gut contents of fish on temperate reefs [@Lindquist1994ReefFishStomach]. However, convincing demonstrations of predators causing haloes of prey in these systems have been hampered due to limited replication of caging studies [@Posey1994OffshoreReef] and the lack of large-scale manipulations [@Thrush2000GeneralityFieldExperiments].
 
-The original analysis of Langlois et al. (2005) relied on mixed‑model ANOVA and multivariate approaches that could not fully incorporate environmental covariates or flexible error structures. Here, we revisit these data using full subsets GAMMs to disentangle the relative importance of predator density, distance from reef, reserve status, and environmental characteristics.
+The most conspicuous predators associated with reefs in northeastern New Zealand are the sparid fish *Pagrus auratus* (snapper) and the rock lobster *Jasus edwardsii*. They are highly targeted by local fisheries and occur at higher densities inside no‑take marine reserves [NTR, @Babcock1999TemperateReserves]. In this region the influence of predators on rocky reefs has been examined using the existing large-scale experimental framework provided by marine reserves [@Babcock1999TemperateReserves; @Shears2002TopDownControl]. Using this approach, @Langlois2005ReefAssociatedPredators examined the potential role of large reef-associated predators in structuring adjacent soft-sediment communities, by contrasting the densities of predators and prey found inside versus outside three NTR.
+
+Unlike a Before-After-Control-Impact [@Underwood1993SpatiallyReplicated] designed study, a potential problem with studies of established NTR is that evidence of a negative relationship between predator densities and densities of prey does not eliminate other potential models [@Hurlbert1984Pseudoreplication; @Underwood2000ObservationsEcology]. Results might be confounded by other factors that may structure the soft-sediment community (e.g. wave action, sediment grain-size distributions, organic matter, infaunal interactions). In the original study, @Langlois2005ReefAssociatedPredators hypothesised that predation by large reef-associated predators would result in lower densities of large (> 4 mm) soft-sediment macrofauna inside reserves compared to outside reserves (Predator model). A further hypothesis was that predation would decrease with increasing distances from the reef, resulting in a 'halo' pattern in the community [@Posey1994OffshoreReef], i.e., an increase in prey densities with increasing distances from the reef edge (Distance model).
+
+In the original study, @Langlois2005ReefAssociatedPredators investigated the influence of measured environmental variables (see the variable table in Methods, below) on the abundance composition of the assemblage inside and outside multiple NTR using multivariate multiple regression, which found no evidence that any of the measured environmental variables were confounding the comparison of the soft-sediment assemblages inside and outside the multiple NTR. To estimate effects on individual taxa inside and outside the NTR across the multiple random sites and multiple NTR locations, the original analysis used a mixed-model ANOVA, where P-values were obtained using permutations [@Anderson2003PermutationTests], to account for the great many zeros contained in the data. Any influence of the multiple environmental variables measured could not be accounted for in the original analysis of individual taxa due to the limited error families available in GLMM routines at that time. As a consequence it was impossible to tease apart the relative importance of NTR status and distance from the reef edge from variation in snapper or rock lobster density or the influence of measured environmental variables on the individual infaunal taxa. The revised analyses here based on a full subsets multiple regression approach allows the influence of environmental and predator density variables to be assessed independently, whilst accounting for the nesting of random sites inside and outside multiple random NTR and samples collected along a transect of fixed distance from the reef edge.
+
+## Methods
+
+In 2002 New Zealand's northeastern bioregion contained eight reserves, three of which were considered broadly comparable biotype replicates [@Shears2003RockyCoastalTypes; @Willis2003ProtectionExploitedFish]. This study was carried out between January and March of 2002, using these three locations as a random factor to explicitly test the generality of any potential differences in the effects of marine reserve status [as in @Beck1997InferenceGenerality]. The Cape Rodney to Okakari Point (Leigh) Marine Reserve (36°16'S, 174°48'E) was gazetted in 1975, the Tawharanui Marine Park (36°22'S, 174°50'E) was declared a no-take area in 1981 and the Te Whanganui a Hei (Hahei) Marine Reserve (36°50'S, 175°49'E) was gazetted in 1993. At each location eight sites of similar wave exposure and reef/soft-sediment interfaces were chosen, four inside and four outside each marine reserve, with non-reserve sites interspersed both north and south of the reserve to mitigate the potential confounding influence of other environmental variables (such as recruitment or food supply).
+
+Within each site, sampling was done at each of four distances from the reef edge: 2, 5, 15 and 30 m. These distance strata were comparable to previous studies of infaunal haloes [@Posey1994OffshoreReef] and within the likely foraging ranges of snapper [@Parsons2003SnapperHomeRange] and rock lobster [@Kelly1999LobsterAggregations]. At each distance, six replicate samples were obtained using box quadrats measuring 0.5 m^2^ (1 m x 0.5 m) x 13 cm deep (0.065 m^3^). Sediment was excavated by hand with a metal scoop and sieved in the field using a sieve with a 4 mm mesh. Other studies from different systems [@Ambrose1991InfaunalPredators; @Lindquist1994ReefFishStomach; @Posey1994OffshoreReef; @Dahlgren1999Bioturbation] have focused on smaller infauna (> 0.5 mm) where the corresponding reef-associated predators were also smaller. In the present study, we focused on larger infauna (> 4 mm), corresponding to the larger reef-associated predators found within reserves (snapper are ~316 mm mean total length and rock lobster are ~109.9 mm mean carapace length inside reserves, [@Babcock1999TemperateReserves]). Organisms retained on the sieve were preserved in 5% formalin and later transferred to 70% ethanol, and identified to the lowest taxonomic resolution possible.
+
+Physical environmental variables measured at each distance stratum at each site included replicate measurements of grain size by dry sieving, organic content by ignition at 550°C, and bed form measurements. Wave exposure was estimated using an index of potential fetch [@Thomas1986ExposureIndex]. Estimates of the density of snapper at the reef edge were obtained using baited underwater video [BUV, @Willis2000BaitedVideo]. Estimates of the density of lobster at the reef edge were obtained by underwater visual census [UVC, @MacDiarmid1991SpinyLobster]. A list and brief description of the environmental variables measured and subsequently included in analyses are given below.
+
+| Variable | Description |
+| --- | --- |
+| Snapper | Density of legal-sized snapper (*Pagrus auratus*) estimated by BUV |
+| Rock Lobster | Density of legal-sized rock lobster (*Jasus edwardsii*) estimated by UVC |
+| Predatory Infauna | Infauna considered to be predators [@Langlois2005ReefAssociatedPredators] |
+| Bioturbating Infauna | Infauna considered to be bioturbators [@Langlois2005ReefAssociatedPredators] |
+| Grain size fractions | Percentage of grain sizes of ambient sediments (by weight), from 125 um up to 4 mm |
+| Organics | Sediment organic matter (%) |
+| Bed Stress | Estimated using bed form ripple measurements and depth |
+| Exposure | Estimation of fetch (km) |
+| Depth | Water depth (m) |
+
+Table: Environmental variables used as predictors in the full subsets analyses.
+
+### Analysis
+
+A generalised additive mixed model with full subsets analyses was used to determine if NTR status, distance from the reef edge, variation in snapper or rock lobster density or the influence of any measured environmental variables or interactions between these predictors best explained variance in abundance of the three most abundant and ubiquitous infaunal taxa. Abundance data were modelled using a tweedie distribution, implemented via a call to `gam` (mgcv, [@Wood2017GAMSecondEdition]) with the random effect of site included using the `bs='re'` specification. Smoothers to the random factors of NTR location and nested sites (`bs='re'`) were included in all models (and as part of the null model) via the `null.terms` argument of the full subsets gam function. Given the complexity of the null model, the total number of predictors was limited to only an additional three terms (`max.predictors=3`) and `k` was limited to 3. As the density of legal-sized lobster and snapper and NTR status were all relevant to the primary hypothesis, the most parsimonious models within 2 AIC units of the top model that contained any of these variables in addition to any habitat variables were considered as the most parsimonious. The R language for statistical computing [@RCoreTeam2017R] was used for all data manipulation [dplyr, @WickhamFrancois2016dplyr; tidyr, @Wickham2017tidyr], analysis [mgcv, @Wood2011FastStableREML] and graphing [ggplot2, @Wickham2009ggplot2; gridExtra, @Auguie2016gridExtra].
 
 ** note **
 This example was updated on the 11th Oct 2018 to demonstrate usage of the replacement functions
-generate.model.set and fit.model.set that have now superseded full.subsets.gam in package FSSgam
+generate_model_set and fit_model_set that have now superseded full.subsets.gam in package FSSgam
 Between them these functions carry out the same analysis, take the same arguments and return the same
 outputs as full.subsets.gam with the only difference being that the model set generation and model
 fitting procedures are separated into two steps. This was done to make the function easier to use,
@@ -42,6 +73,8 @@ because the model set can be interrogated, along with the correlation matrix of 
 fitting is even attempted.
 
 It has since been updated with minimal changes on the 29th April 2026 to ensure reproducibility and to convert it to a .Rmd file for the vignette format for githubio.
+
+It was updated again on the dev branch to call generate_model_set and fit_model_set, the snake_case names that generate.model.set and fit.model.set were themselves renamed to. The old dot-case names still work (they now just emit a deprecation warning and forward to the new names), but new code should call generate_model_set/fit_model_set directly.
 
 ## Script information
 
@@ -185,14 +218,14 @@ for(i in 1:length(resp.vars)){
   Model1=gam(response~s(lobster,k=3,bs='cr')+ s(Location, Site, bs="re"),
              family=tw(),  data=use.dat)
 
-  model.set=generate.model.set(use.dat=use.dat,
+  model.set=generate_model_set(use.dat=use.dat,
                             test.fit=Model1,
                             pred.vars.cont=pred.vars,
                             pred.vars.fact=factor.vars,
                             linear.vars="Distance",
                             k=3,
                             null.terms="s(Location,Site,bs='re')")
-  out.list=fit.model.set(model.set,
+  out.list=fit_model_set(model.set,
                             max.models=600,
                             parallel=FALSE)
   names(out.list)
@@ -637,6 +670,20 @@ combine.plot<-arrangeGrob(ggmod.bds.status,ggmod.bds.Distance.x.status,ggmod.bds
 
 combine.plot
 ```
+
+## Results and discussion
+
+The most parsimonious model for the bivalve *Dosinia subrosea* included the interaction of distance from reef with NTR status and the 500 um sediment grain size fraction, which (along with random site effects) explained 52% of its distribution (see the model summary table above). While fetch occurred in the second top model, importance scores indicated that it was relatively unimportant compared to distance and NTR status (see the variable importance heatmap above). The abundance of *D. subrosea* was negatively correlated with increasing proportion of the 500 um sediment grain size fraction and positively correlated with increasing distance from the reef edge (see the plots above). Subsequent manipulative studies have found that *D. subrosea* are readily preyed upon by the large-bodied rock lobster in the field [@Langlois2006aTrophicInteractions] and laboratory [@Langlois2006bBivalvePrey], supporting the results of this analysis.
+
+NTR status, distance and organic content were found to be important across all possible models explaining the abundance of *Myadora striata*, and had strong model support according to AICc. However a simpler model of decreasing abundance of *M. striata* with increasing density of legal-sized rock lobster was the most parsimonious model within 2 AICc, and had relatively high model support based on BIC. A direct relationship with the density of legal-sized rock lobster is consistent with the observation that greater than legal-size rock lobster can readily prey upon bivalves [@Langlois2006bBivalvePrey].
+
+There was a high level of model uncertainty in the full subsets analysis of the ubiquitous hermit crab *Pagurus novizelandiae*, with very low model weights and low, relatively evenly distributed variable importance scores. This is consistent with the original study that found no effect of NTR status on the abundance of *Pagurus novizelandiae*. The best model included the 4 mm sediment grain size fraction and the density of legal-sized rock lobster, explaining 48% of the distribution of *P. novizelandiae*. The abundance of *P. novizelandiae* was negatively correlated with increasing proportion of the 4 mm sediment grain size fraction and negatively correlated with the density of rock lobster on the reef edge. The direct relationship between the density of legal-sized rock lobster and the hermit crab *P. novizelandiae* is consistent with feeding studies of rock lobster, which indicated that they can exhibit a strong preference for decapod prey [@Dumas2013DecapodPrey].
+
+Overall the general results of the revised analysis are comparable to those from the original study. However, by allowing environmental information to be included in the new analysis, whilst accounting for the nesting and random allocation of sites and NTR locations, a more informed comparison of the abundance of ubiquitous infaunal taxa has been made possible. In particular, it is useful that instead of relying on a simple comparison of NTR status to test hypotheses regarding predation of infauna, the role of the large carnivorous species protected within the NTR (e.g. rock lobster) can be more clearly indicated once it is included as a predictor variable in the models.
+
+## References
+
+<div id="refs"></div>
 
 
 
