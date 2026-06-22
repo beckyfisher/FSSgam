@@ -72,6 +72,21 @@ or renames something else, the same approach applies: re-grep the vignettes
 for the old name, update call-sites and prose, then render and verify (see
 Section 5).
 
+### Recently fixed: root site going stale (2026-06-22)
+
+At some point master/main's `DESCRIPTION` `Version` was bumped to match
+dev's 4-part dev-style value (`1.11.0.9000`). Because pkgdown's
+`development: mode: auto` decides root-vs-`docs/dev/` purely from that
+version string — not from which branch is building — every push from
+*either* branch started landing in `docs/dev/`, and the root site
+(<https://beckyfisher.github.io/FSSgam>) silently stopped rebuilding. It sat
+frozen on an older commit (missing the "Reference" navbar link and the
+`f33216f` case-study fixes) while `docs/dev/` kept updating correctly. Fixed
+by setting master/main's `Version` back to a plain release-style number
+(`1.11.0`) and leaving dev's `1.11.0.9000` alone. The same bug exists in
+`FSSgam_package` (both branches there also carry the same `1.0.0.9000`) —
+reported back to the user rather than fixed here, per Section 1.
+
 ---
 
 ## 3. Key Files and Structure
@@ -89,10 +104,16 @@ vignettes/
   function-outputs.Rmd       # same, for Appendix S2 / function outputs
 R/zzz.R                  # @noRd placeholder; package exports nothing, exists only for pkgdown
 DESCRIPTION              # Package: FSSgam.docs (intentionally not "FSSgam") — do not rename.
-                          # Version is intentionally a dev-style 4-part number (currently
-                          # 1.11.0.9000) so pkgdown's `development: mode: auto` (see _pkgdown.yml)
-                          # routes dev-branch builds to docs/dev/ instead of the root site — don't
-                          # "fix" this back to a plain release-style version.
+                          # `development: mode: auto` (see _pkgdown.yml) decides root-vs-docs/dev/
+                          # purely from this file's Version string at build time — NOT from which
+                          # git branch triggered the build. A 4-part dev-style version (x.y.z.9000)
+                          # always builds to docs/dev/; a plain release-style version always builds
+                          # to root. For the intended split to work, master/main must carry a
+                          # release-style version (currently 1.11.0) and dev must carry the 4-part
+                          # one (currently 1.11.0.9000). If both branches ever end up with the same
+                          # Version (e.g. a version bump applied to both without checking this),
+                          # root silently stops rebuilding and goes stale while dev keeps updating —
+                          # this happened and was fixed on 2026-06-22 (see Section 2).
 NAMESPACE                # auto-generated, currently has no exports — do not hand-edit
 man/                      # empty — no exported functions to document
 _pkgdown.yml              # site nav/config — do not restructure without being asked. Has
@@ -135,13 +156,17 @@ publication/                # supplementary files from the original paper — re
 - **The site installs the real package from GitHub at build time**
   (`.github/workflows/pkgdown.yaml`). The install step is branch-conditional:
   when *this* repo's branch is `dev` it installs `FSSgam_package`'s `dev`
-  ref; otherwise it installs `FSSgam_package`'s default branch. Since the
-  snake_case rename is now merged into `FSSgam_package`'s `master`, both
-  paths currently resolve to equivalent functions — the conditional isn't
-  load-bearing for the rename itself any more, but it's still what makes the
-  dual root/`dev` pkgdown-site setup work (see `_pkgdown.yml`'s
-  `development: mode: auto` and `DESCRIPTION`'s dev-style `Version`). Don't
-  remove it without checking with the user first.
+  ref; otherwise it installs `FSSgam_package`'s default branch. This is a
+  separate mechanism from the root/`dev` site split below — it controls
+  which package version vignettes are rendered against, not where the built
+  site lands. Don't remove it without checking with the user first.
+
+- **The root-vs-`docs/dev/` site split is controlled by `DESCRIPTION`'s
+  `Version` string alone, not by git branch** (see the `DESCRIPTION` entry
+  in Section 3 for the mechanics and the 2026-06-22 incident where both
+  branches briefly carried the same version and root went stale). Keep
+  master/main's `Version` release-style and dev's 4-part — don't bump them
+  to match each other.
 
 - **Do not alter historical results, figures, or scientific conclusions**
   in the case-study vignettes — a standing rule, not tied to any one task.
