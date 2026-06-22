@@ -26,6 +26,7 @@ jobs:
           extra-packages: |
             any::pkgdown
             any::remotes
+            local::.
 
       # Optional but recommended: install the real package
       # so examples in articles/reference can run.
