@@ -16,6 +16,9 @@ examples of usage.
 **R package source code:**  
 <https://github.com/beckyfisher/FSSgam_package>
 
+Full function-level documentation is available at
+<https://beckyfisher.github.io/FSSgam_package/reference/>.
+
 ### Installation
 
 The **FSSgam** package depends on a number of standard R packages for
