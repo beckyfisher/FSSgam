@@ -18,6 +18,11 @@ navbar:
     left:
       - home
       - articles
+      - reference
     right:
       - github
+  components:
+    reference:
+      text: Reference
+      href: https://beckyfisher.github.io/FSSgam_package/reference/
 
