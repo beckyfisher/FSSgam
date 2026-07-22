@@ -341,7 +341,7 @@ gam.check(best.model)
     ## 
     ## Method: GCV   Optimizer: outer newton
     ## full convergence after 8 iterations.
-    ## Gradient range [6.886352e-11,6.377734e-07]
+    ## Gradient range [6.886353e-11,6.377734e-07]
     ## (score 0.3332369 & scale 0.3350731).
     ## Hessian positive definite, eigenvalue range [7.71641e-06,0.0001997042].
     ## Model rank =  15 / 15 

@@ -177,7 +177,7 @@ knitr::kable(
 | modname | AICc | r2.vals | edf | delta.AICc | wi.AICc |
 |:---|---:|---:|---:|---:|---:|
 | av.wave.by.Survey+Survey | 5726.072 | 0.002 | 30.43 | 0.000 | 1 |
-| Depth.by.Survey+Survey | 5804.053 | 0.121 | 30.00 | 77.981 | 0 |
+| Depth.by.Survey+Survey | 5804.118 | 0.117 | 30.00 | 78.047 | 0 |
 | av.wave+Survey | 5872.776 | 0.001 | 10.00 | 146.704 | 0 |
 | Survey | 5901.816 | 0.021 | 6.00 | 175.744 | 0 |
 | Depth+Survey | 5904.288 | 0.103 | 10.00 | 178.216 | 0 |
@@ -267,7 +267,7 @@ knitr::kable(
 | modname | AICc | r2.vals | edf | delta.AICc | wi.AICc |
 |:---|---:|---:|---:|---:|---:|
 | av.wave.by.Survey+Survey | 5726.072 | 0.002 | 30.43 | 0.000 | 1 |
-| Depth.by.Survey+Survey | 5804.053 | 0.121 | 30.00 | 77.981 | 0 |
+| Depth.by.Survey+Survey | 5804.118 | 0.117 | 30.00 | 78.047 | 0 |
 | av.wave+Survey | 5872.776 | 0.001 | 10.00 | 146.704 | 0 |
 | Survey | 5901.816 | 0.021 | 6.00 | 175.744 | 0 |
 | Depth+Survey | 5904.288 | 0.103 | 10.00 | 178.216 | 0 |
@@ -405,7 +405,7 @@ knitr::kable(
 | Pocillopora | Depth.by.Survey+Survey | 836.556 | 0.002 | 30.00 | 13.727 | 0.000 |
 | Pocillopora | av.wave.by.Survey+Survey | 842.665 | 0.026 | 30.00 | 19.835 | 0.000 |
 | Acropora | av.wave.by.Survey+Survey | 3216.484 | 0.142 | 30.11 | 0.000 | 1.000 |
-| Acropora | Depth.by.Survey+Survey | 3234.482 | 0.176 | 30.00 | 17.997 | 0.000 |
+| Acropora | Depth.by.Survey+Survey | 3234.481 | 0.176 | 30.00 | 17.997 | 0.000 |
 | Acropora | Survey | 3273.224 | 0.009 | 6.00 | 56.740 | 0.000 |
 | Acropora | Depth+Survey | 3276.126 | 0.251 | 10.00 | 59.642 | 0.000 |
 | Acropora | av.wave+Survey | 3277.110 | 0.046 | 10.20 | 60.626 | 0.000 |
