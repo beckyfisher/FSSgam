@@ -500,25 +500,25 @@ variables.</p>
 <colgroup>
 <col width="11%">
 <col width="10%">
-<col width="31%">
-<col width="1%">
-<col width="1%">
-<col width="1%">
+<col width="32%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
 <col width="3%">
 <col width="1%">
 <col width="2%">
 <col width="2%">
 <col width="2%">
-<col width="1%">
+<col width="2%">
 <col width="1%">
 <col width="2%">
 <col width="2%">
 <col width="2%">
+<col width="3%">
+<col width="1%">
+<col width="1%">
 <col width="2%">
-<col width="1%">
-<col width="0%">
-<col width="1%">
-<col width="1%">
+<col width="2%">
 <col width="1%">
 <col width="2%">
 <col width="2%">
@@ -551,20 +551,155 @@ variables.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">BDS.Distance+sqrt.X4mm</td>
+<td align="left">BDS.Distance+fetch+sqrt.X4mm</td>
+<td align="left">Distance+fetch+sqrt.X4mm</td>
+<td align="left">s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs =
+“cr”) + Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">271.445</td>
+<td align="right">316.294</td>
+<td align="right">0.450</td>
+<td align="right">NA</td>
+<td align="right">22.36</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.468</td>
+<td align="right">0.548</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.468</td>
+</tr>
+<tr class="even">
+<td align="left">BDS.Distance+sqrt.X4mm+sqrt.X500um</td>
+<td align="left">Distance+sqrt.X4mm+sqrt.X500um</td>
+<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3,
+bs = “cr”) + Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">272.957</td>
+<td align="right">318.426</td>
+<td align="right">0.531</td>
+<td align="right">NA</td>
+<td align="right">23.13</td>
+<td align="right">0</td>
+<td align="right">1.512</td>
+<td align="right">2.131</td>
+<td align="right">0.220</td>
+<td align="right">0.189</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.688</td>
+</tr>
+<tr class="odd">
+<td align="left">BMS.Distance+fetch.by.Status+Status</td>
+<td align="left">Distance+fetch.by.Status+Status</td>
+<td align="left">s(fetch, by = Status, k = 3, bs = “cr”) + Status +
+Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">152.755</td>
+<td align="right">191.090</td>
+<td align="right">0.115</td>
+<td align="right">NA</td>
+<td align="right">15.89</td>
+<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.298</td>
+<td align="right">0.443</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.298</td>
+</tr>
+<tr class="even">
+<td align="left">BMS.fetch.by.Status+org.by.Status+Status</td>
+<td align="left">fetch.by.Status+org.by.Status+Status</td>
+<td align="left">s(fetch, by = Status, k = 3, bs = “cr”) + s(org, by =
+Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”)</td>
+<td align="right">152.953</td>
+<td align="right">193.987</td>
+<td align="right">0.116</td>
+<td align="right">NA</td>
+<td align="right">17.39</td>
+<td align="right">0</td>
+<td align="right">0.198</td>
+<td align="right">2.896</td>
+<td align="right">0.270</td>
+<td align="right">0.104</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0.568</td>
+</tr>
+<tr class="odd">
+<td align="left">BMS.Distance.t.Status+fetch.by.Status+Status</td>
+<td align="left">Distance.t.Status+fetch.by.Status+Status</td>
+<td align="left">s(fetch, by = Status, k = 3, bs = “cr”) + Distance +
+Status + s(Location, Site, bs = “re”) + Distance:Status</td>
+<td align="right">153.709</td>
+<td align="right">193.381</td>
+<td align="right">0.115</td>
+<td align="right">NA</td>
+<td align="right">16.89</td>
+<td align="right">0</td>
+<td align="right">0.954</td>
+<td align="right">2.291</td>
+<td align="right">0.185</td>
+<td align="right">0.141</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.753</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.Distance+sqrt.X4mm</td>
 <td align="left">Distance+sqrt.X4mm</td>
 <td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location,
 Site, bs = “re”)</td>
-<td align="right">276.405</td>
-<td align="right">321.906</td>
-<td align="right">0.529</td>
+<td align="right">476.210</td>
+<td align="right">520.074</td>
+<td align="right">0.493</td>
 <td align="right">NA</td>
-<td align="right">23.24</td>
+<td align="right">20.90</td>
 <td align="right">0</td>
 <td align="right">0.000</td>
-<td align="right">0.000</td>
-<td align="right">0.677</td>
-<td align="right">0.721</td>
+<td align="right">1.735</td>
+<td align="right">0.059</td>
+<td align="right">0.029</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -575,78 +710,189 @@ Site, bs = “re”)</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">0.677</td>
-</tr>
-<tr class="even">
-<td align="left">BDS.Distance.t.Status+sqrt.X4mm+Status</td>
-<td align="left">Distance.t.Status+sqrt.X4mm+Status</td>
-<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + Status +
-s(Location, Site, bs = “re”) + Distance:Status</td>
-<td align="right">277.884</td>
-<td align="right">323.807</td>
-<td align="right">0.517</td>
-<td align="right">NA</td>
-<td align="right">23.82</td>
-<td align="right">0</td>
-<td align="right">1.480</td>
-<td align="right">1.901</td>
-<td align="right">0.323</td>
-<td align="right">0.279</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1.000</td>
+<td align="right">0.059</td>
 </tr>
 <tr class="odd">
-<td align="left">BMS.fetch.by.Status+sqrt.X4mm+Status</td>
-<td align="left">fetch.by.Status+sqrt.X4mm+Status</td>
-<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + s(fetch, by = Status,
-k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”)</td>
-<td align="right">157.220</td>
-<td align="right">195.278</td>
-<td align="right">0.114</td>
+<td align="left">CPN.Distance+lobster+sqrt.X1mm</td>
+<td align="left">Distance+lobster+sqrt.X1mm</td>
+<td align="left">s(lobster, k = 3, bs = “cr”) + s(sqrt.X1mm, k = 3, bs =
+“cr”) + Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">476.377</td>
+<td align="right">518.340</td>
+<td align="right">0.444</td>
 <td align="right">NA</td>
-<td align="right">15.70</td>
+<td align="right">19.05</td>
 <td align="right">0</td>
+<td align="right">0.167</td>
 <td align="right">0.000</td>
-<td align="right">0.000</td>
-<td align="right">0.630</td>
-<td align="right">0.909</td>
-<td align="right">1</td>
-<td align="right">0</td>
+<td align="right">0.054</td>
+<td align="right">0.069</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
-<td align="right">0.630</td>
+<td align="right">1</td>
+<td align="right">0.113</td>
 </tr>
 <tr class="even">
-<td align="left">BMS.fetch.by.Status+sqrt.X4mm.by.Status+Status</td>
-<td align="left">fetch.by.Status+sqrt.X4mm.by.Status+Status</td>
-<td align="left">s(fetch, by = Status, k = 3, bs = “cr”) + s(sqrt.X4mm,
-by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs =
+<td align="left">CPN.Distance+fetch+sqrt.X4mm</td>
+<td align="left">Distance+fetch+sqrt.X4mm</td>
+<td align="left">s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs =
+“cr”) + Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">476.515</td>
+<td align="right">520.509</td>
+<td align="right">0.489</td>
+<td align="right">NA</td>
+<td align="right">21.06</td>
+<td align="right">0</td>
+<td align="right">0.306</td>
+<td align="right">2.169</td>
+<td align="right">0.051</td>
+<td align="right">0.023</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.164</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.Distance+sqrt.X1mm</td>
+<td align="left">Distance+sqrt.X1mm</td>
+<td align="left">s(sqrt.X1mm, k = 3, bs = “cr”) + Distance + s(Location,
+Site, bs = “re”)</td>
+<td align="right">476.800</td>
+<td align="right">518.816</td>
+<td align="right">0.454</td>
+<td align="right">NA</td>
+<td align="right">19.11</td>
+<td align="right">0</td>
+<td align="right">0.590</td>
+<td align="right">0.476</td>
+<td align="right">0.044</td>
+<td align="right">0.055</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.208</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.Distance+snapper+sqrt.X1mm</td>
+<td align="left">Distance+snapper+sqrt.X1mm</td>
+<td align="left">s(snapper, k = 3, bs = “cr”) + s(sqrt.X1mm, k = 3, bs =
+“cr”) + Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">477.047</td>
+<td align="right">519.148</td>
+<td align="right">0.447</td>
+<td align="right">NA</td>
+<td align="right">19.14</td>
+<td align="right">0</td>
+<td align="right">0.837</td>
+<td align="right">0.809</td>
+<td align="right">0.039</td>
+<td align="right">0.046</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.247</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.Distance+sqrt.X1mm+Status</td>
+<td align="left">Distance+sqrt.X1mm+Status</td>
+<td align="left">s(sqrt.X1mm, k = 3, bs = “cr”) + Status + Distance +
+s(Location, Site, bs = “re”)</td>
+<td align="right">477.137</td>
+<td align="right">519.339</td>
+<td align="right">0.453</td>
+<td align="right">NA</td>
+<td align="right">19.28</td>
+<td align="right">0</td>
+<td align="right">0.927</td>
+<td align="right">0.999</td>
+<td align="right">0.037</td>
+<td align="right">0.042</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.284</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.lobster+sqrt.X4mm</td>
+<td align="left">lobster+sqrt.X4mm</td>
+<td align="left">s(lobster, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs =
+“cr”) + s(Location, Site, bs = “re”)</td>
+<td align="right">477.723</td>
+<td align="right">520.201</td>
+<td align="right">0.467</td>
+<td align="right">NA</td>
+<td align="right">19.54</td>
+<td align="right">0</td>
+<td align="right">1.513</td>
+<td align="right">1.861</td>
+<td align="right">0.028</td>
+<td align="right">0.027</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.312</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.lobster+sqrt.X4mm+sqrt.X500um</td>
+<td align="left">lobster+sqrt.X4mm+sqrt.X500um</td>
+<td align="left">s(lobster, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs =
+“cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + s(Location, Site, bs =
 “re”)</td>
-<td align="right">158.379</td>
-<td align="right">199.933</td>
-<td align="right">0.116</td>
+<td align="right">477.817</td>
+<td align="right">520.638</td>
+<td align="right">0.462</td>
 <td align="right">NA</td>
-<td align="right">17.70</td>
+<td align="right">19.84</td>
 <td align="right">0</td>
-<td align="right">1.159</td>
-<td align="right">4.655</td>
-<td align="right">0.353</td>
-<td align="right">0.089</td>
+<td align="right">1.607</td>
+<td align="right">2.298</td>
+<td align="right">0.026</td>
+<td align="right">0.022</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -654,26 +900,163 @@ by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs =
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="right">0.338</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.sqrt.X4mm+sqrt.X500um</td>
+<td align="left">sqrt.X4mm+sqrt.X500um</td>
+<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3,
+bs = “cr”) + s(Location, Site, bs = “re”)</td>
+<td align="right">478.086</td>
+<td align="right">520.941</td>
+<td align="right">0.474</td>
+<td align="right">NA</td>
+<td align="right">19.90</td>
+<td align="right">0</td>
+<td align="right">1.876</td>
+<td align="right">2.602</td>
+<td align="right">0.023</td>
+<td align="right">0.019</td>
+<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
-<td align="right">0.983</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.361</td>
 </tr>
 <tr class="odd">
-<td align="left">CPN</td>
-<td align="left">lobster+org+sqrt.X4mm</td>
-<td align="left">s(lobster, k = 3, bs = “cr”) + s(org, k = 3, bs = “cr”)
-+ s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”)</td>
-<td align="right">399.262</td>
-<td align="right">446.531</td>
+<td align="left">CPN.sqrt.X4mm</td>
+<td align="left">sqrt.X4mm</td>
+<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs =
+“re”)</td>
+<td align="right">478.102</td>
+<td align="right">520.668</td>
 <td align="right">0.481</td>
 <td align="right">NA</td>
-<td align="right">24.75</td>
+<td align="right">19.66</td>
 <td align="right">0</td>
-<td align="right">0.000</td>
-<td align="right">0.000</td>
-<td align="right">0.988</td>
-<td align="right">0.983</td>
+<td align="right">1.892</td>
+<td align="right">2.328</td>
+<td align="right">0.023</td>
+<td align="right">0.022</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.384</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.snapper+sqrt.X4mm</td>
+<td align="left">snapper+sqrt.X4mm</td>
+<td align="left">s(snapper, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs =
+“cr”) + s(Location, Site, bs = “re”)</td>
+<td align="right">478.114</td>
+<td align="right">520.688</td>
+<td align="right">0.471</td>
+<td align="right">NA</td>
+<td align="right">19.62</td>
+<td align="right">0</td>
+<td align="right">1.905</td>
+<td align="right">2.349</td>
+<td align="right">0.023</td>
+<td align="right">0.021</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.407</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.snapper+sqrt.X4mm+sqrt.X500um</td>
+<td align="left">snapper+sqrt.X4mm+sqrt.X500um</td>
+<td align="left">s(snapper, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs =
+“cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + s(Location, Site, bs =
+“re”)</td>
+<td align="right">478.130</td>
+<td align="right">521.011</td>
+<td align="right">0.464</td>
+<td align="right">NA</td>
+<td align="right">19.87</td>
+<td align="right">0</td>
+<td align="right">1.920</td>
+<td align="right">2.671</td>
+<td align="right">0.023</td>
+<td align="right">0.018</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.430</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.fetch+lobster+sqrt.X4mm</td>
+<td align="left">fetch+lobster+sqrt.X4mm</td>
+<td align="left">s(fetch, k = 3, bs = “cr”) + s(lobster, k = 3, bs =
+“cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs =
+“re”)</td>
+<td align="right">478.408</td>
+<td align="right">521.096</td>
+<td align="right">0.458</td>
+<td align="right">NA</td>
+<td align="right">19.68</td>
+<td align="right">0</td>
+<td align="right">2.198</td>
+<td align="right">2.757</td>
+<td align="right">0.020</td>
+<td align="right">0.017</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.450</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.sqrt.X4mm+sqrt.X500um+Status</td>
+<td align="left">sqrt.X4mm+sqrt.X500um+Status</td>
+<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3,
+bs = “cr”) + Status + s(Location, Site, bs = “re”)</td>
+<td align="right">478.458</td>
+<td align="right">521.494</td>
+<td align="right">0.472</td>
+<td align="right">NA</td>
+<td align="right">20.07</td>
+<td align="right">0</td>
+<td align="right">2.249</td>
+<td align="right">3.155</td>
+<td align="right">0.019</td>
+<td align="right">0.014</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -681,10 +1064,331 @@ by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs =
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
+<td align="right">0.469</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.sqrt.X4mm+Status</td>
+<td align="left">sqrt.X4mm+Status</td>
+<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + Status + s(Location,
+Site, bs = “re”)</td>
+<td align="right">478.476</td>
+<td align="right">521.218</td>
+<td align="right">0.478</td>
+<td align="right">NA</td>
+<td align="right">19.82</td>
+<td align="right">0</td>
+<td align="right">2.266</td>
+<td align="right">2.878</td>
+<td align="right">0.019</td>
+<td align="right">0.016</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0.988</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0.488</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.Distance+sqrt.X1mm.by.Status+Status</td>
+<td align="left">Distance+sqrt.X1mm.by.Status+Status</td>
+<td align="left">s(sqrt.X1mm, by = Status, k = 3, bs = “cr”) + Status +
+Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">478.527</td>
+<td align="right">521.671</td>
+<td align="right">0.459</td>
+<td align="right">NA</td>
+<td align="right">20.19</td>
+<td align="right">0</td>
+<td align="right">2.317</td>
+<td align="right">3.331</td>
+<td align="right">0.018</td>
+<td align="right">0.013</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.506</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.fetch+sqrt.X4mm</td>
+<td align="left">fetch+sqrt.X4mm</td>
+<td align="left">s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs =
+“cr”) + s(Location, Site, bs = “re”)</td>
+<td align="right">478.561</td>
+<td align="right">521.328</td>
+<td align="right">0.476</td>
+<td align="right">NA</td>
+<td align="right">19.81</td>
+<td align="right">0</td>
+<td align="right">2.351</td>
+<td align="right">2.989</td>
+<td align="right">0.018</td>
+<td align="right">0.016</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.524</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.Distance+sqrt.X500um</td>
+<td align="left">Distance+sqrt.X500um</td>
+<td align="left">s(sqrt.X500um, k = 3, bs = “cr”) + Distance +
+s(Location, Site, bs = “re”)</td>
+<td align="right">478.635</td>
+<td align="right">520.898</td>
+<td align="right">0.476</td>
+<td align="right">NA</td>
+<td align="right">19.31</td>
+<td align="right">0</td>
+<td align="right">2.425</td>
+<td align="right">2.558</td>
+<td align="right">0.018</td>
+<td align="right">0.019</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.542</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.Distance+lobster+sqrt.X2mm</td>
+<td align="left">Distance+lobster+sqrt.X2mm</td>
+<td align="left">s(lobster, k = 3, bs = “cr”) + s(sqrt.X2mm, k = 3, bs =
+“cr”) + Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">478.756</td>
+<td align="right">521.203</td>
+<td align="right">0.453</td>
+<td align="right">NA</td>
+<td align="right">19.53</td>
+<td align="right">0</td>
+<td align="right">2.546</td>
+<td align="right">2.864</td>
+<td align="right">0.016</td>
+<td align="right">0.017</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.558</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.fetch+snapper+sqrt.X4mm</td>
+<td align="left">fetch+snapper+sqrt.X4mm</td>
+<td align="left">s(fetch, k = 3, bs = “cr”) + s(snapper, k = 3, bs =
+“cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs =
+“re”)</td>
+<td align="right">478.776</td>
+<td align="right">521.622</td>
+<td align="right">0.465</td>
+<td align="right">NA</td>
+<td align="right">19.84</td>
+<td align="right">0</td>
+<td align="right">2.566</td>
+<td align="right">3.282</td>
+<td align="right">0.016</td>
+<td align="right">0.013</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.574</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.Distance+snapper+sqrt.X500um</td>
+<td align="left">Distance+snapper+sqrt.X500um</td>
+<td align="left">s(snapper, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs
+= “cr”) + Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">478.801</td>
+<td align="right">521.110</td>
+<td align="right">0.466</td>
+<td align="right">NA</td>
+<td align="right">19.29</td>
+<td align="right">0</td>
+<td align="right">2.591</td>
+<td align="right">2.770</td>
+<td align="right">0.016</td>
+<td align="right">0.017</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.590</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.fetch+sqrt.X4mm+Status</td>
+<td align="left">fetch+sqrt.X4mm+Status</td>
+<td align="left">s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs =
+“cr”) + Status + s(Location, Site, bs = “re”)</td>
+<td align="right">478.978</td>
+<td align="right">521.900</td>
+<td align="right">0.471</td>
+<td align="right">NA</td>
+<td align="right">19.93</td>
+<td align="right">0</td>
+<td align="right">2.768</td>
+<td align="right">3.560</td>
+<td align="right">0.015</td>
+<td align="right">0.012</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0.605</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.lobster+sqrt.X1mm</td>
+<td align="left">lobster+sqrt.X1mm</td>
+<td align="left">s(lobster, k = 3, bs = “cr”) + s(sqrt.X1mm, k = 3, bs =
+“cr”) + s(Location, Site, bs = “re”)</td>
+<td align="right">479.069</td>
+<td align="right">519.525</td>
+<td align="right">0.420</td>
+<td align="right">NA</td>
+<td align="right">17.72</td>
+<td align="right">0</td>
+<td align="right">2.859</td>
+<td align="right">1.185</td>
+<td align="right">0.014</td>
+<td align="right">0.038</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.619</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.Distance</td>
+<td align="left">Distance</td>
+<td align="left">Distance + s(Location, Site, bs = “re”)</td>
+<td align="right">479.081</td>
+<td align="right">521.261</td>
+<td align="right">0.483</td>
+<td align="right">NA</td>
+<td align="right">19.27</td>
+<td align="right">0</td>
+<td align="right">2.871</td>
+<td align="right">2.921</td>
+<td align="right">0.014</td>
+<td align="right">0.016</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.633</td>
+</tr>
+<tr class="even">
+<td align="left">CPN.Distance+sqrt.X500um+Status</td>
+<td align="left">Distance+sqrt.X500um+Status</td>
+<td align="left">s(sqrt.X500um, k = 3, bs = “cr”) + Status + Distance +
+s(Location, Site, bs = “re”)</td>
+<td align="right">479.123</td>
+<td align="right">521.614</td>
+<td align="right">0.474</td>
+<td align="right">NA</td>
+<td align="right">19.51</td>
+<td align="right">0</td>
+<td align="right">2.913</td>
+<td align="right">3.275</td>
+<td align="right">0.014</td>
+<td align="right">0.013</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.647</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN.Distance+snapper</td>
+<td align="left">Distance+snapper</td>
+<td align="left">s(snapper, k = 3, bs = “cr”) + Distance + s(Location,
+Site, bs = “re”)</td>
+<td align="right">479.210</td>
+<td align="right">521.419</td>
+<td align="right">0.474</td>
+<td align="right">NA</td>
+<td align="right">19.23</td>
+<td align="right">0</td>
+<td align="right">3.000</td>
+<td align="right">3.080</td>
+<td align="right">0.013</td>
+<td align="right">0.015</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.660</td>
 </tr>
 </tbody>
 </table>
@@ -725,42 +1429,42 @@ by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs =
 <tbody>
 <tr class="odd">
 <td align="left">BDS</td>
-<td align="right">1.000</td>
-<td align="right">0</td>
-<td align="right">0.000</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">0.958</td>
 <td align="right">0.000</td>
 <td align="right">0.000</td>
-<td align="right">0.000</td>
-<td align="right">0.323</td>
-<td align="right">1.000</td>
+<td align="right">0.220</td>
+<td align="right">0.468</td>
+<td align="right">0.043</td>
+<td align="right">0.049</td>
+<td align="right">0.061</td>
+<td align="right">0.164</td>
+<td align="right">1.001</td>
 </tr>
 <tr class="even">
 <td align="left">BMS</td>
-<td align="right">0.984</td>
-<td align="right">0</td>
+<td align="right">0.056</td>
 <td align="right">0.000</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0.000</td>
-<td align="right">0.017</td>
-<td align="right">0.000</td>
-<td align="right">0.983</td>
-<td align="right">0.013</td>
+<td align="right">0.001</td>
+<td align="right">0.003</td>
+<td align="right">0.967</td>
+<td align="right">0.340</td>
+<td align="right">0.001</td>
+<td align="right">0.035</td>
+<td align="right">0.924</td>
+<td align="right">0.573</td>
 </tr>
 <tr class="odd">
 <td align="left">CPN</td>
-<td align="right">0.988</td>
-<td align="right">0</td>
-<td align="right">0.013</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1.001</td>
-<td align="right">0.000</td>
-<td align="right">0.996</td>
-<td align="right">0.005</td>
-<td align="right">0.000</td>
+<td align="right">0.410</td>
+<td align="right">0.074</td>
+<td align="right">0.260</td>
+<td align="right">0.183</td>
+<td align="right">0.210</td>
+<td align="right">0.061</td>
+<td align="right">0.194</td>
+<td align="right">0.193</td>
+<td align="right">0.223</td>
+<td align="right">0.472</td>
 </tr>
 </tbody>
 </table>
@@ -801,7 +1505,7 @@ by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs =
 <span><span class="co">## Columns: 3</span></span>
 <span><span class="co">## $ resp.var   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BD…</span></span>
 <span><span class="co">## $ predictor  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "sqrt.X4mm"<span style="color: #949494;">, </span>"sqrt.X2mm"<span style="color: #949494;">, </span>"sqrt.X1mm"<span style="color: #949494;">, </span>"sqrt.X500um"<span style="color: #949494;">, </span>"fetc…</span></span>
-<span><span class="co">## $ importance <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.3…</span></span></code></pre>
+<span><span class="co">## $ importance <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.958<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.220<span style="color: #949494;">, </span>0.468<span style="color: #949494;">, </span>0.043<span style="color: #949494;">, </span>0.049<span style="color: #949494;">, </span>0.061<span style="color: #949494;">, </span>0.1…</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gg.importance.scores</span></span></code></pre></div>
 <p><img src="case-study-2_files/figure-html/imp2plot-1.png" class="r-plt" alt="" width="700"></p>
@@ -1434,7 +2138,7 @@ r</em>. 2nd ed. CRC Press.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

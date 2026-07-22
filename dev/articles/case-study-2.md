@@ -411,11 +411,37 @@ knitr::kable(
 
 |  | modname | formula | AICc | BIC | r2.vals | r2.vals.unique | edf | edf.less.1 | delta.AICc | delta.BIC | wi.AICc | wi.BIC | sqrt.X4mm | sqrt.X2mm | sqrt.X1mm | sqrt.X500um | fetch | org | snapper | lobster | Status | Distance | cumsum.wi |
 |:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| BDS.Distance+sqrt.X4mm | Distance+sqrt.X4mm | s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 276.405 | 321.906 | 0.529 | NA | 23.24 | 0 | 0.000 | 0.000 | 0.677 | 0.721 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0.677 |
-| BDS.Distance.t.Status+sqrt.X4mm+Status | Distance.t.Status+sqrt.X4mm+Status | s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + Status + s(Location, Site, bs = “re”) + Distance:Status | 277.884 | 323.807 | 0.517 | NA | 23.82 | 0 | 1.480 | 1.901 | 0.323 | 0.279 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1.000 |
-| BMS.fetch.by.Status+sqrt.X4mm+Status | fetch.by.Status+sqrt.X4mm+Status | s(sqrt.X4mm, k = 3, bs = “cr”) + s(fetch, by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 157.220 | 195.278 | 0.114 | NA | 15.70 | 0 | 0.000 | 0.000 | 0.630 | 0.909 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0.630 |
-| BMS.fetch.by.Status+sqrt.X4mm.by.Status+Status | fetch.by.Status+sqrt.X4mm.by.Status+Status | s(fetch, by = Status, k = 3, bs = “cr”) + s(sqrt.X4mm, by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 158.379 | 199.933 | 0.116 | NA | 17.70 | 0 | 1.159 | 4.655 | 0.353 | 0.089 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0.983 |
-| CPN | lobster+org+sqrt.X4mm | s(lobster, k = 3, bs = “cr”) + s(org, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 399.262 | 446.531 | 0.481 | NA | 24.75 | 0 | 0.000 | 0.000 | 0.988 | 0.983 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0.988 |
+| BDS.Distance+fetch+sqrt.X4mm | Distance+fetch+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 271.445 | 316.294 | 0.450 | NA | 22.36 | 0 | 0.000 | 0.000 | 0.468 | 0.548 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0.468 |
+| BDS.Distance+sqrt.X4mm+sqrt.X500um | Distance+sqrt.X4mm+sqrt.X500um | s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 272.957 | 318.426 | 0.531 | NA | 23.13 | 0 | 1.512 | 2.131 | 0.220 | 0.189 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0.688 |
+| BMS.Distance+fetch.by.Status+Status | Distance+fetch.by.Status+Status | s(fetch, by = Status, k = 3, bs = “cr”) + Status + Distance + s(Location, Site, bs = “re”) | 152.755 | 191.090 | 0.115 | NA | 15.89 | 0 | 0.000 | 0.000 | 0.298 | 0.443 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0.298 |
+| BMS.fetch.by.Status+org.by.Status+Status | fetch.by.Status+org.by.Status+Status | s(fetch, by = Status, k = 3, bs = “cr”) + s(org, by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 152.953 | 193.987 | 0.116 | NA | 17.39 | 0 | 0.198 | 2.896 | 0.270 | 0.104 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 0 | 0.568 |
+| BMS.Distance.t.Status+fetch.by.Status+Status | Distance.t.Status+fetch.by.Status+Status | s(fetch, by = Status, k = 3, bs = “cr”) + Distance + Status + s(Location, Site, bs = “re”) + Distance:Status | 153.709 | 193.381 | 0.115 | NA | 16.89 | 0 | 0.954 | 2.291 | 0.185 | 0.141 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0.753 |
+| CPN.Distance+sqrt.X4mm | Distance+sqrt.X4mm | s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 476.210 | 520.074 | 0.493 | NA | 20.90 | 0 | 0.000 | 1.735 | 0.059 | 0.029 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0.059 |
+| CPN.Distance+lobster+sqrt.X1mm | Distance+lobster+sqrt.X1mm | s(lobster, k = 3, bs = “cr”) + s(sqrt.X1mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 476.377 | 518.340 | 0.444 | NA | 19.05 | 0 | 0.167 | 0.000 | 0.054 | 0.069 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 0.113 |
+| CPN.Distance+fetch+sqrt.X4mm | Distance+fetch+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 476.515 | 520.509 | 0.489 | NA | 21.06 | 0 | 0.306 | 2.169 | 0.051 | 0.023 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0.164 |
+| CPN.Distance+sqrt.X1mm | Distance+sqrt.X1mm | s(sqrt.X1mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 476.800 | 518.816 | 0.454 | NA | 19.11 | 0 | 0.590 | 0.476 | 0.044 | 0.055 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0.208 |
+| CPN.Distance+snapper+sqrt.X1mm | Distance+snapper+sqrt.X1mm | s(snapper, k = 3, bs = “cr”) + s(sqrt.X1mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 477.047 | 519.148 | 0.447 | NA | 19.14 | 0 | 0.837 | 0.809 | 0.039 | 0.046 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0.247 |
+| CPN.Distance+sqrt.X1mm+Status | Distance+sqrt.X1mm+Status | s(sqrt.X1mm, k = 3, bs = “cr”) + Status + Distance + s(Location, Site, bs = “re”) | 477.137 | 519.339 | 0.453 | NA | 19.28 | 0 | 0.927 | 0.999 | 0.037 | 0.042 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0.284 |
+| CPN.lobster+sqrt.X4mm | lobster+sqrt.X4mm | s(lobster, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 477.723 | 520.201 | 0.467 | NA | 19.54 | 0 | 1.513 | 1.861 | 0.028 | 0.027 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0.312 |
+| CPN.lobster+sqrt.X4mm+sqrt.X500um | lobster+sqrt.X4mm+sqrt.X500um | s(lobster, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 477.817 | 520.638 | 0.462 | NA | 19.84 | 0 | 1.607 | 2.298 | 0.026 | 0.022 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0.338 |
+| CPN.sqrt.X4mm+sqrt.X500um | sqrt.X4mm+sqrt.X500um | s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.086 | 520.941 | 0.474 | NA | 19.90 | 0 | 1.876 | 2.602 | 0.023 | 0.019 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0.361 |
+| CPN.sqrt.X4mm | sqrt.X4mm | s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.102 | 520.668 | 0.481 | NA | 19.66 | 0 | 1.892 | 2.328 | 0.023 | 0.022 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.384 |
+| CPN.snapper+sqrt.X4mm | snapper+sqrt.X4mm | s(snapper, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.114 | 520.688 | 0.471 | NA | 19.62 | 0 | 1.905 | 2.349 | 0.023 | 0.021 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0.407 |
+| CPN.snapper+sqrt.X4mm+sqrt.X500um | snapper+sqrt.X4mm+sqrt.X500um | s(snapper, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.130 | 521.011 | 0.464 | NA | 19.87 | 0 | 1.920 | 2.671 | 0.023 | 0.018 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0.430 |
+| CPN.fetch+lobster+sqrt.X4mm | fetch+lobster+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(lobster, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.408 | 521.096 | 0.458 | NA | 19.68 | 0 | 2.198 | 2.757 | 0.020 | 0.017 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0.450 |
+| CPN.sqrt.X4mm+sqrt.X500um+Status | sqrt.X4mm+sqrt.X500um+Status | s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 478.458 | 521.494 | 0.472 | NA | 20.07 | 0 | 2.249 | 3.155 | 0.019 | 0.014 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0.469 |
+| CPN.sqrt.X4mm+Status | sqrt.X4mm+Status | s(sqrt.X4mm, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 478.476 | 521.218 | 0.478 | NA | 19.82 | 0 | 2.266 | 2.878 | 0.019 | 0.016 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0.488 |
+| CPN.Distance+sqrt.X1mm.by.Status+Status | Distance+sqrt.X1mm.by.Status+Status | s(sqrt.X1mm, by = Status, k = 3, bs = “cr”) + Status + Distance + s(Location, Site, bs = “re”) | 478.527 | 521.671 | 0.459 | NA | 20.19 | 0 | 2.317 | 3.331 | 0.018 | 0.013 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0.506 |
+| CPN.fetch+sqrt.X4mm | fetch+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.561 | 521.328 | 0.476 | NA | 19.81 | 0 | 2.351 | 2.989 | 0.018 | 0.016 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0.524 |
+| CPN.Distance+sqrt.X500um | Distance+sqrt.X500um | s(sqrt.X500um, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 478.635 | 520.898 | 0.476 | NA | 19.31 | 0 | 2.425 | 2.558 | 0.018 | 0.019 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0.542 |
+| CPN.Distance+lobster+sqrt.X2mm | Distance+lobster+sqrt.X2mm | s(lobster, k = 3, bs = “cr”) + s(sqrt.X2mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 478.756 | 521.203 | 0.453 | NA | 19.53 | 0 | 2.546 | 2.864 | 0.016 | 0.017 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 0.558 |
+| CPN.fetch+snapper+sqrt.X4mm | fetch+snapper+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(snapper, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.776 | 521.622 | 0.465 | NA | 19.84 | 0 | 2.566 | 3.282 | 0.016 | 0.013 | 1 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 0.574 |
+| CPN.Distance+snapper+sqrt.X500um | Distance+snapper+sqrt.X500um | s(snapper, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 478.801 | 521.110 | 0.466 | NA | 19.29 | 0 | 2.591 | 2.770 | 0.016 | 0.017 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | 0.590 |
+| CPN.fetch+sqrt.X4mm+Status | fetch+sqrt.X4mm+Status | s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 478.978 | 521.900 | 0.471 | NA | 19.93 | 0 | 2.768 | 3.560 | 0.015 | 0.012 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0.605 |
+| CPN.lobster+sqrt.X1mm | lobster+sqrt.X1mm | s(lobster, k = 3, bs = “cr”) + s(sqrt.X1mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 479.069 | 519.525 | 0.420 | NA | 17.72 | 0 | 2.859 | 1.185 | 0.014 | 0.038 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0.619 |
+| CPN.Distance | Distance | Distance + s(Location, Site, bs = “re”) | 479.081 | 521.261 | 0.483 | NA | 19.27 | 0 | 2.871 | 2.921 | 0.014 | 0.016 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0.633 |
+| CPN.Distance+sqrt.X500um+Status | Distance+sqrt.X500um+Status | s(sqrt.X500um, k = 3, bs = “cr”) + Status + Distance + s(Location, Site, bs = “re”) | 479.123 | 521.614 | 0.474 | NA | 19.51 | 0 | 2.913 | 3.275 | 0.014 | 0.013 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0.647 |
+| CPN.Distance+snapper | Distance+snapper | s(snapper, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 479.210 | 521.419 | 0.474 | NA | 19.23 | 0 | 3.000 | 3.080 | 0.013 | 0.015 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0.660 |
 
 Summary of all fitted FSSgam models {.table}
 
@@ -430,9 +456,9 @@ knitr::kable(
 
 |  | sqrt.X4mm | sqrt.X2mm | sqrt.X1mm | sqrt.X500um | fetch | org | snapper | lobster | Status | Distance |
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| BDS | 1.000 | 0 | 0.000 | 0 | 0 | 0.000 | 0.000 | 0.000 | 0.323 | 1.000 |
-| BMS | 0.984 | 0 | 0.000 | 0 | 1 | 0.000 | 0.017 | 0.000 | 0.983 | 0.013 |
-| CPN | 0.988 | 0 | 0.013 | 0 | 0 | 1.001 | 0.000 | 0.996 | 0.005 | 0.000 |
+| BDS | 0.958 | 0.000 | 0.000 | 0.220 | 0.468 | 0.043 | 0.049 | 0.061 | 0.164 | 1.001 |
+| BMS | 0.056 | 0.000 | 0.001 | 0.003 | 0.967 | 0.340 | 0.001 | 0.035 | 0.924 | 0.573 |
+| CPN | 0.410 | 0.074 | 0.260 | 0.183 | 0.210 | 0.061 | 0.194 | 0.193 | 0.223 | 0.472 |
 
 Variable importance scores across response variables {.table
 style="width:100%;"}
@@ -476,7 +502,7 @@ dat.taxa <- all.var.imp |>
     ## Columns: 3
     ## $ resp.var   <chr> "BDS", "BDS", "BDS", "BDS", "BDS", "BDS", "BDS", "BDS", "BD…
     ## $ predictor  <chr> "sqrt.X4mm", "sqrt.X2mm", "sqrt.X1mm", "sqrt.X500um", "fetc…
-    ## $ importance <dbl> 1.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.3…
+    ## $ importance <dbl> 0.958, 0.000, 0.000, 0.220, 0.468, 0.043, 0.049, 0.061, 0.1…
 
 ``` r
 

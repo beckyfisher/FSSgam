@@ -307,21 +307,21 @@ knitr::kable(
 
 | response | modname | edf | AICc | delta_AICc | wi.AICc |
 |:---|:---|---:|---:|---:|---:|
-| Herbivore.abundance | complexity | 6.22 | 517.577 | 0.000 | 0.545 |
-| Herbivore.biomass | complexity | 6.20 | 1193.357 | 0.000 | 0.648 |
-| Invertivore.abundance | complexity | 8.58 | 609.964 | 0.000 | 0.318 |
-| Invertivore.abundance | complexity+ZONE | 9.04 | 610.091 | 0.127 | 0.298 |
-| Invertivore.abundance | complexity+SCORE2 | 9.35 | 610.185 | 0.221 | 0.284 |
-| Invertivore.biomass | complexity | 6.42 | 1236.194 | 0.000 | 0.490 |
+| Herbivore.abundance | complexity | 6.22 | 517.579 | 0.000 | 0.545 |
+| Herbivore.biomass | complexity | 6.20 | 1193.364 | 0.000 | 0.648 |
+| Invertivore.abundance | complexity | 8.58 | 609.963 | 0.000 | 0.316 |
+| Invertivore.abundance | complexity+ZONE | 9.04 | 610.090 | 0.127 | 0.297 |
+| Invertivore.abundance | complexity+SCORE2 | 9.35 | 610.183 | 0.220 | 0.283 |
+| Invertivore.biomass | complexity | 6.42 | 1236.190 | 0.000 | 0.489 |
 | Piscivore.abundance | complexity+ZONE | 6.01 | 457.410 | 0.000 | 0.241 |
 | Piscivore.abundance | complexity | 5.64 | 457.424 | 0.014 | 0.239 |
-| Piscivore.abundance | complexity.by.ZONE+ZONE | 7.00 | 458.609 | 1.199 | 0.132 |
+| Piscivore.abundance | complexity.by.ZONE+ZONE | 7.00 | 458.610 | 1.199 | 0.132 |
 | Piscivore.abundance | SCORE1.by.ZONE+ZONE | 7.86 | 458.616 | 1.206 | 0.132 |
-| Piscivore.biomass | SCORE1 | 5.05 | 1023.292 | 0.000 | 0.290 |
-| Piscivore.biomass | complexity | 5.00 | 1023.699 | 0.407 | 0.236 |
-| Planktivore.abundance | SCORE1 | 6.72 | 686.784 | 0.000 | 0.453 |
+| Piscivore.biomass | SCORE1 | 5.05 | 1023.310 | 0.000 | 0.288 |
+| Piscivore.biomass | complexity | 5.00 | 1023.701 | 0.392 | 0.237 |
+| Planktivore.abundance | SCORE1 | 6.72 | 686.785 | 0.000 | 0.453 |
 | Planktivore.biomass | complexity+ZONE | 9.65 | 1011.661 | 0.000 | 0.471 |
-| Planktivore.biomass | complexity | 9.31 | 1012.086 | 0.425 | 0.381 |
+| Planktivore.biomass | complexity | 9.31 | 1012.084 | 0.423 | 0.381 |
 
 Top FSSgam models within ΔAICc ≤ 2, ordered best to worst within each
 response {.table}
