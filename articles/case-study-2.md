@@ -195,6 +195,15 @@ and the data are identical either way; only the fitted variance function
 differed. See ‘Relationship to the published table’ below for the
 measured effect.
 
+The combined six-panel figure of the most parsimonious models was relaid
+out on the 7th September 2026. Only its presentation changed: the same
+six panels are drawn from the same fits, in the same order and with the
+same (a)-(f) labels. The figure is now given an explicit size, the panel
+text was reduced from 15 pt so that the axis titles are not cut off, the
+Status key is drawn once for the whole figure instead of over the bars
+of panel (a), and each row’s leftmost panel is labelled with the
+response axis.
+
 ## Script information
 
 ### Part 1-FSS modeling
@@ -659,7 +668,11 @@ gg.importance.scores
 
 ## Part 3 - plots of the most parsimonious models
 
-Make an suitable theme
+Make a suitable theme. The text sizes are set for the assembled
+multi-panel figure below rather than for a single plot: at 15 pt the
+axis titles are wider than a one-third-width panel and are clipped. The
+legend is turned off here and drawn once for the whole figure instead,
+because a per-panel legend is drawn over the data.
 
 ``` r
 
@@ -668,15 +681,15 @@ Theme1 <- theme(
   panel.grid.minor = element_blank(),
   legend.background = element_blank(),
   legend.key = element_blank(),
-  legend.text = element_text(size = 15),
+  legend.text = element_text(size = 12),
   legend.title = element_blank(),
-  legend.position = c(0.2, 0.8),
-  text = element_text(size = 15),
-  strip.text.y = element_text(size = 15, angle = 0),
-  axis.title.x = element_text(vjust = 0.3, size = 15),
-  axis.title.y = element_text(vjust = 0.6, angle = 90, size = 15),
-  axis.text.x = element_text(size = 15),
-  axis.text.y = element_text(size = 15),
+  legend.position = "none",
+  text = element_text(size = 12),
+  strip.text.y = element_text(size = 12, angle = 0),
+  axis.title.x = element_text(vjust = 0.3, size = 12),
+  axis.title.y = element_text(vjust = 0.6, angle = 90, size = 12),
+  axis.text.x = element_text(size = 11),
+  axis.text.y = element_text(size = 11),
   axis.line.x = element_line(colour = "black", linewidth = 0.5, linetype = "solid"),
   axis.line.y = element_line(colour = "black", linewidth = 0.5, linetype = "solid"),
   strip.background = element_blank()
@@ -979,13 +992,15 @@ predicts.cpn.lobster %>%
 ``` r
 
 ggmod.bds.status<- ggplot(aes(x=Status,y=response,fill=Status,colour=Status), data=predicts.bds.status) +
-  ylab(" ")+
+  ylab("Abundance")+
   xlab('Status')+
   scale_fill_manual(labels = c("Fished", "No-take"),values=c("red", "black"))+
   scale_colour_manual(labels = c("Fished", "No-take"),values=c("red", "black"))+
   scale_x_discrete(limits = rev(levels(predicts.bds.status$Status)))+
   geom_bar(stat = "identity")+
   geom_errorbar(aes(ymin = response-se.fit,ymax = response+se.fit),width = 0.5) +
+  # bars start at zero, so expand only at the top, clear of the error bar
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15)))+
   theme_classic()+
   Theme1+
   annotate("text", x = -Inf, y=Inf, label = "(a)",vjust = 1, hjust = -.1,size=5)+
@@ -1006,6 +1021,8 @@ ggmod.bds.Distance.x.status<- ggplot(aes(x=Distance,y=response,colour=Status), d
   geom_line(data=predicts.bds.Distance.x.status,show.legend=FALSE)+
   geom_line(data=predicts.bds.Distance.x.status,aes(y=response - se.fit),linetype="dashed",show.legend=FALSE)+
   geom_line(data=predicts.bds.Distance.x.status,aes(y=response + se.fit),linetype="dashed",show.legend=FALSE)+
+  # headroom at the top of the panel so the (a)-(f) labels sit clear of the data
+  scale_y_continuous(expand = expansion(mult = c(0.03, 0.13)))+
   theme_classic()+
   Theme1+
   annotate("text", x = -Inf, y=Inf, label = "(b)",vjust = 1, hjust = -.1,size=5)
@@ -1024,6 +1041,8 @@ ggmod.bds.500um<- ggplot() +
   geom_line(data=predicts.bds.500um,aes(x=sqrt.X500um,y=response),alpha=0.5)+
   geom_line(data=predicts.bds.500um,aes(x=sqrt.X500um,y=response - se.fit),linetype="dashed",alpha=0.5)+
   geom_line(data=predicts.bds.500um,aes(x=sqrt.X500um,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  # headroom at the top of the panel so the (a)-(f) labels sit clear of the data
+  scale_y_continuous(expand = expansion(mult = c(0.03, 0.13)))+
   theme_classic()+
   Theme1+
   annotate("text", x = -Inf, y=Inf, label = "(c)",vjust = 1, hjust = -.1,size=5)
@@ -1044,6 +1063,8 @@ ggmod.bms.lobster<- ggplot() +
   geom_line(data=predicts.bms.lobster,aes(x=lobster,y=response),alpha=0.5)+
   geom_line(data=predicts.bms.lobster,aes(x=lobster,y=response - se.fit),linetype="dashed",alpha=0.5)+
   geom_line(data=predicts.bms.lobster,aes(x=lobster,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  # headroom at the top of the panel so the (a)-(f) labels sit clear of the data
+  scale_y_continuous(expand = expansion(mult = c(0.03, 0.13)))+
   theme_classic()+
   Theme1+
   annotate("text", x = -Inf, y=Inf, label = "(d)",vjust = 1, hjust = -.1,size=5)+
@@ -1059,13 +1080,15 @@ ggmod.bms.lobster
 ``` r
 
 ggmod.cpn.lobster<- ggplot() +
-  ylab(" ")+
+  ylab("Abundance")+
   xlab(bquote('Density of legal lobster (no./25' *m^-2*')'))+
   scale_color_manual(labels = c("Fished", "SZ"),values=c("red", "black"))+
   geom_point(data=dat.cpn,aes(x=lobster,y=response,colour=Status),  alpha=0.75, size=2,show.legend=FALSE)+
   geom_line(data=predicts.cpn.lobster,aes(x=lobster,y=response),alpha=0.5)+
   geom_line(data=predicts.cpn.lobster,aes(x=lobster,y=response - se.fit),linetype="dashed",alpha=0.5)+
   geom_line(data=predicts.cpn.lobster,aes(x=lobster,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  # headroom at the top of the panel so the (a)-(f) labels sit clear of the data
+  scale_y_continuous(expand = expansion(mult = c(0.03, 0.13)))+
   theme_classic()+
   Theme1+
   annotate("text", x = -Inf, y=Inf, label = "(e)",vjust = 1, hjust = -.1,size=5)+
@@ -1086,6 +1109,8 @@ ggmod.cpn.4mm<- ggplot() +
   geom_line(data=predicts.cpn.4mm,aes(x=sqrt.X4mm,y=response),alpha=0.5)+
   geom_line(data=predicts.cpn.4mm,aes(x=sqrt.X4mm,y=response - se.fit),linetype="dashed",alpha=0.5)+
   geom_line(data=predicts.cpn.4mm,aes(x=sqrt.X4mm,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  # headroom at the top of the panel so the (a)-(f) labels sit clear of the data
+  scale_y_continuous(expand = expansion(mult = c(0.03, 0.13)))+
   theme_classic()+
   Theme1+
   annotate("text", x = -Inf, y=Inf, label = "(f)",vjust = 1, hjust = -.1,size=5)+
@@ -1097,50 +1122,75 @@ ggmod.cpn.4mm
 
 Combined.plot using grid() and gridExtra()
 
-To see what they will look like use grid.arrange() - make sure Plot
-window is large enough! - or will error!
+The six panels are assembled with one row per taxon, so the second and
+third rows hold fewer panels than the first. `layout_matrix` places each
+panel and leaves the unused cells empty. Note that
+[`grid.rect()`](https://rdrr.io/r/grid/grid.rect.html) is not a way to
+fill an unused cell: it draws to the device as a side effect as well as
+returning a grob, so it emits a stray blank plot of its own.
+
+The Status key is drawn once for the whole figure and placed in one of
+the empty cells, rather than inside panel (a) where it obscures the
+bars.
+[`ggplotGrob()`](https://ggplot2.tidyverse.org/reference/ggplotGrob.html)
+builds a panel as a gtable, from which the legend can be taken and then
+positioned like any other panel.
+
+Set the figure large enough for three columns of panels. At the default
+size the axis titles are wider than a panel and are cut off. In an
+interactive session, make the plot window large before running
+[`grid.arrange()`](https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html)
+or it will error.
 
 ``` r
 
-blank <- grid.rect(gp=gpar(col="white"))
+# Take the Status key out of panel (a) so it can be placed in an empty cell.
+legend.panel <- ggplotGrob(ggmod.bds.status +
+                             theme(legend.position = "top",
+                                   legend.direction = "horizontal"))
+guide.box <- which(grepl("guide-box", legend.panel$layout$name))
+guide.box <- guide.box[!vapply(legend.panel$grobs[guide.box],
+                               inherits, logical(1), "zeroGrob")][1]
+status.legend <- legend.panel$grobs[[guide.box]]
+
+panel.layout <- rbind(c(1, 2, 3),
+                      c(4, 7, NA),
+                      c(5, 6, NA))
+
+grid.arrange(ggmod.bds.status, ggmod.bds.Distance.x.status, ggmod.bds.500um,
+             ggmod.bms.lobster, ggmod.cpn.lobster, ggmod.cpn.4mm, status.legend,
+             layout_matrix = panel.layout)
 ```
 
 ![](case-study-2_files/figure-html/gridarrange-1.png)
 
-``` r
-
-grid.arrange(ggmod.bds.status,ggmod.bds.Distance.x.status,ggmod.bds.500um,
-             ggmod.bms.lobster,blank,blank,
-             ggmod.cpn.lobster,ggmod.cpn.4mm,blank,nrow=3,ncol=3)
-```
-
-![](case-study-2_files/figure-html/gridarrange-2.png)
-
 Use arrangeGrob ONLY - as we can pass this to ggsave! Note use of raw
 ggplot’s
 
+[`arrangeGrob()`](https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html)
+returns the assembled figure rather than drawing it, so printing the
+object lists the gtable structure instead of producing a plot. Draw it
+with [`grid::grid.draw()`](https://rdrr.io/r/grid/grid.draw.html), or
+pass it to
+[`ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html) to
+write it to a file.
+
 ``` r
 
-combine.plot<-arrangeGrob(ggmod.bds.status,ggmod.bds.Distance.x.status,ggmod.bds.500um,
-                          ggmod.bms.lobster,blank,blank,
-                          ggmod.cpn.lobster,ggmod.cpn.4mm,blank,nrow=3,ncol=3)
+combine.plot <- arrangeGrob(ggmod.bds.status, ggmod.bds.Distance.x.status,
+                            ggmod.bds.500um, ggmod.bms.lobster,
+                            ggmod.cpn.lobster, ggmod.cpn.4mm, status.legend,
+                            layout_matrix = panel.layout)
 
-
-
-combine.plot
+grid.draw(combine.plot)
 ```
 
-    ## TableGrob (3 x 3) "arrange": 9 grobs
-    ##   z     cells    name                 grob
-    ## 1 1 (1-1,1-1) arrange       gtable[layout]
-    ## 2 2 (1-1,2-2) arrange       gtable[layout]
-    ## 3 3 (1-1,3-3) arrange       gtable[layout]
-    ## 4 4 (2-2,1-1) arrange       gtable[layout]
-    ## 5 5 (2-2,2-2) arrange rect[GRID.rect.2764]
-    ## 6 6 (2-2,3-3) arrange rect[GRID.rect.2764]
-    ## 7 7 (3-3,1-1) arrange       gtable[layout]
-    ## 8 8 (3-3,2-2) arrange       gtable[layout]
-    ## 9 9 (3-3,3-3) arrange rect[GRID.rect.2764]
+![](case-study-2_files/figure-html/arrangegrob-1.png)
+
+``` r
+
+# ggsave("combined_plot.png", combine.plot, width = 9.5, height = 10.5, dpi = 300)
+```
 
 ## Results and discussion
 
