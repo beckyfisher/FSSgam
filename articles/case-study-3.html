@@ -224,8 +224,16 @@ links to estimates from January, in the case of month.</p>
 <span><span class="va">cont.vars</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lunar.date"</span>, <span class="st">"month"</span><span class="op">)</span></span>
 <span><span class="va">factor.vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"Species"</span><span class="op">)</span></span></code></pre></div>
 <p>Both month and lunar date are treated as <strong>cyclic continuous
-predictors</strong>, allowing smooth transitions at their
-boundaries.</p>
+predictors</strong>, so that the fitted curve joins at the ends of the
+range. Naming a variable in <code>cyclic.vars</code> makes
+<code>FSSgam</code> build its smooth with <code>bs = 'cc'</code> rather
+than the default <code>bs = 'cr'</code>. This matters for a periodic
+predictor: December is adjacent to January and lunar day 29 is adjacent
+to lunar day 0, and a non-cyclic basis is free to end the two extremes
+at unrelated values, producing a discontinuity at the boundary that has
+no biological meaning. Note that a variable named in
+<code>cyclic.vars</code> must also appear in
+<code>pred.vars.cont</code>, as both do here.</p>
 </div>
 <div class="section level2">
 <h2 id="full-subsets-gam-analysis">Full subsets GAM analysis<a class="anchor" aria-label="anchor" href="#full-subsets-gam-analysis"></a>
@@ -235,6 +243,25 @@ boundaries.</p>
 (via factor.factor.interactions = TRUE), and as interaction terms
 between the two smoothers (this is default behaviour for FSSgam, see
 ?generate_model_set).</p>
+<p>Two practical points about the call below.</p>
+<p><strong>Turning both interaction arguments on multiplies the size of
+the set.</strong> With <code>factor.factor.interactions = TRUE</code>
+and <code>smooth.smooth.interactions = TRUE</code> at
+<code>max.predictors = 4</code>, this set reaches 52 candidates from two
+smooths and two factors. That is manageable, but the count rises steeply
+with each additional predictor, so it is worth checking
+<code>model.set$n.mods</code> before fitting rather than after.
+<code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set()</a></code> refuses a set larger than
+<code>max.models</code>, which defaults to 200.</p>
+<p><strong>The <code>test.fit</code> only supplies the structure, not
+the terms.</strong> <code>start.fit</code> below fits GSI against a
+single smooth of lunar date. Nothing about that formula is retained:
+<code>FSSgam</code> updates it with each candidate formula in turn, so
+what the <code>test.fit</code> actually contributes is the response, the
+family, the data and any random effects specified outside the formula.
+It is still worth fitting a sensible one and checking it, because a
+<code>test.fit</code> that fits badly produces a whole model set that
+fits badly.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">use.dat</span> <span class="op">&lt;-</span> <span class="va">dat</span></span>
 <span></span>
@@ -836,7 +863,7 @@ using:</p>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Method: GCV   Optimizer: outer newton</span></span>
 <span><span class="co">## full convergence after 8 iterations.</span></span>
-<span><span class="co">## Gradient range [6.886352e-11,6.377734e-07]</span></span>
+<span><span class="co">## Gradient range [6.886353e-11,6.377734e-07]</span></span>
 <span><span class="co">## (score 0.3332369 &amp; scale 0.3350731).</span></span>
 <span><span class="co">## Hessian positive definite, eigenvalue range [7.71641e-06,0.0001997042].</span></span>
 <span><span class="co">## Model rank =  15 / 15 </span></span>

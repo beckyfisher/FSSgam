@@ -166,7 +166,14 @@ factor.vars <- c("Sex", "Species")
 ```
 
 Both month and lunar date are treated as **cyclic continuous
-predictors**, allowing smooth transitions at their boundaries.
+predictors**, so that the fitted curve joins at the ends of the range.
+Naming a variable in `cyclic.vars` makes `FSSgam` build its smooth with
+`bs = 'cc'` rather than the default `bs = 'cr'`. This matters for a
+periodic predictor: December is adjacent to January and lunar day 29 is
+adjacent to lunar day 0, and a non-cyclic basis is free to end the two
+extremes at unrelated values, producing a discontinuity at the boundary
+that has no biological meaning. Note that a variable named in
+`cyclic.vars` must also appear in `pred.vars.cont`, as both do here.
 
 ## Full subsets GAM analysis
 
@@ -176,6 +183,27 @@ Sex and Species are included as interaction terms with each other (via
 factor.factor.interactions = TRUE), and as interaction terms between the
 two smoothers (this is default behaviour for FSSgam, see
 ?generate_model_set).
+
+Two practical points about the call below.
+
+**Turning both interaction arguments on multiplies the size of the
+set.** With `factor.factor.interactions = TRUE` and
+`smooth.smooth.interactions = TRUE` at `max.predictors = 4`, this set
+reaches 52 candidates from two smooths and two factors. That is
+manageable, but the count rises steeply with each additional predictor,
+so it is worth checking `model.set$n.mods` before fitting rather than
+after.
+[`fit_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html)
+refuses a set larger than `max.models`, which defaults to 200.
+
+**The `test.fit` only supplies the structure, not the terms.**
+`start.fit` below fits GSI against a single smooth of lunar date.
+Nothing about that formula is retained: `FSSgam` updates it with each
+candidate formula in turn, so what the `test.fit` actually contributes
+is the response, the family, the data and any random effects specified
+outside the formula. It is still worth fitting a sensible one and
+checking it, because a `test.fit` that fits badly produces a whole model
+set that fits badly.
 
 ``` r
 
@@ -366,7 +394,7 @@ gam.check(best.model)
     ## 
     ## Method: GCV   Optimizer: outer newton
     ## full convergence after 8 iterations.
-    ## Gradient range [6.886352e-11,6.377734e-07]
+    ## Gradient range [6.886353e-11,6.377734e-07]
     ## (score 0.3332369 & scale 0.3350731).
     ## Hessian positive definite, eigenvalue range [7.71641e-06,0.0001997042].
     ## Model rank =  15 / 15 
