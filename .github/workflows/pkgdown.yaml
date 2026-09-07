@@ -28,15 +28,15 @@ jobs:
             any::remotes
             local::.
 
-      # Optional but recommended: install the real package
-      # so examples in articles/reference can run.
-      # The dev branch builds against FSSgam_package's dev branch (where the
-      # snake_case generate_model_set/fit_model_set rename lives); main/master
-      # build against FSSgam_package's default branch.
+      # Install the real package so examples in articles/reference can run.
+      # Every branch builds against FSSgam_package's dev branch, named here
+      # explicitly rather than left to that repo's default. Its default is
+      # currently dev, so the previous `ref = NULL` resolved there anyway, but
+      # that is a property of the other repo and would change without warning
+      # if its default moved. RF, 2026-09-07.
       - name: Install FSSgam package from GitHub
         run: |
-          ref <- if (Sys.getenv("GITHUB_REF_NAME") == "dev") "dev" else NULL
-          remotes::install_github("beckyfisher/FSSgam_package", ref = ref)
+          remotes::install_github("beckyfisher/FSSgam_package", ref = "dev")
         shell: Rscript {0}
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
