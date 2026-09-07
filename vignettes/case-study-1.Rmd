@@ -60,8 +60,11 @@ In the original analysis PCA was used to summarise habitat information and score
 ```{r data, eval=FALSE}
 data("case_study1")
 ```
-Some transformations were applied to ensure the predictors were relatively evenly distribution without
-their range. This is important to obtain stable results from FSSgam.
+Some transformations were applied to spread the predictors more evenly across their range.
+This matters in practice. A smoother fitted to a predictor with a long right tail has most
+of its data in a narrow part of the range, so the fitted curve is determined by a handful of
+points at the far end. Transforming before fitting, rather than interpreting the curve
+afterwards, is the more reliable approach.
 
 ```{r wrangle}
 case_study1$SQRTSA     <- case_study1$SA
@@ -76,7 +79,7 @@ case_study1$site <- as.factor(case_study1$site)
 
 ### Outlier handling
 
-FFSgam can also be very sensitive to outliers. In this case these were a small number of very large schools of fish, that would be unlikely to be closely linked to the habitat variables in any case.
+FSSgam is also sensitive to outliers. Here these were a small number of very large schools of fish, unlikely to be closely linked to the habitat variables in any case. They are set to NA rather than removed row-wise, so that a patch reef dropped from one response is still available to the others. Note that na.omit() is applied to each response separately in the fitting loop below: models compared by AICc must be fitted to the same rows, so the omission has to happen once per response, before the model set is built.
 
 ```{r outliers}
 case_study1$Piscivore.abundance[case_study1$Piscivore.abundance > 150] <- NA
@@ -112,7 +115,7 @@ par(mfrow=c(2,1))
 
 ### Full subsets GAMM analysis
 
-Both abundance and biomass data were modelled using a tweedie distribution, passed to FFSgam via a list.
+Both abundance and biomass data were modelled using a tweedie distribution, passed to FSSgam via a list.
 
 ```{r responses}
 resp.vars.fams <- list(
@@ -215,10 +218,14 @@ top.models <- all.models %>%
   select(
     response,
     modname,
-    edf,
     AICc,
+    BIC,
     delta_AICc,
-    wi.AICc)
+    delta.BIC,
+    wi.AICc,
+    wi.BIC,
+    r2.vals,
+    edf)
 
 
 ```
@@ -228,9 +235,29 @@ top.models <- all.models %>%
 knitr::kable(
   top.models,
   digits = 3,
-  caption = "Top FSSgam models within ΔAICc ≤ 2, ordered best to worst within each response"
+  col.names = c("Response", "Model", "AICc", "BIC", "ΔAICc", "ΔBIC",
+                "wi.AICc", "wi.BIC", "R2", "edf"),
+  caption = "Top FSSgam models within ΔAICc ≤ 2, ordered best to worst within each response. Columns follow Table A3.1 of Appendix S3."
 )
 ```
+
+### Relationship to the published table
+
+The table above is recomputed each time this vignette is built, so it will not agree digit
+for digit with Table A3.1 of Appendix S3, which was produced in 2018. Comparing the two
+across the seventeen published rows, AICc differs by a median of 0.66 and a maximum of 2.47
+units. The top-ranked model is the same as the published one for all eight responses, and
+the R2 and edf values agree to the precision at which they were published.
+
+The difference is not attributable to `FSSgam`. Running the same code against `FSSgam`
+1.0.0 and against the current development version on the same R and `mgcv` gives AICc
+values agreeing to within 0.02 units on these rows, so what has changed since 2018 is
+`mgcv` and R, not the full subsets procedure.
+
+Model names are also written differently. `FSSgam` now orders the terms within a model name
+in byte order rather than by the collation of the session that happened to build the site, so
+the model published as `complexity+ZONE` is named `ZONE+complexity` here. This is a naming
+change only: the fitted model, its AICc, its weight and its R2 are unaffected.
 
 ### Predictor correlations
 
