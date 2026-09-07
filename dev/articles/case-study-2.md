@@ -479,8 +479,9 @@ novizelandiae* as an example, 1.0.0 reported AICc 605.50 at 24.87 edf,
 whereas fitting the identical formula to the identical data with a
 direct call to [`mgcv::gam()`](https://rdrr.io/pkg/mgcv/man/gam.html)
 gives AICc 478.76 at 19.53 edf. The current version reproduces the
-`mgcv` value exactly. The candidate set is unchanged: the same 139
-models with the same formulae are fitted either way.
+`mgcv` value exactly, measured on R 4.5.1 with `mgcv` 1.9-3. The
+candidate set is unchanged: the same 139 models with the same formulae
+are fitted either way.
 
 The practical effect is on how many models are close to the best one.
 For *Pagurus novizelandiae*, 1.0.0 placed a single model within 2 AICc
