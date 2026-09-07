@@ -15,6 +15,7 @@ library(RColorBrewer)
 library(dplyr)
 library(tidyr)
 library(purrr)
+library(ggplot2)
 data(case_study1, package = "FSSgam", envir = environment())
 ```
 
@@ -51,6 +52,7 @@ library(RColorBrewer)
 library(dplyr)
 library(tidyr)
 library(purrr)
+library(ggplot2)
 ```
 
 ### Data preparation
@@ -102,15 +104,24 @@ cont.preds <- c(
 )
 ```
 
-It is useful to have a look at the distribution of the continuous predictors to ensure
-they are well distributed (following the transformation above).
+It is useful to look at the distribution of the continuous predictors to confirm they are
+well spread across their range following the transformations above. The rug along the
+bottom of each panel marks where the observations actually lie, which shows up clustering
+and gaps that a histogram's bins can hide. A gap matters here because a smoother fitted
+across one has no data to constrain its shape there.
 
-```{r predictor-plots}
-for(p in 1:length(cont.preds)){
-par(mfrow=c(2,1))
- hist(case_study1[,cont.preds[p]],main=cont.preds[p])
- plot(jitter(case_study1[,cont.preds[p]]))
- }
+```{r predictor-plots, fig.width = 8, fig.height = 5}
+case_study1 |>
+  select(all_of(cont.preds)) |>
+  pivot_longer(everything(), names_to = "predictor", values_to = "value") |>
+  mutate(predictor = factor(predictor, levels = cont.preds)) |>
+  filter(!is.na(value)) |>
+  ggplot(aes(value)) +
+  geom_histogram(bins = 20, fill = "grey75", colour = "grey30", linewidth = 0.2) +
+  geom_rug(sides = "b", alpha = 0.35) +
+  facet_wrap(~predictor, scales = "free", ncol = 3) +
+  labs(x = NULL, y = "Number of patch reefs") +
+  theme_bw(base_size = 9)
 ```
 
 ### Full subsets GAMM analysis
@@ -132,15 +143,23 @@ resp.vars.fams <- list(
 resp.vars <- names(resp.vars.fams)
 ```
 
-It is always a good idea to look at the response variables, and make sure they suit the
-distribution.
+It is always a good idea to look at the response variables and check that they suit the
+distribution chosen for them. All eight are counts or biomasses bounded below at zero with
+a long right tail and, for the abundances, a spike at zero, which is what the Tweedie
+distribution specified below is for.
 
-```{r response-plots} 
-for(r in 1:length(resp.vars)){
-par(mfrow=c(2,1))
- hist(case_study1[,resp.vars[r]],main=resp.vars[r])
- plot(jitter(case_study1[,resp.vars[r]]))
-}
+```{r response-plots, fig.width = 8, fig.height = 5.5}
+case_study1 |>
+  select(all_of(resp.vars)) |>
+  pivot_longer(everything(), names_to = "response", values_to = "value") |>
+  mutate(response = factor(response, levels = resp.vars)) |>
+  filter(!is.na(value)) |>
+  ggplot(aes(value)) +
+  geom_histogram(bins = 20, fill = "grey75", colour = "grey30", linewidth = 0.2) +
+  geom_rug(sides = "b", alpha = 0.35) +
+  facet_wrap(~response, scales = "free", ncol = 3) +
+  labs(x = NULL, y = "Number of patch reefs") +
+  theme_bw(base_size = 9)
 ```
 The models are then implemented via a call to gam (mgcv) with the random effect of site included using the bs=’re’ specification. Smoothers to both square-route surface area of the patch reef as well as depth were included in all models (and as part of the null model) via the null.terms argument of the full subsets gam function. 
 

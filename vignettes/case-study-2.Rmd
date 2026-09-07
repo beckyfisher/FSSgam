@@ -5,7 +5,6 @@ bibliography: ../references.bib
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
-options(error = recover)
 library(tidyr)
 library(tibble)
 library(dplyr)
@@ -159,20 +158,31 @@ round(cor(dat[,pred.vars]),2)
 
 Note that nothing is highly correlated 
 
-Plot of likely transformations - thanks to Anna Cresswell for this loop!
+Each predictor is plotted raw, square-root transformed and log(x + 1) transformed, so the
+three can be compared directly. The aim is an even spread across the range rather than a
+pile-up at one end; the rug marks where the samples actually lie. The original version of
+this comparison was written as a base R loop by Anna Cresswell.
 
-```{R trans}
-par(mfrow=c(3,2))
-for (i in pred.vars) {
-  x<-dat[ ,i]
-  x = as.numeric(unlist(x))
-  hist((x))#Looks best
-  plot((x),main = paste(i))
-  hist(sqrt(x))
-  plot(sqrt(x))
-  hist(log(x+1))
-  plot(log(x+1))
-}
+```{r trans, fig.width = 7, fig.height = 13}
+dat |>
+  select(all_of(pred.vars)) |>
+  pivot_longer(everything(), names_to = "predictor", values_to = "value") |>
+  mutate(predictor = factor(predictor, levels = pred.vars)) |>
+  filter(!is.na(value)) |>
+  mutate(raw = value,
+         `square root` = sqrt(value),
+         `log(x + 1)`  = log(value + 1)) |>
+  select(-value) |>
+  pivot_longer(c(raw, `square root`, `log(x + 1)`),
+               names_to = "transformation", values_to = "x") |>
+  mutate(transformation = factor(transformation,
+                                 levels = c("raw", "square root", "log(x + 1)"))) |>
+  ggplot(aes(x)) +
+  geom_histogram(bins = 15, fill = "grey75", colour = "grey30", linewidth = 0.15) +
+  geom_rug(sides = "b", alpha = 0.3) +
+  facet_wrap(~ predictor + transformation, scales = "free", ncol = 3) +
+  labs(x = NULL, y = "Number of samples") +
+  theme_bw(base_size = 8)
 ```
 
 Review of individual predictors - we have to make sure they have an even distribution.
@@ -191,7 +201,14 @@ pred.vars=c("sqrt.X4mm","sqrt.X2mm","sqrt.X1mm","sqrt.X500um",
 
 ### Screening taxa
 
-Check to make sure Response vector has not more than 80% zeros
+Check that no response vector is more than 80% zeros.
+
+This screen is applied before any model is fitted, and deliberately so. A taxon recorded as
+absent at almost every sample carries very little information about the predictors, but it
+still costs a full model set to find that out, and the fits that do converge are driven by a
+handful of non-zero records. Screening first is cheaper than interpreting the output
+afterwards. The 80% threshold is a convention rather than a rule; what matters is that the
+choice is made explicitly and stated.
 
 ```{r taxa}
 unique.vars=unique(as.character(dat$Taxa))
@@ -210,9 +227,35 @@ unique.vars.use
 "CPN" crustacean Pagrus novaezelandiae
 
 
+Three practical points about the call below.
+
+**`max.models` is a guard, not a target.** It is set to 600 here against a set of 139
+candidates, so it never binds. `fit_model_set()` stops rather than fitting when the set is
+larger, because a full subsets set grows quickly and it is easy to request one that takes
+days without meaning to. If the limit is reached, raising it is rarely the right first move:
+reduce `max.predictors`, or drop predictors, and only then raise the limit.
+
+**`Status` survives the `null.cov.cutoff` screen even though it is perfectly correlated with
+`Location`.** `null.cov.cutoff`, added to `generate_model_set()` after the original paper,
+drops a predictor correlated above 0.8 with a variable named in `null.terms`, because a term
+forced into every candidate should not be competing with a candidate for the same variation.
+Here `null.terms` is `s(Location,Site,bs='re')` and `Status` is nested within `Location`, so
+their correlation is 1. Variables inside a `bs='re'` smooth are excluded from the screen for
+exactly this reason: a random effect grouping factor is correlated with what is measured
+within it by construction, and that is the design of the study rather than collinearity to
+remove. If the random effect were specified some other way, `Status` would be dropped and a
+warning would name it.
+
+**Check `failed.models` before reading anything else.** `fit_model_set()` catches a candidate
+that fails and records the error against the model name rather than stopping. An empty list is
+what you want. A few failures are usually a `k` set too high for the data in one term; many
+failures usually mean the `test.fit` or the predictor set is wrong, not that individual models
+are unlucky. The recorded formula can be fitted by hand outside the call to see the error in
+full.
+
 ### Full subsets GAMM analysis
 
-```{r fss, include=FALSE}
+```{r fss, echo=TRUE, results='hide'}
 resp.vars=unique.vars.use
 use.dat=dat
 factor.vars=c("Status")# Status as a Factor with two levels

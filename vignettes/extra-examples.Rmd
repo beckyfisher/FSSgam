@@ -15,12 +15,12 @@ require(RColorBrewer)
 library(tibble)
 library(dplyr)
 library(tidyr)
-dat <- get("coral_data", envir = asNamespace("FSSgam"))
+data(coral_data, package = "FSSgam", envir = environment())
 ```
 
 ## Overview
 
-He we show some simpler examples of using FSSgam for different response distributions and particularly show the use with binomial data, which none of the original case studies were able to do.
+Here we show some simpler examples of using FSSgam for different response distributions and particularly show the use with binomial data, which none of the original case studies were able to do.
 
 ## R packages and data
 
@@ -42,9 +42,21 @@ dat <- coral_data
 str(dat)
 ```
 
-## Example showing use of uGamm to allow fitting with gamm4 
+## Example showing use of uGamm to allow fitting with gamm4
 
-We set up the necessaru predictor vectors
+`MuMIn::uGamm()` with `lme4 = TRUE` fits through `gamm4`. As of `FSSgam` 1.1.0 `gamm4`
+is a suggested rather than an imported package, so installing `FSSgam` no longer installs
+`gamm4` and `lme4` with it. Install them before running this section:
+
+```{r gamm4-install, eval=FALSE}
+install.packages("gamm4")
+```
+
+```{r gamm4-lib}
+library(gamm4)
+```
+
+We set up the necessary predictor vectors
 
 ```{r preds}
 cat.preds=c("Survey","bleach.pres","dredge.pres","dhw.fact")
@@ -63,7 +75,7 @@ use.dat$trials=use.dat$totalpoints
 
 Now we fit the test.fit model for all coral, with total points as trials, and run the FSSgam approach.
 
-```{r fit, include=FALSE}
+```{r fit, echo=TRUE, results='hide'}
 Model1=uGamm(cbind(successes,failures)~s(Depth,k=4,bs='cr'),
               family=binomial(), random=~(1|Site),
              data=use.dat,
@@ -151,7 +163,7 @@ use.dat=na.omit(dat[,c(null.vars,cat.preds,cont.preds,resp.vars,"totalpoints")])
 
 Now set up some objects to store the results and run the analysis looping through the response variables.
 
-```{r run, include=FALSE}
+```{r run, echo=TRUE, results='hide'}
 out.all=list()
 var.imp=list()
 fss.all=list()

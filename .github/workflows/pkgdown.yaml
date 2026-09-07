@@ -46,6 +46,15 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      # pkgdown renders every .md in the package root as a site page, with no
+      # opt-out: package_mds() skips only README/NEWS/LICENCE and a short fixed
+      # list, and does not consult .Rbuildignore. CLAUDE.md is internal working
+      # notes and was being published at /CLAUDE.html. Removing it from the
+      # checkout before the build keeps it out of the pages, and out of
+      # search.json and llms.txt with them. The repository file is untouched.
+      - name: Keep internal notes out of the built site
+        run: rm -f CLAUDE.md
+
       - name: Build pkgdown site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
