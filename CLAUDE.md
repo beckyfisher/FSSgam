@@ -120,13 +120,28 @@ _pkgdown.yml              # site nav/config — do not restructure without being
                           # `development: mode: auto`, and a custom "Reference" navbar component
                           # linking out to FSSgam_package's own pkgdown reference site.
 .github/workflows/pkgdown.yaml  # builds + deploys the site. Triggers on push to main/master/dev.
-                          # Installs FSSgam_package from GitHub; the install step picks
-                          # FSSgam_package's `dev` ref only when *this* repo's branch is `dev` —
-                          # currently redundant now that FSSgam_package's dev is merged to its
-                          # master, but harmless; ask before removing it, since it exists to
-                          # support the dual root/dev pkgdown-site setup, not just the rename.
+                          # Installs FSSgam_package's `dev` ref, named explicitly, on every
+                          # branch (see Section 4). Carries two clean-up steps, both needed and
+                          # neither obvious — do not remove either without reading this:
+                          #  1. `rm -f CLAUDE.md` BEFORE the build. pkgdown's package_mds()
+                          #     renders every .md in the package root and in .github/, skipping
+                          #     only README/NEWS/LICENCE and a three-item list, and it does NOT
+                          #     consult .Rbuildignore (tried; no effect). Without this step the
+                          #     whole of this file is published at /CLAUDE.html. Removing it
+                          #     from the checkout also keeps it out of search.json and llms.txt.
+                          #  2. `rm -rf docs/reference docs/dev/reference` AFTER the build, plus
+                          #     a filter dropping that URL from sitemap.xml. FSSgam.docs exports
+                          #     nothing, so the reference index is empty and nothing links to it
+                          #     (the navbar Reference component points at FSSgam_package's own
+                          #     site). `build: reference: false` in _pkgdown.yml is parsed into
+                          #     the meta but does not suppress the index. The sitemap is written
+                          #     during the build, so it must be filtered after, or it advertises
+                          #     a 404.
                           # Deploys with `keep_files: true` so the root and /dev/ builds don't
-                          # clobber each other on gh-pages.
+                          # clobber each other on gh-pages. Note the consequence: a deploy never
+                          # DELETES anything from gh-pages, so a page that should no longer be
+                          # published has to be removed from that branch directly, as the
+                          # CLAUDE.html and reference/ pages were on 2026-09-07.
 references.bib            # bibtex entries cited from the case-study/function-reference vignettes.
                           # Keyed `{Surname}{Year}{ShortCamelCaseTitle}`, e.g. `Wilson2012Ningaloo`.
 inst/CITATION              # paper citation metadata — do not change
