@@ -441,21 +441,32 @@ correlated (&gt;0.95)—</p>
 <span><span class="co">## snapper    0.54</span></span>
 <span><span class="co">## lobster    1.00</span></span></code></pre>
 <p>Note that nothing is highly correlated</p>
-<p>Plot of likely transformations - thanks to Anna Cresswell for this
-loop!</p>
+<p>Each predictor is plotted raw, square-root transformed and log(x + 1)
+transformed, so the three can be compared directly. The aim is an even
+spread across the range rather than a pile-up at one end; the rug marks
+where the samples actually lie. The original version of this comparison
+was written as a base R loop by Anna Cresswell.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="va">pred.vars</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">x</span><span class="op">&lt;-</span><span class="va">dat</span><span class="op">[</span> ,<span class="va">i</span><span class="op">]</span></span>
-<span>  <span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="co">#Looks best</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p><img src="case-study-2_files/figure-html/trans-1.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-2.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-3.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-4.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-5.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-6.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-7.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-8.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-9.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-10.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-11.png" class="r-plt" alt="" width="700"><img src="case-study-2_files/figure-html/trans-12.png" class="r-plt" alt="" width="700"></p>
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">pred.vars</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"predictor"</span>, values_to <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>predictor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">predictor</span>, levels <span class="op">=</span> <span class="va">pred.vars</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>raw <span class="op">=</span> <span class="va">value</span>,</span>
+<span>         `square root` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,</span>
+<span>         `log(x + 1)`  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">value</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">raw</span>, <span class="va">`square root`</span>, <span class="va">`log(x + 1)`</span><span class="op">)</span>,</span>
+<span>               names_to <span class="op">=</span> <span class="st">"transformation"</span>, values_to <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>transformation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">transformation</span>,</span>
+<span>                                 levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw"</span>, <span class="st">"square root"</span>, <span class="st">"log(x + 1)"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">15</span>, fill <span class="op">=</span> <span class="st">"grey75"</span>, colour <span class="op">=</span> <span class="st">"grey30"</span>, linewidth <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_rug.html" class="external-link">geom_rug</a></span><span class="op">(</span>sides <span class="op">=</span> <span class="st">"b"</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">predictor</span> <span class="op">+</span> <span class="va">transformation</span>, scales <span class="op">=</span> <span class="st">"free"</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Number of samples"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
+<p><img src="case-study-2_files/figure-html/trans-1.png" class="r-plt" alt="" width="672"></p>
 <p>Review of individual predictors - we have to make sure they have an
 even distribution.</p>
 <p>If the data are squewed to low numbers try sqrt&gt;log or if skewed
@@ -471,7 +482,15 @@ variables.</p>
 <div class="section level3">
 <h3 id="screening-taxa">Screening taxa<a class="anchor" aria-label="anchor" href="#screening-taxa"></a>
 </h3>
-<p>Check to make sure Response vector has not more than 80% zeros</p>
+<p>Check that no response vector is more than 80% zeros.</p>
+<p>This screen is applied before any model is fitted, and deliberately
+so. A taxon recorded as absent at almost every sample carries very
+little information about the predictors, but it still costs a full model
+set to find that out, and the fits that do converge are driven by a
+handful of non-zero records. Screening first is cheaper than
+interpreting the output afterwards. The 80% threshold is a convention
+rather than a rule; what matters is that the choice is made explicitly
+and stated.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">unique.vars</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">Taxa</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">unique.vars.use</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -485,22 +504,90 @@ variables.</p>
 <p>“BDS” bivalve Dosina subrosea</p>
 <p>“BMS” bivalve Myadora striata</p>
 <p>“CPN” crustacean Pagrus novaezelandiae</p>
+<p>Three practical points about the call below.</p>
+<p><strong><code>max.models</code> is a guard, not a target.</strong> It
+is set to 600 here against a set of 139 candidates, so it never binds.
+<code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set()</a></code> stops rather than fitting when the set is
+larger, because a full subsets set grows quickly and it is easy to
+request one that takes days without meaning to. If the limit is reached,
+raising it is rarely the right first move: reduce
+<code>max.predictors</code>, or drop predictors, and only then raise the
+limit.</p>
+<p><strong><code>Status</code> survives the <code>null.cov.cutoff</code>
+screen even though it is perfectly correlated with
+<code>Location</code>.</strong> <code>null.cov.cutoff</code>, added to
+<code><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set()</a></code> after the original paper, drops a
+predictor correlated above 0.8 with a variable named in
+<code>null.terms</code>, because a term forced into every candidate
+should not be competing with a candidate for the same variation. Here
+<code>null.terms</code> is <code>s(Location,Site,bs='re')</code> and
+<code>Status</code> is nested within <code>Location</code>, so their
+correlation is 1. Variables inside a <code>bs='re'</code> smooth are
+excluded from the screen for exactly this reason: a random effect
+grouping factor is correlated with what is measured within it by
+construction, and that is the design of the study rather than
+collinearity to remove. If the random effect were specified some other
+way, <code>Status</code> would be dropped and a warning would name
+it.</p>
+<p><strong>Check <code>failed.models</code> before reading anything
+else.</strong> <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set()</a></code> catches a candidate that
+fails and records the error against the model name rather than stopping.
+An empty list is what you want. A few failures are usually a
+<code>k</code> set too high for the data in one term; many failures
+usually mean the <code>test.fit</code> or the predictor set is wrong,
+not that individual models are unlucky. The recorded formula can be
+fitted by hand outside the call to see the error in full.</p>
 </div>
 <div class="section level3">
 <h3 id="full-subsets-gamm-analysis">Full subsets GAMM analysis<a class="anchor" aria-label="anchor" href="#full-subsets-gamm-analysis"></a>
 </h3>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">resp.vars</span><span class="op">=</span><span class="va">unique.vars.use</span></span>
+<span><span class="va">use.dat</span><span class="op">=</span><span class="va">dat</span></span>
+<span><span class="va">factor.vars</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Status"</span><span class="op">)</span><span class="co"># Status as a Factor with two levels</span></span>
+<span><span class="va">out.all</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">var.imp</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Loop through the FSS function for each Taxa----</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">resp.vars</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">use.dat</span><span class="op">=</span><span class="va">dat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">Taxa</span><span class="op">==</span><span class="va">resp.vars</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>,<span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="va">Model1</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">response</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">lobster</span>,k<span class="op">=</span><span class="fl">3</span>,bs<span class="op">=</span><span class="st">'cr'</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">Location</span>, <span class="va">Site</span>, bs<span class="op">=</span><span class="st">"re"</span><span class="op">)</span>,</span>
+<span>             family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/Tweedie.html" class="external-link">tw</a></span><span class="op">(</span><span class="op">)</span>,  data<span class="op">=</span><span class="va">use.dat</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">model.set</span><span class="op">=</span><span class="fu"><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set</a></span><span class="op">(</span>use.dat<span class="op">=</span><span class="va">use.dat</span>,</span>
+<span>                            test.fit<span class="op">=</span><span class="va">Model1</span>,</span>
+<span>                            pred.vars.cont<span class="op">=</span><span class="va">pred.vars</span>,</span>
+<span>                            pred.vars.fact<span class="op">=</span><span class="va">factor.vars</span>,</span>
+<span>                            linear.vars<span class="op">=</span><span class="st">"Distance"</span>,</span>
+<span>                            k<span class="op">=</span><span class="fl">3</span>,</span>
+<span>                            null.terms<span class="op">=</span><span class="st">"s(Location,Site,bs='re')"</span><span class="op">)</span></span>
+<span>  <span class="va">out.list</span><span class="op">=</span><span class="fu"><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set</a></span><span class="op">(</span><span class="va">model.set</span>,</span>
+<span>                            max.models<span class="op">=</span><span class="fl">600</span>,</span>
+<span>                            parallel<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">out.list</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">out.list</span><span class="op">$</span><span class="va">failed.models</span> <span class="co"># examine the list of failed models</span></span>
+<span>  <span class="va">mod.table</span><span class="op">=</span><span class="va">out.list</span><span class="op">$</span><span class="va">mod.data.out</span>  <span class="co"># look at the model selection table</span></span>
+<span>  <span class="va">mod.table</span><span class="op">=</span><span class="va">mod.table</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">mod.table</span><span class="op">$</span><span class="va">AICc</span><span class="op">)</span>,<span class="op">]</span></span>
+<span>  <span class="va">mod.table</span><span class="op">$</span><span class="va">cumsum.wi</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">mod.table</span><span class="op">$</span><span class="va">wi.AICc</span><span class="op">)</span></span>
+<span>  <span class="va">out.i</span><span class="op">=</span><span class="va">mod.table</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">mod.table</span><span class="op">$</span><span class="va">delta.AICc</span><span class="op">&lt;=</span><span class="fl">3</span><span class="op">)</span>,<span class="op">]</span></span>
+<span>  <span class="va">out.all</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">out.all</span>,<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">out.i</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="co"># var.imp=c(var.imp,list(out.list$variable.importance$aic$variable.weights.raw)) #Either raw importance score</span></span>
+<span>  <span class="va">var.imp</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">var.imp</span>,<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">out.list</span><span class="op">$</span><span class="va">variable.importance</span><span class="op">$</span><span class="va">aic</span><span class="op">$</span><span class="va">variable.weights.raw</span><span class="op">)</span><span class="op">)</span> <span class="co">#Or importance score weighted by r2</span></span>
+<span>  <span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="extract-model-fits-and-importance">Extract Model fits and importance<a class="anchor" aria-label="anchor" href="#extract-model-fits-and-importance"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">out.all</span><span class="op">)</span><span class="op">=</span><span class="va">resp.vars</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">var.imp</span><span class="op">)</span><span class="op">=</span><span class="va">resp.vars</span></span>
 <span><span class="va">all.mod.fits</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"rbind"</span>,<span class="va">out.all</span><span class="op">)</span></span>
 <span><span class="co"># label each row with its taxon: rbind on a named list leaves that only in the row names</span></span>
 <span><span class="va">all.mod.fits</span><span class="op">$</span><span class="va">Taxa</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">resp.vars</span>, times<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">out.all</span>, <span class="va">nrow</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">all.var.imp</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"rbind"</span>,<span class="va">var.imp</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="va">all.mod.fits</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Taxa"</span>, <span class="st">"modname"</span>, <span class="st">"delta.AICc"</span>, <span class="st">"delta.BIC"</span>,</span>
 <span>                   <span class="st">"wi.AICc"</span>, <span class="st">"wi.BIC"</span>, <span class="st">"r2.vals"</span>, <span class="st">"edf"</span><span class="op">)</span><span class="op">]</span>,</span>
@@ -883,7 +970,7 @@ order, and the vignette uses the column names of the data set rather
 than the shortened labels used in the paper, so the model published as
 <code>4mm + lobster</code> appears here as
 <code>lobster+sqrt.X4mm</code>. This is a naming change only.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="va">all.var.imp</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -963,7 +1050,7 @@ than the shortened labels used in the paper, so the model published as
 <div class="section level3">
 <h3 id="variable-importance">Variable importance<a class="anchor" aria-label="anchor" href="#variable-importance"></a>
 </h3>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://talgalili.github.io/gplots/reference/heatmap.2.html" class="external-link">heatmap.2</a></span><span class="op">(</span></span>
 <span>  <span class="va">all.var.imp</span>,</span>
 <span>  dendrogram <span class="op">=</span> <span class="st">"none"</span>,</span>
@@ -982,7 +1069,7 @@ than the shortened labels used in the paper, so the model published as
 <div class="section level2">
 <h2 id="part-2---custom-plot-of-importance-scores-1">Part 2 - custom plot of importance scores<a class="anchor" aria-label="anchor" href="#part-2---custom-plot-of-importance-scores-1"></a>
 </h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.taxa</span> <span class="op">&lt;-</span> <span class="va">all.var.imp</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames_to_column</a></span><span class="op">(</span><span class="st">"resp.var"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -997,7 +1084,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ resp.var   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BD…</span></span>
 <span><span class="co">## $ predictor  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "sqrt.X4mm"<span style="color: #949494;">, </span>"sqrt.X2mm"<span style="color: #949494;">, </span>"sqrt.X1mm"<span style="color: #949494;">, </span>"sqrt.X500um"<span style="color: #949494;">, </span>"fetc…</span></span>
 <span><span class="co">## $ importance <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.958<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.220<span style="color: #949494;">, </span>0.468<span style="color: #949494;">, </span>0.043<span style="color: #949494;">, </span>0.049<span style="color: #949494;">, </span>0.061<span style="color: #949494;">, </span>0.1…</span></span></code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gg.importance.scores</span></span></code></pre></div>
 <p><img src="case-study-2_files/figure-html/imp2plot-1.png" class="r-plt" alt="" width="700"></p>
 </div>
@@ -1005,7 +1092,7 @@ than the shortened labels used in the paper, so the model published as
 <h2 id="part-3---plots-of-the-most-parsimonious-models-1">Part 3 - plots of the most parsimonious models<a class="anchor" aria-label="anchor" href="#part-3---plots-of-the-most-parsimonious-models-1"></a>
 </h2>
 <p>Make an suitable theme</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Theme1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
 <span>  panel.grid.major <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -1029,11 +1116,11 @@ than the shortened labels used in the paper, so the model published as
 <div class="section level3">
 <h3 id="model-bivalve-dosina-subrosea-500um-distance-x-status">MODEL Bivalve.Dosina.subrosea 500um + Distance x Status<a class="anchor" aria-label="anchor" href="#model-bivalve-dosina-subrosea-500um-distance-x-status"></a>
 </h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.bds</span><span class="op">&lt;-</span><span class="va">dat</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Taxa</span><span class="op">==</span><span class="st">"BDS"</span><span class="op">)</span></span>
 <span><span class="va">gamm</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">response</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">sqrt.X500um</span>,k<span class="op">=</span><span class="fl">3</span>,bs<span class="op">=</span><span class="st">'cr'</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">Distance</span>,k<span class="op">=</span><span class="fl">1</span>,bs<span class="op">=</span><span class="st">'cr'</span>, by<span class="op">=</span><span class="va">Status</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">Location</span>,<span class="va">Site</span>,bs<span class="op">=</span><span class="st">"re"</span><span class="op">)</span><span class="op">+</span> <span class="va">Status</span>, family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/Tweedie.html" class="external-link">tw</a></span><span class="op">(</span><span class="op">)</span>,data<span class="op">=</span><span class="va">dat.bds</span><span class="op">)</span></span></code></pre></div>
 <p>Predict - status from MODEL Bivalve.Dosina.subrosea—-</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">&lt;-</span><span class="va">gamm</span></span>
 <span><span class="va">testdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Distance<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">Distance</span><span class="op">)</span>,</span>
 <span>                        sqrt.X500um<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">sqrt.X500um</span><span class="op">)</span>,</span>
@@ -1049,7 +1136,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ Location    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Hahei<span style="color: #949494;">, </span>Leigh<span style="color: #949494;">, </span>Tawharanui<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Leigh<span style="color: #949494;">, </span>Tawharanui<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">,</span>…</span></span>
 <span><span class="co">## $ Site        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>C…</span></span>
 <span><span class="co">## $ Status      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fi…</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/predict.gam.html" class="external-link">predict.gam</a></span><span class="op">(</span><span class="va">mod</span>, newdata<span class="op">=</span><span class="va">testdata</span>, type<span class="op">=</span><span class="st">'response'</span>, se.fit<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">predicts.bds.status</span> <span class="op">=</span> <span class="va">testdata</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">fits</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1065,7 +1152,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ response <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2.8646047<span style="color: #949494;">, </span>0.7276123</span></span>
 <span><span class="co">## $ se.fit   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2.390011<span style="color: #949494;">, </span>0.619802</span></span></code></pre>
 <p>predict - Distance.x.status from MODEL Bivalve.Dosina.subrosea—-</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">&lt;-</span><span class="va">gamm</span></span>
 <span><span class="va">testdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Distance<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">Distance</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">Distance</span><span class="op">)</span>,length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
 <span>                        sqrt.X500um<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">sqrt.X500um</span><span class="op">)</span>,</span>
@@ -1081,7 +1168,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ Location    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Ha…</span></span>
 <span><span class="co">## $ Site        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>C…</span></span>
 <span><span class="co">## $ Status      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fi…</span></span></code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/predict.gam.html" class="external-link">predict.gam</a></span><span class="op">(</span><span class="va">mod</span>, newdata<span class="op">=</span><span class="va">testdata</span>, type<span class="op">=</span><span class="st">'response'</span>, se.fit<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">predicts.bds.Distance.x.status</span> <span class="op">=</span> <span class="va">testdata</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">fits</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1097,7 +1184,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ response <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2.0505723<span style="color: #949494;">, </span>0.4356395<span style="color: #949494;">, </span>2.1446873<span style="color: #949494;">, </span>0.4666912<span style="color: #949494;">, </span>2.2431218<span style="color: #949494;">, </span>0.4999…</span></span>
 <span><span class="co">## $ se.fit   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.7306685<span style="color: #949494;">, </span>0.3823930<span style="color: #949494;">, </span>1.8058795<span style="color: #949494;">, </span>0.4073529<span style="color: #949494;">, </span>1.8848049<span style="color: #949494;">, </span>0.4341…</span></span></code></pre>
 <p>Predict 500um from MODEL Bivalve.Dosina.subrosea—-</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">&lt;-</span><span class="va">gamm</span></span>
 <span><span class="va">testdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>sqrt.X500um<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">sqrt.X500um</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">sqrt.X500um</span><span class="op">)</span>,length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
 <span>                        Distance<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">Distance</span><span class="op">)</span>,</span>
@@ -1113,7 +1200,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ Location    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Ha…</span></span>
 <span><span class="co">## $ Site        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>C…</span></span>
 <span><span class="co">## $ Status      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fi…</span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/predict.gam.html" class="external-link">predict.gam</a></span><span class="op">(</span><span class="va">mod</span>, newdata<span class="op">=</span><span class="va">testdata</span>, type<span class="op">=</span><span class="st">'response'</span>, se.fit<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">predicts.bds.500um</span> <span class="op">=</span> <span class="va">testdata</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">fits</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1131,7 +1218,7 @@ than the shortened labels used in the paper, so the model published as
 <div class="section level3">
 <h3 id="model-bivalve-myadora-striata-lobster">MODEL Bivalve.Myadora.striata Lobster<a class="anchor" aria-label="anchor" href="#model-bivalve-myadora-striata-lobster"></a>
 </h3>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.bms</span><span class="op">&lt;-</span><span class="va">dat</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Taxa</span><span class="op">==</span><span class="st">"BMS"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.bms</span>,<span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sediment Location Status              Site Distance depth    X4mm    X2mm</span></span>
@@ -1143,7 +1230,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">##   InPreds   BioTurb Taxa response sqrt.X4mm sqrt.X2mm sqrt.X1mm sqrt.X500um</span></span>
 <span><span class="co">## 1       0 0.1666667  BMS        6  1.778938  1.187935  1.972212    2.949057</span></span>
 <span><span class="co">## 2       0 0.1666667  BMS        4  1.300496  1.275974  2.206187    3.150922</span></span></code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gamm</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">response</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">lobster</span>,k<span class="op">=</span><span class="fl">3</span>,bs<span class="op">=</span><span class="st">'cr'</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">Location</span>,<span class="va">Site</span>,bs<span class="op">=</span><span class="st">"re"</span><span class="op">)</span>, family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/Tweedie.html" class="external-link">tw</a></span><span class="op">(</span><span class="op">)</span>,data<span class="op">=</span><span class="va">dat.bms</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># predict - lobster from model for Bivalve.Myadora.striata ----</span></span>
@@ -1160,7 +1247,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ Location <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei…</span></span>
 <span><span class="co">## $ Site     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>Cook…</span></span>
 <span><span class="co">## $ Status   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fishe…</span></span></code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/predict.gam.html" class="external-link">predict.gam</a></span><span class="op">(</span><span class="va">mod</span>, newdata<span class="op">=</span><span class="va">testdata</span>, type<span class="op">=</span><span class="st">'response'</span>, se.fit<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span><span class="va">predicts.bms.lobster</span> <span class="op">=</span> <span class="va">testdata</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">fits</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">lobster</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -1178,7 +1265,7 @@ than the shortened labels used in the paper, so the model published as
 <div class="section level3">
 <h3 id="model-decapod-p-novazelandiae-4mm-lobster">MODEL Decapod.P.novazelandiae 4mm + Lobster<a class="anchor" aria-label="anchor" href="#model-decapod-p-novazelandiae-4mm-lobster"></a>
 </h3>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.cpn</span><span class="op">&lt;-</span><span class="va">dat</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Taxa</span><span class="op">==</span><span class="st">"CPN"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat.cpn</span>,<span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sediment Location Status              Site Distance depth    X4mm    X2mm</span></span>
@@ -1190,10 +1277,10 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">##   InPreds   BioTurb Taxa response sqrt.X4mm sqrt.X2mm sqrt.X1mm sqrt.X500um</span></span>
 <span><span class="co">## 1       0 0.1666667  CPN        3  1.778938  1.187935  1.972212    2.949057</span></span>
 <span><span class="co">## 2       0 0.1666667  CPN       11  1.300496  1.275974  2.206187    3.150922</span></span></code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gamm</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">response</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">sqrt.X4mm</span>,k<span class="op">=</span><span class="fl">3</span>,bs<span class="op">=</span><span class="st">'cr'</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">lobster</span>,k<span class="op">=</span><span class="fl">3</span>,bs<span class="op">=</span><span class="st">'cr'</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">Location</span>,<span class="va">Site</span>,bs<span class="op">=</span><span class="st">"re"</span><span class="op">)</span>, family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/Tweedie.html" class="external-link">tw</a></span><span class="op">(</span><span class="op">)</span>,data<span class="op">=</span><span class="va">dat.cpn</span><span class="op">)</span></span></code></pre></div>
 <p>Predict - sqrt.X4mm from model for Decapod.P.novazelandiae —-</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">&lt;-</span><span class="va">gamm</span></span>
 <span><span class="va">testdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>sqrt.X4mm<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">sqrt.X4mm</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">sqrt.X4mm</span><span class="op">)</span>,length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
 <span>                        lobster<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">lobster</span><span class="op">)</span>,</span>
@@ -1209,7 +1296,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ Location  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahe…</span></span>
 <span><span class="co">## $ Site      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>Coo…</span></span>
 <span><span class="co">## $ Status    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fish…</span></span></code></pre>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/predict.gam.html" class="external-link">predict.gam</a></span><span class="op">(</span><span class="va">mod</span>, newdata<span class="op">=</span><span class="va">testdata</span>, type<span class="op">=</span><span class="st">'response'</span>, se.fit<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span><span class="va">predicts.cpn.4mm</span> <span class="op">=</span> <span class="va">testdata</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">fits</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">sqrt.X4mm</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co">#only change here</span></span>
@@ -1223,7 +1310,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ response  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 4.822420<span style="color: #949494;">, </span>4.499149<span style="color: #949494;">, </span>4.197548<span style="color: #949494;">, </span>3.916164<span style="color: #949494;">, </span>3.653641<span style="color: #949494;">, </span>3.408715<span style="color: #949494;">, </span>…</span></span>
 <span><span class="co">## $ se.fit    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3.235051<span style="color: #949494;">, </span>2.979428<span style="color: #949494;">, </span>2.751207<span style="color: #949494;">, </span>2.547690<span style="color: #949494;">, </span>2.366325<span style="color: #949494;">, </span>2.204703<span style="color: #949494;">, </span>…</span></span></code></pre>
 <p>Predict - lobster from model for Decapod.P.novazelandiae —-</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">&lt;-</span><span class="va">gamm</span></span>
 <span><span class="va">testdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>lobster<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">lobster</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">lobster</span><span class="op">)</span>,length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
 <span>                        sqrt.X4mm<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">sqrt.X4mm</span><span class="op">)</span>,</span>
@@ -1239,7 +1326,7 @@ than the shortened labels used in the paper, so the model published as
 <span><span class="co">## $ Location  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahei<span style="color: #949494;">, </span>Hahe…</span></span>
 <span><span class="co">## $ Site      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>Cooks Beach Inner<span style="color: #949494;">, </span>Coo…</span></span>
 <span><span class="co">## $ Status    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fished<span style="color: #949494;">, </span>Fish…</span></span></code></pre>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/predict.gam.html" class="external-link">predict.gam</a></span><span class="op">(</span><span class="va">mod</span>, newdata<span class="op">=</span><span class="va">testdata</span>, type<span class="op">=</span><span class="st">'response'</span>, se.fit<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span><span class="va">predicts.cpn.lobster</span> <span class="op">=</span> <span class="va">testdata</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">fits</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">lobster</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -1256,7 +1343,7 @@ than the shortened labels used in the paper, so the model published as
 <div class="section level3">
 <h3 id="plots-for-bivalve-dosina-subrosea-500um-distance-x-status">PLOTS for Bivalve.Dosina.subrosea 500um + Distance x Status<a class="anchor" aria-label="anchor" href="#plots-for-bivalve-dosina-subrosea-500um-distance-x-status"></a>
 </h3>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ggmod.bds.status</span><span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Status</span>,y<span class="op">=</span><span class="va">response</span>,fill<span class="op">=</span><span class="va">Status</span>,colour<span class="op">=</span><span class="va">Status</span><span class="op">)</span>, data<span class="op">=</span><span class="va">predicts.bds.status</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">" "</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">'Status'</span><span class="op">)</span><span class="op">+</span></span>
@@ -1271,7 +1358,7 @@ than the shortened labels used in the paper, so the model published as
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, y<span class="op">=</span><span class="cn">Inf</span>, label <span class="op">=</span> <span class="st">"   Dosinia subrosea"</span>,vjust <span class="op">=</span> <span class="fl">1</span>, hjust <span class="op">=</span> <span class="op">-</span><span class="fl">.1</span>,size<span class="op">=</span><span class="fl">5</span>,fontface<span class="op">=</span><span class="st">"italic"</span><span class="op">)</span></span>
 <span><span class="va">ggmod.bds.status</span></span></code></pre></div>
 <p><img src="case-study-2_files/figure-html/plotsbds-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ggmod.bds.Distance.x.status</span><span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Distance</span>,y<span class="op">=</span><span class="va">response</span>,colour<span class="op">=</span><span class="va">Status</span><span class="op">)</span>, data<span class="op">=</span><span class="va">dat.bds</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">" "</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">'Distance (m)'</span><span class="op">)</span><span class="op">+</span></span>
@@ -1286,7 +1373,7 @@ than the shortened labels used in the paper, so the model published as
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, y<span class="op">=</span><span class="cn">Inf</span>, label <span class="op">=</span> <span class="st">"(b)"</span>,vjust <span class="op">=</span> <span class="fl">1</span>, hjust <span class="op">=</span> <span class="op">-</span><span class="fl">.1</span>,size<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">ggmod.bds.Distance.x.status</span></span></code></pre></div>
 <p><img src="case-study-2_files/figure-html/plotsbds-2.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ggmod.bds.500um</span><span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">" "</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">'Grain size: 500 um (sqrt)'</span><span class="op">)</span><span class="op">+</span></span>
@@ -1304,7 +1391,7 @@ than the shortened labels used in the paper, so the model published as
 <div class="section level3">
 <h3 id="plots-bivalve-m-striata-lobster">PLOTS Bivalve M.striata lobster<a class="anchor" aria-label="anchor" href="#plots-bivalve-m-striata-lobster"></a>
 </h3>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ggmod.bms.lobster</span><span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Abundance"</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote</a></span><span class="op">(</span><span class="st">'Density of legal lobster (no./25'</span> <span class="op">*</span><span class="va">m</span><span class="op">^</span><span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="st">')'</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -1324,7 +1411,7 @@ than the shortened labels used in the paper, so the model published as
 <div class="section level3">
 <h3 id="plots-decapod-p-novazelandiae-4mm-lobster">PLOTS Decapod.P.novazelandiae 4mm + lobster<a class="anchor" aria-label="anchor" href="#plots-decapod-p-novazelandiae-4mm-lobster"></a>
 </h3>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ggmod.cpn.lobster</span><span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">" "</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote</a></span><span class="op">(</span><span class="st">'Density of legal lobster (no./25'</span> <span class="op">*</span><span class="va">m</span><span class="op">^</span><span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="st">')'</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
@@ -1340,7 +1427,7 @@ than the shortened labels used in the paper, so the model published as
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_blank.html" class="external-link">geom_blank</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">dat.cpn</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">lobster</span>,y<span class="op">=</span><span class="va">response</span><span class="op">*</span><span class="fl">1.05</span><span class="op">)</span><span class="op">)</span><span class="co">#to nudge data off annotations</span></span>
 <span><span class="va">ggmod.cpn.lobster</span></span></code></pre></div>
 <p><img src="case-study-2_files/figure-html/plotsdpn-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ggmod.cpn.4mm</span><span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">" "</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">'Grain size: 4 mm (sqrt)'</span><span class="op">)</span><span class="op">+</span></span>
@@ -1358,17 +1445,17 @@ than the shortened labels used in the paper, so the model published as
 <p>Combined.plot using grid() and gridExtra()</p>
 <p>To see what they will look like use grid.arrange() - make sure Plot
 window is large enough! - or will error!</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">blank</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grid/grid.rect.html" class="external-link">grid.rect</a></span><span class="op">(</span>gp<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/grid/gpar.html" class="external-link">gpar</a></span><span class="op">(</span>col<span class="op">=</span><span class="st">"white"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="case-study-2_files/figure-html/gridarrange-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">ggmod.bds.status</span>,<span class="va">ggmod.bds.Distance.x.status</span>,<span class="va">ggmod.bds.500um</span>,</span>
 <span>             <span class="va">ggmod.bms.lobster</span>,<span class="va">blank</span>,<span class="va">blank</span>,</span>
 <span>             <span class="va">ggmod.cpn.lobster</span>,<span class="va">ggmod.cpn.4mm</span>,<span class="va">blank</span>,nrow<span class="op">=</span><span class="fl">3</span>,ncol<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="case-study-2_files/figure-html/gridarrange-2.png" class="r-plt" alt="" width="700"></p>
 <p>Use arrangeGrob ONLY - as we can pass this to ggsave! Note use of raw
 ggplot’s</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">combine.plot</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">arrangeGrob</a></span><span class="op">(</span><span class="va">ggmod.bds.status</span>,<span class="va">ggmod.bds.Distance.x.status</span>,<span class="va">ggmod.bds.500um</span>,</span>
 <span>                          <span class="va">ggmod.bms.lobster</span>,<span class="va">blank</span>,<span class="va">blank</span>,</span>
 <span>                          <span class="va">ggmod.cpn.lobster</span>,<span class="va">ggmod.cpn.4mm</span>,<span class="va">blank</span>,nrow<span class="op">=</span><span class="fl">3</span>,ncol<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
@@ -1377,16 +1464,16 @@ ggplot’s</p>
 <span></span>
 <span><span class="va">combine.plot</span></span></code></pre></div>
 <pre><code><span><span class="co">## TableGrob (3 x 3) "arrange": 9 grobs</span></span>
-<span><span class="co">##   z     cells    name                grob</span></span>
-<span><span class="co">## 1 1 (1-1,1-1) arrange      gtable[layout]</span></span>
-<span><span class="co">## 2 2 (1-1,2-2) arrange      gtable[layout]</span></span>
-<span><span class="co">## 3 3 (1-1,3-3) arrange      gtable[layout]</span></span>
-<span><span class="co">## 4 4 (2-2,1-1) arrange      gtable[layout]</span></span>
-<span><span class="co">## 5 5 (2-2,2-2) arrange rect[GRID.rect.299]</span></span>
-<span><span class="co">## 6 6 (2-2,3-3) arrange rect[GRID.rect.299]</span></span>
-<span><span class="co">## 7 7 (3-3,1-1) arrange      gtable[layout]</span></span>
-<span><span class="co">## 8 8 (3-3,2-2) arrange      gtable[layout]</span></span>
-<span><span class="co">## 9 9 (3-3,3-3) arrange rect[GRID.rect.299]</span></span></code></pre>
+<span><span class="co">##   z     cells    name                 grob</span></span>
+<span><span class="co">## 1 1 (1-1,1-1) arrange       gtable[layout]</span></span>
+<span><span class="co">## 2 2 (1-1,2-2) arrange       gtable[layout]</span></span>
+<span><span class="co">## 3 3 (1-1,3-3) arrange       gtable[layout]</span></span>
+<span><span class="co">## 4 4 (2-2,1-1) arrange       gtable[layout]</span></span>
+<span><span class="co">## 5 5 (2-2,2-2) arrange rect[GRID.rect.2764]</span></span>
+<span><span class="co">## 6 6 (2-2,3-3) arrange rect[GRID.rect.2764]</span></span>
+<span><span class="co">## 7 7 (3-3,1-1) arrange       gtable[layout]</span></span>
+<span><span class="co">## 8 8 (3-3,2-2) arrange       gtable[layout]</span></span>
+<span><span class="co">## 9 9 (3-3,3-3) arrange rect[GRID.rect.2764]</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">

@@ -37,6 +37,28 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 remotes::install_github("beckyfisher/FSSgam_package")
 ```
 
+That installs the default branch of the package repository, which is
+currently `dev`, so it gives you the development version. To install the
+last released state instead, name the branch:
+
+``` r
+
+remotes::install_github("beckyfisher/FSSgam_package", ref = "master")
+```
+
+The vignettes on this site are built against the `dev` branch.
+
+Fitting through `gamm4`, by way of `MuMIn::uGamm(lme4 = TRUE)`, needs
+one further step. As of **FSSgam** 1.1.0 `gamm4` is a suggested rather
+than an imported package, so installing **FSSgam** no longer installs
+`gamm4` and `lme4` with it. Install `gamm4` separately if you need that
+route, as the extra examples vignette does:
+
+``` r
+
+install.packages("gamm4")
+```
+
 ### Citation
 
 If you use **FSSgam** or results derived from it, please cite:

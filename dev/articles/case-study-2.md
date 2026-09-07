@@ -337,24 +337,36 @@ round(cor(dat[,pred.vars]),2)
 
 Note that nothing is highly correlated
 
-Plot of likely transformations - thanks to Anna Cresswell for this loop!
+Each predictor is plotted raw, square-root transformed and log(x + 1)
+transformed, so the three can be compared directly. The aim is an even
+spread across the range rather than a pile-up at one end; the rug marks
+where the samples actually lie. The original version of this comparison
+was written as a base R loop by Anna Cresswell.
 
 ``` r
 
-par(mfrow=c(3,2))
-for (i in pred.vars) {
-  x<-dat[ ,i]
-  x = as.numeric(unlist(x))
-  hist((x))#Looks best
-  plot((x),main = paste(i))
-  hist(sqrt(x))
-  plot(sqrt(x))
-  hist(log(x+1))
-  plot(log(x+1))
-}
+dat |>
+  select(all_of(pred.vars)) |>
+  pivot_longer(everything(), names_to = "predictor", values_to = "value") |>
+  mutate(predictor = factor(predictor, levels = pred.vars)) |>
+  filter(!is.na(value)) |>
+  mutate(raw = value,
+         `square root` = sqrt(value),
+         `log(x + 1)`  = log(value + 1)) |>
+  select(-value) |>
+  pivot_longer(c(raw, `square root`, `log(x + 1)`),
+               names_to = "transformation", values_to = "x") |>
+  mutate(transformation = factor(transformation,
+                                 levels = c("raw", "square root", "log(x + 1)"))) |>
+  ggplot(aes(x)) +
+  geom_histogram(bins = 15, fill = "grey75", colour = "grey30", linewidth = 0.15) +
+  geom_rug(sides = "b", alpha = 0.3) +
+  facet_wrap(~ predictor + transformation, scales = "free", ncol = 3) +
+  labs(x = NULL, y = "Number of samples") +
+  theme_bw(base_size = 8)
 ```
 
-![](case-study-2_files/figure-html/trans-1.png)![](case-study-2_files/figure-html/trans-2.png)![](case-study-2_files/figure-html/trans-3.png)![](case-study-2_files/figure-html/trans-4.png)![](case-study-2_files/figure-html/trans-5.png)![](case-study-2_files/figure-html/trans-6.png)![](case-study-2_files/figure-html/trans-7.png)![](case-study-2_files/figure-html/trans-8.png)![](case-study-2_files/figure-html/trans-9.png)![](case-study-2_files/figure-html/trans-10.png)![](case-study-2_files/figure-html/trans-11.png)![](case-study-2_files/figure-html/trans-12.png)
+![](case-study-2_files/figure-html/trans-1.png)
 
 Review of individual predictors - we have to make sure they have an even
 distribution.
@@ -376,7 +388,15 @@ pred.vars=c("sqrt.X4mm","sqrt.X2mm","sqrt.X1mm","sqrt.X500um",
 
 ### Screening taxa
 
-Check to make sure Response vector has not more than 80% zeros
+Check that no response vector is more than 80% zeros.
+
+This screen is applied before any model is fitted, and deliberately so.
+A taxon recorded as absent at almost every sample carries very little
+information about the predictors, but it still costs a full model set to
+find that out, and the fits that do converge are driven by a handful of
+non-zero records. Screening first is cheaper than interpreting the
+output afterwards. The 80% threshold is a convention rather than a rule;
+what matters is that the choice is made explicitly and stated.
 
 ``` r
 
@@ -398,7 +418,79 @@ unique.vars.use
 
 “CPN” crustacean Pagrus novaezelandiae
 
+Three practical points about the call below.
+
+**`max.models` is a guard, not a target.** It is set to 600 here against
+a set of 139 candidates, so it never binds.
+[`fit_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html)
+stops rather than fitting when the set is larger, because a full subsets
+set grows quickly and it is easy to request one that takes days without
+meaning to. If the limit is reached, raising it is rarely the right
+first move: reduce `max.predictors`, or drop predictors, and only then
+raise the limit.
+
+**`Status` survives the `null.cov.cutoff` screen even though it is
+perfectly correlated with `Location`.** `null.cov.cutoff`, added to
+[`generate_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html)
+after the original paper, drops a predictor correlated above 0.8 with a
+variable named in `null.terms`, because a term forced into every
+candidate should not be competing with a candidate for the same
+variation. Here `null.terms` is `s(Location,Site,bs='re')` and `Status`
+is nested within `Location`, so their correlation is 1. Variables inside
+a `bs='re'` smooth are excluded from the screen for exactly this reason:
+a random effect grouping factor is correlated with what is measured
+within it by construction, and that is the design of the study rather
+than collinearity to remove. If the random effect were specified some
+other way, `Status` would be dropped and a warning would name it.
+
+**Check `failed.models` before reading anything else.**
+[`fit_model_set()`](https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html)
+catches a candidate that fails and records the error against the model
+name rather than stopping. An empty list is what you want. A few
+failures are usually a `k` set too high for the data in one term; many
+failures usually mean the `test.fit` or the predictor set is wrong, not
+that individual models are unlucky. The recorded formula can be fitted
+by hand outside the call to see the error in full.
+
 ### Full subsets GAMM analysis
+
+``` r
+
+resp.vars=unique.vars.use
+use.dat=dat
+factor.vars=c("Status")# Status as a Factor with two levels
+out.all=list()
+var.imp=list()
+
+# Loop through the FSS function for each Taxa----
+for(i in 1:length(resp.vars)){
+  use.dat=dat[which(dat$Taxa==resp.vars[i]),]
+  
+  Model1=gam(response~s(lobster,k=3,bs='cr')+ s(Location, Site, bs="re"),
+             family=tw(),  data=use.dat)
+
+  model.set=generate_model_set(use.dat=use.dat,
+                            test.fit=Model1,
+                            pred.vars.cont=pred.vars,
+                            pred.vars.fact=factor.vars,
+                            linear.vars="Distance",
+                            k=3,
+                            null.terms="s(Location,Site,bs='re')")
+  out.list=fit_model_set(model.set,
+                            max.models=600,
+                            parallel=FALSE)
+  names(out.list)
+  
+  out.list$failed.models # examine the list of failed models
+  mod.table=out.list$mod.data.out  # look at the model selection table
+  mod.table=mod.table[order(mod.table$AICc),]
+  mod.table$cumsum.wi=cumsum(mod.table$wi.AICc)
+  out.i=mod.table[which(mod.table$delta.AICc<=3),]
+  out.all=c(out.all,list(out.i))
+  # var.imp=c(var.imp,list(out.list$variable.importance$aic$variable.weights.raw)) #Either raw importance score
+  var.imp=c(var.imp,list(out.list$variable.importance$aic$variable.weights.raw)) #Or importance score weighted by r2
+  }
+```
 
 ### Extract Model fits and importance
 
@@ -1039,16 +1131,16 @@ combine.plot
 ```
 
     ## TableGrob (3 x 3) "arrange": 9 grobs
-    ##   z     cells    name                grob
-    ## 1 1 (1-1,1-1) arrange      gtable[layout]
-    ## 2 2 (1-1,2-2) arrange      gtable[layout]
-    ## 3 3 (1-1,3-3) arrange      gtable[layout]
-    ## 4 4 (2-2,1-1) arrange      gtable[layout]
-    ## 5 5 (2-2,2-2) arrange rect[GRID.rect.299]
-    ## 6 6 (2-2,3-3) arrange rect[GRID.rect.299]
-    ## 7 7 (3-3,1-1) arrange      gtable[layout]
-    ## 8 8 (3-3,2-2) arrange      gtable[layout]
-    ## 9 9 (3-3,3-3) arrange rect[GRID.rect.299]
+    ##   z     cells    name                 grob
+    ## 1 1 (1-1,1-1) arrange       gtable[layout]
+    ## 2 2 (1-1,2-2) arrange       gtable[layout]
+    ## 3 3 (1-1,3-3) arrange       gtable[layout]
+    ## 4 4 (2-2,1-1) arrange       gtable[layout]
+    ## 5 5 (2-2,2-2) arrange rect[GRID.rect.2764]
+    ## 6 6 (2-2,3-3) arrange rect[GRID.rect.2764]
+    ## 7 7 (3-3,1-1) arrange       gtable[layout]
+    ## 8 8 (3-3,2-2) arrange       gtable[layout]
+    ## 9 9 (3-3,3-3) arrange rect[GRID.rect.2764]
 
 ## Results and discussion
 

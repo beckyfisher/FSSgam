@@ -2,9 +2,9 @@
 
 ## Overview
 
-He we show some simpler examples of using FSSgam for different response
-distributions and particularly show the use with binomial data, which
-none of the original case studies were able to do.
+Here we show some simpler examples of using FSSgam for different
+response distributions and particularly show the use with binomial data,
+which none of the original case studies were able to do.
 
 ## R packages and data
 
@@ -106,7 +106,23 @@ str(dat)
 
 ## Example showing use of uGamm to allow fitting with gamm4
 
-We set up the necessaru predictor vectors
+[`MuMIn::uGamm()`](https://rdrr.io/pkg/MuMIn/man/updateable.html) with
+`lme4 = TRUE` fits through `gamm4`. As of `FSSgam` 1.1.0 `gamm4` is a
+suggested rather than an imported package, so installing `FSSgam` no
+longer installs `gamm4` and `lme4` with it. Install them before running
+this section:
+
+``` r
+
+install.packages("gamm4")
+```
+
+``` r
+
+library(gamm4)
+```
+
+We set up the necessary predictor vectors
 
 ``` r
 
@@ -128,6 +144,21 @@ use.dat$trials=use.dat$totalpoints
 
 Now we fit the test.fit model for all coral, with total points as
 trials, and run the FSSgam approach.
+
+``` r
+
+Model1=uGamm(cbind(successes,failures)~s(Depth,k=4,bs='cr'),
+              family=binomial(), random=~(1|Site),
+             data=use.dat,
+             lme4=TRUE)
+
+model.set=generate_model_set(use.dat=use.dat,
+                          test.fit=Model1,
+                          pred.vars.cont=cont.preds,
+                          pred.vars.fact=cat.preds)
+out.list=fit_model_set(model.set, parallel = FALSE, 
+                       report.unique.r2 = TRUE)
+```
 
 We can examine the output with:
 
@@ -177,7 +208,7 @@ knitr::kable(
 | modname | AICc | r2.vals | edf | delta.AICc | wi.AICc |
 |:---|---:|---:|---:|---:|---:|
 | Survey+av.wave.by.Survey | 5726.072 | 0.002 | 30.43 | 0.000 | 1 |
-| Depth.by.Survey+Survey | 5804.053 | 0.121 | 30.00 | 77.981 | 0 |
+| Depth.by.Survey+Survey | 5804.118 | 0.117 | 30.00 | 78.047 | 0 |
 | Survey+av.wave | 5872.776 | 0.001 | 10.00 | 146.704 | 0 |
 | Survey | 5901.816 | 0.021 | 6.00 | 175.744 | 0 |
 | Depth+Survey | 5904.288 | 0.103 | 10.00 | 178.216 | 0 |
@@ -261,7 +292,7 @@ knitr::kable(
 | modname | AICc | r2.vals | edf | delta.AICc | wi.AICc |
 |:---|---:|---:|---:|---:|---:|
 | Survey+av.wave.by.Survey | 5726.072 | 0.002 | 30.43 | 0.000 | 1 |
-| Depth.by.Survey+Survey | 5804.053 | 0.121 | 30.00 | 77.981 | 0 |
+| Depth.by.Survey+Survey | 5804.118 | 0.117 | 30.00 | 78.047 | 0 |
 | Survey+av.wave | 5872.776 | 0.001 | 10.00 | 146.704 | 0 |
 | Survey | 5901.816 | 0.021 | 6.00 | 175.744 | 0 |
 | Depth+Survey | 5904.288 | 0.103 | 10.00 | 178.216 | 0 |
@@ -307,6 +338,60 @@ use.dat=na.omit(dat[,c(null.vars,cat.preds,cont.preds,resp.vars,"totalpoints")])
 
 Now set up some objects to store the results and run the analysis
 looping through the response variables.
+
+``` r
+
+out.all=list()
+var.imp=list()
+fss.all=list()
+top.all=list()
+
+for(i in 1:length(resp.vars)){
+ use.dat$response=use.dat[,resp.vars[i]]
+ Model1=uGamm(cbind(use.dat$response,use.dat$totalpoints-use.dat$response)~s(Depth,k=4,bs='cr'),
+              family=binomial(), random=~(1|Site),
+             data=use.dat,
+             lme4=TRUE)
+
+ model.set=generate_model_set(use.dat=use.dat,
+                          test.fit=Model1,
+                          pred.vars.cont=cont.preds,
+                          pred.vars.fact=cat.preds)
+ out.list=fit_model_set(model.set)
+ fss.all=c(fss.all,list(out.list))
+ mod.table=out.list$mod.data.out
+ mod.table=mod.table[order(mod.table$AICc),]
+ out.i=mod.table
+ out.all=c(out.all,list(out.i))
+ var.imp=c(var.imp,list(out.list$variable.importance$aic$variable.weights.raw))
+ all.less.2AICc=mod.table[which(mod.table$delta.AICc<2),]
+ top.all=c(top.all,list(all.less.2AICc))
+
+ # plot the all best models
+ par(oma=c(1,1,4,1))
+ for(r in 1:nrow(all.less.2AICc)){
+ best.model.name=as.character(all.less.2AICc$modname[r])
+ best.model=out.list$success.models[[best.model.name]]
+ if(best.model.name!="null"){
+  plot(best.model$gam,all.terms=T,pages=1,residuals=T,pch=16)
+  mtext(side=3,text=resp.vars[i],outer=T)}
+ }
+}
+```
+
+![](extra-examples_files/figure-html/run-1.png)![](extra-examples_files/figure-html/run-2.png)![](extra-examples_files/figure-html/run-3.png)![](extra-examples_files/figure-html/run-4.png)![](extra-examples_files/figure-html/run-5.png)![](extra-examples_files/figure-html/run-6.png)![](extra-examples_files/figure-html/run-7.png)![](extra-examples_files/figure-html/run-8.png)
+
+``` r
+
+names(out.all)=resp.vars
+names(var.imp)=resp.vars
+names(top.all)=resp.vars
+names(fss.all)=resp.vars
+
+all.mod.fits=do.call("rbind",out.all)
+all.var.imp=do.call("rbind",var.imp)
+top.mod.fits=do.call("rbind",top.all)
+```
 
 Make a heatmap plot of the variable importance scores.
 
