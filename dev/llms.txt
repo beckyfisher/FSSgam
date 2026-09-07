@@ -114,6 +114,23 @@ The code is released under the Apache License 2.0
     See the License for the specific language governing permissions and
     limitations under the License.
 
+The contents of `publication/` are not covered by the Apache License.
+They are reproduced from the published article and its supporting
+information:
+
+> Fisher R, Wilson SK, Sin TM, Lee AC, Langlois TJ (2018). *A simple
+> function for full-subsets multiple regression in ecology with R.*
+> **Ecology and Evolution**, 8(12), 6104–6113.
+> <https://doi.org/10.1002/ece3.4134>
+
+© 2018 The Authors. *Ecology and Evolution* published by John Wiley &
+Sons Ltd. The article is open access under the terms of the [Creative
+Commons Attribution 4.0 International
+License](https://creativecommons.org/licenses/by/4.0/), which permits
+use, distribution and reproduction in any medium, provided the original
+work is properly cited. These files are redistributed here under that
+licence, with attribution given above.
+
 # 
 
 # Articles

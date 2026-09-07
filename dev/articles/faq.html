@@ -92,32 +92,32 @@ assumptions. I highly recommending fitting a reasonable
 <strong>test.fit</strong> and exploring this thoroughly to be confident
 the model has fit as you intend.</p>
 <p>There are two examples of generating <strong>test.fit</strong> in the
-supporting material. The first is in the case study 1 vignette <a href="https://github.com/beckyfisher/FSSgam/blob/master/case_study1_reef_fish.R" class="external-link uri">https://github.com/beckyfisher/FSSgam/blob/master/case_study1_reef_fish.R</a>).
-This example shows a <strong>test.fit</strong> calling the gam function
-in mgcv directly, which is necessary to use the <strong>tw()</strong>
-distribution in this example. The main things that need to be specified
-are the response variable (here called simply <strong>response</strong>
-- but this would be whatever variable you want to build the model set to
-predict), family - in this case <strong>tw()</strong>, and the data to
-use. Here we have fit one of the predictors that we think will be
-important (although that was not strictly necessary), as well as the two
-predictors that we are going to use in our null model (again, also not
-necessary, but <strong>test.fit</strong> is a good place to make sure
-your gam models are fitting as intended). Note our null model in this
-example consists of a random effect of <strong>site</strong> specified
-through <strong>s(site, bs=“re”)</strong>. Note that specifying the null
-terms in <strong>test.fit</strong> does not automatically mean the null
-terms are carried into the full subsets gam. They must also be specified
-as <strong>null.terms</strong> (see line 111 of the
-case_study1_reef_fish.R example).</p>
-<p>In the extra examples vignette <a href="https://github.com/beckyfisher/FSSgam/blob/master/extra_examples.R" class="external-link uri">https://github.com/beckyfisher/FSSgam/blob/master/extra_examples.R</a>
-you can see an alternative specification of <strong>test.fit</strong>
-using the <strong>uGamm</strong> function from the
-<strong>MuMIn</strong>. <strong>uGamm</strong> is wrapper function that
-allows <strong>gamm4</strong> model fits to be updateable and therefore
-usable by <strong>FSSgam</strong>. Here we are fitting a binomial model
-using the <strong>cbind</strong> format for <strong>successes</strong>
-and <strong>failures</strong> which must be as labelled in the
+supporting material. The first is in the <a href="case-study-1.html">case study 1 vignette</a>. This example shows a
+<strong>test.fit</strong> calling the gam function in mgcv directly,
+which is necessary to use the <strong>tw()</strong> distribution in this
+example. The main things that need to be specified are the response
+variable (here called simply <strong>response</strong> - but this would
+be whatever variable you want to build the model set to predict), family
+- in this case <strong>tw()</strong>, and the data to use. Here we have
+fit one of the predictors that we think will be important (although that
+was not strictly necessary), as well as the two predictors that we are
+going to use in our null model (again, also not necessary, but
+<strong>test.fit</strong> is a good place to make sure your gam models
+are fitting as intended). Note our null model in this example consists
+of a random effect of <strong>site</strong> specified through
+<strong>s(site, bs=“re”)</strong>. Note that specifying the null terms
+in <strong>test.fit</strong> does not automatically mean the null terms
+are carried into the full subsets gam. They must also be specified as
+<strong>null.terms</strong> (see the full subsets GAMM analysis section
+of the case study 1 vignette).</p>
+<p>In the <a href="extra-examples.html">extra examples vignette</a> you
+can see an alternative specification of <strong>test.fit</strong> using
+the <strong>uGamm</strong> function from the <strong>MuMIn</strong>.
+<strong>uGamm</strong> is wrapper function that allows
+<strong>gamm4</strong> model fits to be updateable and therefore usable
+by <strong>FSSgam</strong>. Here we are fitting a binomial model using
+the <strong>cbind</strong> format for <strong>successes</strong> and
+<strong>failures</strong> which must be as labelled in the
 <strong>use.dat</strong> data.frame. With uGamm the random effects are
 specified outside the model formula, meaning they will not be updated by
 <strong>FSSgam</strong> and must be specified exactly in the
@@ -184,15 +184,48 @@ they are fit by FSSgam.</p>
 </h2>
 <p>Those dot-case names have been renamed to
 <strong>generate_model_set</strong> and <strong>fit_model_set</strong>
-respectively, to follow modern snake_case R naming conventions. The old
-names still work exactly as before - they now simply emit a
+respectively, to follow modern snake_case R naming conventions. These
+two old names still work exactly as before - they now simply emit a
 <code><a href="https://rdrr.io/r/base/Deprecated.html" class="external-link">.Deprecated()</a></code> warning and forward all of their arguments
 straight on to the new functions - so existing scripts, including code
 from the original 2018 paper, will keep running. No argument names
-changed as part of this rename, and <strong>full.subsets.gam</strong>
-was not renamed. New code should call
-<strong>generate_model_set</strong> and <strong>fit_model_set</strong>
-directly to avoid the deprecation warning.</p>
+changed as part of this rename.</p>
+<p><strong>full.subsets.gam</strong> was not renamed and is still
+exported. It is now also available as <strong>full_subsets_gam</strong>,
+and the two are the same function.</p>
+<p>The rest of the exported functions were renamed as well, but without
+a deprecated alias, so the dot-case forms no longer exist. Code calling
+one of them will fail with a “could not find function” error. The
+replacements are:</p>
+<table class="table">
+<thead><tr class="header">
+<th>old name</th>
+<th>current name</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>check.correlations</td>
+<td>check_correlations</td>
+</tr>
+<tr class="even">
+<td>check.non.linear.correlations</td>
+<td>check_non_linear_correlations</td>
+</tr>
+<tr class="odd">
+<td>build.inclusion.mat</td>
+<td>build_inclusion_mat</td>
+</tr>
+<tr class="even">
+<td>extract.mod.dat</td>
+<td>extract_mod_dat</td>
+</tr>
+</tbody>
+</table>
+<p><strong>fit.mod.l</strong> is no longer exported at all. It was an
+internal helper and was never intended to be called directly.</p>
+<p>New code should call <strong>generate_model_set</strong> and
+<strong>fit_model_set</strong> directly to avoid the deprecation
+warning.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

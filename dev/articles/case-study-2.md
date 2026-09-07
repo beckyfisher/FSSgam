@@ -185,6 +185,16 @@ work (they now just emit a deprecation warning and forward to the new
 names), but new code should call generate_model_set/fit_model_set
 directly.
 
+It was updated again on the 7th September 2026 against FSSgam
+1.1.0.9000. The results in this case study changed at that point, and
+the change is a correction. Under FSSgam 1.0.0 the candidate models were
+fitted with a Tweedie power parameter of about 1.01 instead of the value
+estimated for the model, which inflated both the estimated degrees of
+freedom and the information criteria. The candidate set, the formulae
+and the data are identical either way; only the fitted variance function
+differed. See ‘Relationship to the published table’ below for the
+measured effect.
+
 ## Script information
 
 ### Part 1-FSS modeling
@@ -397,53 +407,96 @@ unique.vars.use
 names(out.all)=resp.vars
 names(var.imp)=resp.vars
 all.mod.fits=do.call("rbind",out.all)
+# label each row with its taxon: rbind on a named list leaves that only in the row names
+all.mod.fits$Taxa=rep(resp.vars, times=sapply(out.all, nrow))
 all.var.imp=do.call("rbind",var.imp)
 ```
 
 ``` r
 
 knitr::kable(
-  all.mod.fits,
+  all.mod.fits[, c("Taxa", "modname", "delta.AICc", "delta.BIC",
+                   "wi.AICc", "wi.BIC", "r2.vals", "edf")],
   digits = 3,
-  caption = "Summary of all fitted FSSgam models"
+  col.names = c("Taxa", "Best models", "ΔAICc", "ΔBIC", "ωAICc", "ωBIC", "R2", "EDF"),
+  row.names = FALSE,
+  caption = "Models within 3 AICc units of the best model for each taxon. Columns follow Table A4.2 of Appendix S4."
 )
 ```
 
-|  | modname | formula | AICc | BIC | r2.vals | r2.vals.unique | edf | edf.less.1 | delta.AICc | delta.BIC | wi.AICc | wi.BIC | sqrt.X4mm | sqrt.X2mm | sqrt.X1mm | sqrt.X500um | fetch | org | snapper | lobster | Status | Distance | cumsum.wi |
-|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| BDS.Distance+fetch+sqrt.X4mm | Distance+fetch+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 271.445 | 316.294 | 0.450 | NA | 22.36 | 0 | 0.000 | 0.000 | 0.468 | 0.548 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0.468 |
-| BDS.Distance+sqrt.X4mm+sqrt.X500um | Distance+sqrt.X4mm+sqrt.X500um | s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 272.957 | 318.426 | 0.531 | NA | 23.13 | 0 | 1.512 | 2.131 | 0.220 | 0.189 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0.688 |
-| BMS.Distance+fetch.by.Status+Status | Distance+fetch.by.Status+Status | s(fetch, by = Status, k = 3, bs = “cr”) + Status + Distance + s(Location, Site, bs = “re”) | 152.755 | 191.090 | 0.115 | NA | 15.89 | 0 | 0.000 | 0.000 | 0.298 | 0.443 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0.298 |
-| BMS.fetch.by.Status+org.by.Status+Status | fetch.by.Status+org.by.Status+Status | s(fetch, by = Status, k = 3, bs = “cr”) + s(org, by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 152.953 | 193.987 | 0.116 | NA | 17.39 | 0 | 0.198 | 2.896 | 0.270 | 0.104 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 0 | 0.568 |
-| BMS.Distance.t.Status+fetch.by.Status+Status | Distance.t.Status+fetch.by.Status+Status | s(fetch, by = Status, k = 3, bs = “cr”) + Distance + Status + s(Location, Site, bs = “re”) + Distance:Status | 153.709 | 193.381 | 0.115 | NA | 16.89 | 0 | 0.954 | 2.291 | 0.185 | 0.141 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0.753 |
-| CPN.Distance+sqrt.X4mm | Distance+sqrt.X4mm | s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 476.210 | 520.074 | 0.493 | NA | 20.90 | 0 | 0.000 | 1.735 | 0.059 | 0.029 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0.059 |
-| CPN.Distance+lobster+sqrt.X1mm | Distance+lobster+sqrt.X1mm | s(lobster, k = 3, bs = “cr”) + s(sqrt.X1mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 476.377 | 518.340 | 0.444 | NA | 19.05 | 0 | 0.167 | 0.000 | 0.054 | 0.069 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 0.113 |
-| CPN.Distance+fetch+sqrt.X4mm | Distance+fetch+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 476.515 | 520.509 | 0.489 | NA | 21.06 | 0 | 0.306 | 2.169 | 0.051 | 0.023 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0.164 |
-| CPN.Distance+sqrt.X1mm | Distance+sqrt.X1mm | s(sqrt.X1mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 476.800 | 518.816 | 0.454 | NA | 19.11 | 0 | 0.590 | 0.476 | 0.044 | 0.055 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0.208 |
-| CPN.Distance+snapper+sqrt.X1mm | Distance+snapper+sqrt.X1mm | s(snapper, k = 3, bs = “cr”) + s(sqrt.X1mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 477.047 | 519.148 | 0.447 | NA | 19.14 | 0 | 0.837 | 0.809 | 0.039 | 0.046 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0.247 |
-| CPN.Distance+sqrt.X1mm+Status | Distance+sqrt.X1mm+Status | s(sqrt.X1mm, k = 3, bs = “cr”) + Status + Distance + s(Location, Site, bs = “re”) | 477.137 | 519.339 | 0.453 | NA | 19.28 | 0 | 0.927 | 0.999 | 0.037 | 0.042 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0.284 |
-| CPN.lobster+sqrt.X4mm | lobster+sqrt.X4mm | s(lobster, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 477.723 | 520.201 | 0.467 | NA | 19.54 | 0 | 1.513 | 1.861 | 0.028 | 0.027 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0.312 |
-| CPN.lobster+sqrt.X4mm+sqrt.X500um | lobster+sqrt.X4mm+sqrt.X500um | s(lobster, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 477.817 | 520.638 | 0.462 | NA | 19.84 | 0 | 1.607 | 2.298 | 0.026 | 0.022 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0.338 |
-| CPN.sqrt.X4mm+sqrt.X500um | sqrt.X4mm+sqrt.X500um | s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.086 | 520.941 | 0.474 | NA | 19.90 | 0 | 1.876 | 2.602 | 0.023 | 0.019 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0.361 |
-| CPN.sqrt.X4mm | sqrt.X4mm | s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.102 | 520.668 | 0.481 | NA | 19.66 | 0 | 1.892 | 2.328 | 0.023 | 0.022 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.384 |
-| CPN.snapper+sqrt.X4mm | snapper+sqrt.X4mm | s(snapper, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.114 | 520.688 | 0.471 | NA | 19.62 | 0 | 1.905 | 2.349 | 0.023 | 0.021 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0.407 |
-| CPN.snapper+sqrt.X4mm+sqrt.X500um | snapper+sqrt.X4mm+sqrt.X500um | s(snapper, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.130 | 521.011 | 0.464 | NA | 19.87 | 0 | 1.920 | 2.671 | 0.023 | 0.018 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0.430 |
-| CPN.fetch+lobster+sqrt.X4mm | fetch+lobster+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(lobster, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.408 | 521.096 | 0.458 | NA | 19.68 | 0 | 2.198 | 2.757 | 0.020 | 0.017 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0.450 |
-| CPN.sqrt.X4mm+sqrt.X500um+Status | sqrt.X4mm+sqrt.X500um+Status | s(sqrt.X4mm, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 478.458 | 521.494 | 0.472 | NA | 20.07 | 0 | 2.249 | 3.155 | 0.019 | 0.014 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0.469 |
-| CPN.sqrt.X4mm+Status | sqrt.X4mm+Status | s(sqrt.X4mm, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 478.476 | 521.218 | 0.478 | NA | 19.82 | 0 | 2.266 | 2.878 | 0.019 | 0.016 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0.488 |
-| CPN.Distance+sqrt.X1mm.by.Status+Status | Distance+sqrt.X1mm.by.Status+Status | s(sqrt.X1mm, by = Status, k = 3, bs = “cr”) + Status + Distance + s(Location, Site, bs = “re”) | 478.527 | 521.671 | 0.459 | NA | 20.19 | 0 | 2.317 | 3.331 | 0.018 | 0.013 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0.506 |
-| CPN.fetch+sqrt.X4mm | fetch+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.561 | 521.328 | 0.476 | NA | 19.81 | 0 | 2.351 | 2.989 | 0.018 | 0.016 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0.524 |
-| CPN.Distance+sqrt.X500um | Distance+sqrt.X500um | s(sqrt.X500um, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 478.635 | 520.898 | 0.476 | NA | 19.31 | 0 | 2.425 | 2.558 | 0.018 | 0.019 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0.542 |
-| CPN.Distance+lobster+sqrt.X2mm | Distance+lobster+sqrt.X2mm | s(lobster, k = 3, bs = “cr”) + s(sqrt.X2mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 478.756 | 521.203 | 0.453 | NA | 19.53 | 0 | 2.546 | 2.864 | 0.016 | 0.017 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 0.558 |
-| CPN.fetch+snapper+sqrt.X4mm | fetch+snapper+sqrt.X4mm | s(fetch, k = 3, bs = “cr”) + s(snapper, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 478.776 | 521.622 | 0.465 | NA | 19.84 | 0 | 2.566 | 3.282 | 0.016 | 0.013 | 1 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 0.574 |
-| CPN.Distance+snapper+sqrt.X500um | Distance+snapper+sqrt.X500um | s(snapper, k = 3, bs = “cr”) + s(sqrt.X500um, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 478.801 | 521.110 | 0.466 | NA | 19.29 | 0 | 2.591 | 2.770 | 0.016 | 0.017 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | 0.590 |
-| CPN.fetch+sqrt.X4mm+Status | fetch+sqrt.X4mm+Status | s(fetch, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 478.978 | 521.900 | 0.471 | NA | 19.93 | 0 | 2.768 | 3.560 | 0.015 | 0.012 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0.605 |
-| CPN.lobster+sqrt.X1mm | lobster+sqrt.X1mm | s(lobster, k = 3, bs = “cr”) + s(sqrt.X1mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 479.069 | 519.525 | 0.420 | NA | 17.72 | 0 | 2.859 | 1.185 | 0.014 | 0.038 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0.619 |
-| CPN.Distance | Distance | Distance + s(Location, Site, bs = “re”) | 479.081 | 521.261 | 0.483 | NA | 19.27 | 0 | 2.871 | 2.921 | 0.014 | 0.016 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0.633 |
-| CPN.Distance+sqrt.X500um+Status | Distance+sqrt.X500um+Status | s(sqrt.X500um, k = 3, bs = “cr”) + Status + Distance + s(Location, Site, bs = “re”) | 479.123 | 521.614 | 0.474 | NA | 19.51 | 0 | 2.913 | 3.275 | 0.014 | 0.013 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0.647 |
-| CPN.Distance+snapper | Distance+snapper | s(snapper, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 479.210 | 521.419 | 0.474 | NA | 19.23 | 0 | 3.000 | 3.080 | 0.013 | 0.015 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0.660 |
+| Taxa | Best models | ΔAICc | ΔBIC | ωAICc | ωBIC | R2 | EDF |
+|:---|:---|---:|---:|---:|---:|---:|---:|
+| BDS | Distance+fetch+sqrt.X4mm | 0.000 | 0.000 | 0.468 | 0.548 | 0.450 | 22.36 |
+| BDS | Distance+sqrt.X4mm+sqrt.X500um | 1.512 | 2.131 | 0.220 | 0.189 | 0.531 | 23.13 |
+| BMS | Distance+Status+fetch.by.Status | 0.000 | 0.000 | 0.298 | 0.443 | 0.115 | 15.89 |
+| BMS | Status+fetch.by.Status+org.by.Status | 0.198 | 2.896 | 0.270 | 0.104 | 0.116 | 17.39 |
+| BMS | Distance.t.Status+Status+fetch.by.Status | 0.954 | 2.291 | 0.185 | 0.141 | 0.115 | 16.89 |
+| CPN | Distance+sqrt.X4mm | 0.000 | 1.735 | 0.059 | 0.029 | 0.493 | 20.90 |
+| CPN | Distance+lobster+sqrt.X1mm | 0.167 | 0.000 | 0.054 | 0.069 | 0.444 | 19.05 |
+| CPN | Distance+fetch+sqrt.X4mm | 0.306 | 2.169 | 0.051 | 0.023 | 0.489 | 21.06 |
+| CPN | Distance+sqrt.X1mm | 0.590 | 0.476 | 0.044 | 0.055 | 0.454 | 19.11 |
+| CPN | Distance+snapper+sqrt.X1mm | 0.837 | 0.809 | 0.039 | 0.046 | 0.447 | 19.14 |
+| CPN | Distance+Status+sqrt.X1mm | 0.927 | 0.999 | 0.037 | 0.042 | 0.453 | 19.28 |
+| CPN | lobster+sqrt.X4mm | 1.513 | 1.861 | 0.028 | 0.027 | 0.467 | 19.54 |
+| CPN | lobster+sqrt.X4mm+sqrt.X500um | 1.607 | 2.298 | 0.026 | 0.022 | 0.462 | 19.84 |
+| CPN | sqrt.X4mm+sqrt.X500um | 1.876 | 2.602 | 0.023 | 0.019 | 0.474 | 19.90 |
+| CPN | sqrt.X4mm | 1.892 | 2.328 | 0.023 | 0.022 | 0.481 | 19.66 |
+| CPN | snapper+sqrt.X4mm | 1.905 | 2.349 | 0.023 | 0.021 | 0.471 | 19.62 |
+| CPN | snapper+sqrt.X4mm+sqrt.X500um | 1.920 | 2.671 | 0.023 | 0.018 | 0.464 | 19.87 |
+| CPN | fetch+lobster+sqrt.X4mm | 2.198 | 2.757 | 0.020 | 0.017 | 0.458 | 19.68 |
+| CPN | Status+sqrt.X4mm+sqrt.X500um | 2.249 | 3.155 | 0.019 | 0.014 | 0.472 | 20.07 |
+| CPN | Status+sqrt.X4mm | 2.266 | 2.878 | 0.019 | 0.016 | 0.478 | 19.82 |
+| CPN | Distance+Status+sqrt.X1mm.by.Status | 2.317 | 3.331 | 0.018 | 0.013 | 0.459 | 20.19 |
+| CPN | fetch+sqrt.X4mm | 2.351 | 2.989 | 0.018 | 0.016 | 0.476 | 19.81 |
+| CPN | Distance+sqrt.X500um | 2.425 | 2.558 | 0.018 | 0.019 | 0.476 | 19.31 |
+| CPN | Distance+lobster+sqrt.X2mm | 2.546 | 2.864 | 0.016 | 0.017 | 0.453 | 19.53 |
+| CPN | fetch+snapper+sqrt.X4mm | 2.566 | 3.282 | 0.016 | 0.013 | 0.465 | 19.84 |
+| CPN | Distance+snapper+sqrt.X500um | 2.591 | 2.770 | 0.016 | 0.017 | 0.466 | 19.29 |
+| CPN | Status+fetch+sqrt.X4mm | 2.768 | 3.560 | 0.015 | 0.012 | 0.471 | 19.93 |
+| CPN | lobster+sqrt.X1mm | 2.859 | 1.185 | 0.014 | 0.038 | 0.420 | 17.72 |
+| CPN | Distance | 2.871 | 2.921 | 0.014 | 0.016 | 0.483 | 19.27 |
+| CPN | Distance+Status+sqrt.X500um | 2.913 | 3.275 | 0.014 | 0.013 | 0.474 | 19.51 |
+| CPN | Distance+snapper | 3.000 | 3.080 | 0.013 | 0.015 | 0.474 | 19.23 |
 
-Summary of all fitted FSSgam models {.table}
+Models within 3 AICc units of the best model for each taxon. Columns
+follow Table A4.2 of Appendix S4. {.table style="width:100%;"}
+
+### Relationship to the published table
+
+The table above corresponds to Table A4.2 of Appendix S4, which listed
+the models within 2 AICc units of the best model for each taxon. It is
+recomputed each time this vignette is built and will not agree digit for
+digit with the published table.
+
+**These results changed in September 2026, and the change is a
+correction.** Under `FSSgam` 1.0.0 each candidate model was fitted with
+a Tweedie power parameter of about 1.01 rather than the value estimated
+for that model. A Tweedie with the power parameter near 1 is close to a
+Poisson, so the assumed variance function was wrong, and both the
+estimated degrees of freedom and the information criteria were inflated.
+Taking the model `Distance+lobster+sqrt.X2mm` for *Pagurus
+novizelandiae* as an example, 1.0.0 reported AICc 605.50 at 24.87 edf,
+whereas fitting the identical formula to the identical data with a
+direct call to [`mgcv::gam()`](https://rdrr.io/pkg/mgcv/man/gam.html)
+gives AICc 478.76 at 19.53 edf. The current version reproduces the
+`mgcv` value exactly. The candidate set is unchanged: the same 139
+models with the same formulae are fitted either way.
+
+The practical effect is on how many models are close to the best one.
+For *Pagurus novizelandiae*, 1.0.0 placed a single model within 2 AICc
+units of the best; the corrected fit places twelve there, against the
+eighteen of the published table, with estimated degrees of freedom of
+17.7 to 21.1 against the published 17.7 to 21.5. The corrected results
+are therefore much closer to the published analysis than the ones this
+vignette previously showed. For *Dosinia subrosea* and *Myadora striata*
+the effect is smaller, two models within 2 AICc units becoming two and
+three respectively.
+
+Model names are also written differently from the published table.
+`FSSgam` now orders the terms within a model name in byte order, and the
+vignette uses the column names of the data set rather than the shortened
+labels used in the paper, so the model published as `4mm + lobster`
+appears here as `lobster+sqrt.X4mm`. This is a naming change only.
 
 ``` r
 

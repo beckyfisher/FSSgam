@@ -76,9 +76,10 @@ outputs returned by the original combined
 <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html">full.subsets.gam()</a></code> function. That function has since been
 split into <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set()</a></code>, which builds and returns
 the candidate model set, and <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set()</a></code>, which fits
-every model in that set and returns the fitted results.
-<code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html">full.subsets.gam()</a></code> itself still exists and returns the same
-combined set of outputs described here.</p>
+every model in that set and returns the fitted results. The combined
+function itself still exists, as <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full_subsets_gam.html">full_subsets_gam()</a></code> and
+under its original name <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html">full.subsets.gam()</a></code>, and returns the
+same combined set of outputs described here.</p>
 <p>The tables below reproduce the original output descriptions, split
 according to which of the two functions now returns each one — matching
 how they are accessed in the case study vignettes
@@ -109,8 +110,41 @@ cbind.</td>
 <tr class="even">
 <td>$predictor.correlations</td>
 <td>The matrix of estimated predictor correlations returned by the
-function check.correlations and used for model exclusion based on
+function check_correlations and used for model exclusion based on
 cov.cutoff (see the function-arguments vignette).</td>
+</tr>
+<tr class="odd">
+<td>$n.mods</td>
+<td>The number of candidate models in the set. Useful as a check before
+fitting, since the set grows quickly with the number of predictors and
+with <strong>max.predictors</strong>.</td>
+</tr>
+<tr class="even">
+<td>$mod.formula</td>
+<td>A list of the model formulae making up the candidate set, named by
+the model names used throughout the outputs. Note that the terms within
+a model name are written in byte order, so a model containing complexity
+and ZONE is named ZONE+complexity.</td>
+</tr>
+<tr class="odd">
+<td>$null.term.correlations</td>
+<td>The correlations between each candidate predictor and the variables
+named in <strong>null.terms</strong>, used for model exclusion based on
+<strong>null.cov.cutoff</strong> (see the function-arguments vignette).
+Variables inside a bs=‘re’ smooth are excluded from this screen and so
+do not appear here.</td>
+</tr>
+<tr class="even">
+<td>$included.vars</td>
+<td>The predictors that survived the collinearity screens and are
+present in at least one candidate model. Comparing this with the
+predictors supplied shows which were dropped.</td>
+</tr>
+<tr class="odd">
+<td>$test.fit</td>
+<td>The test model fit supplied by the user, retained so that
+fit_model_set() can update it for each candidate model without the user
+passing it again.</td>
 </tr>
 </tbody>
 </table>
@@ -133,21 +167,25 @@ cov.cutoff (see the function-arguments vignette).</td>
 <td>A data.frame that contains the statistics associated with each model
 fit. This includes AICc and BIC, delta values (e.g. AICc-(min(AICc))),
 corresponding weight (omega_i) values <span class="citation">(Burnham
-and Anderson 2002)</span>, an estimate of the model R2, and a column for
-each of the included predictor variables containing either 0 (variable
-not included in the model) or 1 (variable is present in the model). Use
-of BIC in information theoretic approaches has been heavily criticised
-because of the inherent assumption of BIC that there is a “true” model
-that is represented in the candidate set <span class="citation">(Anderson and Burnham 2002)</span>. Rather than decide
-a-priori which model selection tool users should adopt, both AICc and
-BIC are supplied as part of the function outputs. To simplify output,
-only AICc and AICc based model weights, rather than AIC, are included as
-these are asymptotically equivalent at large sample sizes, and for small
-sample sizes AICc should be used in any case. Calculating R2 values is
-non-trivial for mixed models, especially non-gaussian cases. A range of
-methods for estimating R2 are supplied (see <code>r2.type</code> in the
-function-arguments vignette), as in our experience a single method
-rarely performs adequately across all scenarios.</td>
+and Anderson 2002)</span>, an estimate of the model R2 (r2.vals, and
+r2.vals.unique where report.unique.r2 was set), the estimated degrees of
+freedom (edf, and edf.less.1 giving the count of smooth terms whose edf
+is below 1), and a column for each of the included predictor variables
+containing either 0 (variable not included in the model) or 1 (variable
+is present in the model). Use of BIC in information theoretic approaches
+has been heavily criticised because of the inherent assumption of BIC
+that there is a “true” model that is represented in the candidate set
+<span class="citation">(Anderson and Burnham 2002)</span>. Rather than
+decide a-priori which model selection tool users should adopt, both AICc
+and BIC are supplied as part of the function outputs. To simplify
+output, only AICc and AICc based model weights, rather than AIC, are
+included as these are asymptotically equivalent at large sample sizes,
+and for small sample sizes AICc should be used in any case. Calculating
+R2 values is non-trivial for mixed models, especially non-gaussian
+cases. A range of methods for estimating R2 are supplied (see
+<code>r2.type</code> in the function-arguments vignette), as in our
+experience a single method rarely performs adequately across all
+scenarios.</td>
 </tr>
 <tr class="even">
 <td>$failed.models</td>

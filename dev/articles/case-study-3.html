@@ -274,7 +274,7 @@ this is done.</p>
 <span><span class="co">## Sex           0.002458829 0.01067372 1.000000000 0.04597970    0.99999995</span></span>
 <span><span class="co">## Species       0.035772358 0.04418362 0.045980185 1.00000000    0.99999995</span></span>
 <span><span class="co">## Sex.I.Species 0.036180060 0.05979362 0.707483898 0.70747167    1.00000000</span></span></code></pre>
-<p>Examine the model table. Note that the bet model includes all of the
+<p>Examine the model table. Note that the best model includes all of the
 predictors, with interactions between lunar date and species, month and
 species, and an additive effect of Sex.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -283,450 +283,528 @@ species, and an additive effect of Sex.</p>
 <span></span>
 <span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="va">mod.table</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">modname</span>, <span class="va">AICc</span>, <span class="va">r2.vals</span>, <span class="va">edf</span>, <span class="va">delta.AICc</span>, <span class="va">wi.AICc</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">modname</span>, <span class="va">delta.AICc</span>, <span class="va">delta.BIC</span>, <span class="va">wi.AICc</span>, <span class="va">wi.BIC</span>, <span class="va">r2.vals</span>, <span class="va">edf</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="va">tab</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  caption <span class="op">=</span> <span class="st">"Model comparison summary based on AICc"</span></span>
+<span>  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Model"</span>, <span class="st">"ΔAICc"</span>, <span class="st">"ΔBIC"</span>, <span class="st">"ωAICc"</span>, <span class="st">"ωBIC"</span>, <span class="st">"R2"</span>, <span class="st">"Total edf"</span><span class="op">)</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Model comparison summary. Columns follow Table A5.1 of Appendix S5, which published the top six rows of this table."</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<caption>Model comparison summary based on AICc</caption>
+<caption>Model comparison summary. Columns follow Table A5.1 of Appendix
+S5, which published the top six rows of this table.</caption>
 <colgroup>
 <col width="60%">
-<col width="8%">
+<col width="7%">
 <col width="7%">
 <col width="5%">
-<col width="10%">
-<col width="7%">
+<col width="4%">
+<col width="5%">
+<col width="9%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">modname</th>
-<th align="right">AICc</th>
-<th align="right">r2.vals</th>
-<th align="right">edf</th>
-<th align="right">delta.AICc</th>
-<th align="right">wi.AICc</th>
+<th align="left">Model</th>
+<th align="right">ΔAICc</th>
+<th align="right">ΔBIC</th>
+<th align="right">ωAICc</th>
+<th align="right">ωBIC</th>
+<th align="right">R2</th>
+<th align="right">Total edf</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">lunar.date.by.Species+month.by.Species+Sex+Species</td>
-<td align="right">7233.999</td>
-<td align="right">0.276</td>
-<td align="right">13.96</td>
+<td align="left">Sex+Species+lunar.date.by.Species+month.by.Species</td>
+<td align="right">0.000</td>
 <td align="right">0.000</td>
 <td align="right">0.998</td>
+<td align="right">1</td>
+<td align="right">0.276</td>
+<td align="right">13.96</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date.by.Sex.I.Species+month.by.Sex.I.Species+Sex.I.Species</td>
-<td align="right">7246.967</td>
+<td align="left">Sex.I.Species+lunar.date.by.Sex.I.Species+month.by.Sex.I.Species</td>
+<td align="right">12.968</td>
+<td align="right">53.965</td>
+<td align="right">0.002</td>
+<td align="right">0</td>
 <td align="right">0.273</td>
 <td align="right">23.26</td>
-<td align="right">12.968</td>
-<td align="right">0.002</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.by.Species+month.by.Species+Species</td>
-<td align="right">7296.470</td>
+<td align="left">Species+lunar.date.by.Species+month.by.Species</td>
+<td align="right">62.471</td>
+<td align="right">57.100</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.228</td>
 <td align="right">12.88</td>
-<td align="right">62.471</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date.by.Species+month+Sex+Species</td>
-<td align="right">7339.484</td>
+<td align="left">Sex+Species+lunar.date.by.Species+month</td>
+<td align="right">105.484</td>
+<td align="right">91.806</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.208</td>
 <td align="right">11.21</td>
-<td align="right">105.484</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date+month.by.Species+Sex+Species</td>
-<td align="right">7342.382</td>
+<td align="left">Sex+Species+lunar.date+month.by.Species</td>
+<td align="right">108.383</td>
+<td align="right">94.942</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.224</td>
 <td align="right">11.25</td>
-<td align="right">108.383</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date.by.Sex+month.by.Species+Sex+Species</td>
-<td align="right">7343.588</td>
+<td align="left">Sex+Species+lunar.date.by.Sex+month.by.Species</td>
+<td align="right">109.589</td>
+<td align="right">109.881</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.223</td>
 <td align="right">14.02</td>
-<td align="right">109.589</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.by.Species+month.by.Sex+Sex+Species</td>
-<td align="right">7344.032</td>
+<td align="left">Sex+Species+lunar.date.by.Species+month.by.Sex</td>
+<td align="right">110.033</td>
+<td align="right">107.732</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.207</td>
 <td align="right">13.50</td>
-<td align="right">110.033</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date.by.Sex.I.Species+month+Sex.I.Species</td>
-<td align="right">7344.862</td>
+<td align="left">Sex.I.Species+lunar.date.by.Sex.I.Species+month</td>
+<td align="right">110.863</td>
+<td align="right">116.478</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.205</td>
 <td align="right">16.10</td>
-<td align="right">110.863</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date+month.by.Sex.I.Species+Sex.I.Species</td>
-<td align="right">7348.601</td>
+<td align="left">Sex.I.Species+lunar.date+month.by.Sex.I.Species</td>
+<td align="right">114.602</td>
+<td align="right">127.534</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.222</td>
 <td align="right">16.58</td>
-<td align="right">114.602</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date.by.Species+Sex+Species</td>
-<td align="right">7348.865</td>
+<td align="left">Sex+Species+lunar.date.by.Species</td>
+<td align="right">114.866</td>
+<td align="right">88.704</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.198</td>
 <td align="right">8.70</td>
-<td align="right">114.866</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.by.Sex.I.Species+Sex.I.Species</td>
-<td align="right">7354.790</td>
+<td align="left">Sex.I.Species+lunar.date.by.Sex.I.Species</td>
+<td align="right">120.791</td>
+<td align="right">113.486</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.194</td>
 <td align="right">13.49</td>
-<td align="right">120.791</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">month.by.Species+Sex+Species</td>
-<td align="right">7378.703</td>
+<td align="left">Sex+Species+month.by.Species</td>
+<td align="right">144.704</td>
+<td align="right">115.642</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.189</td>
 <td align="right">8.11</td>
-<td align="right">144.704</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">month.by.Sex.I.Species+Sex.I.Species</td>
-<td align="right">7384.738</td>
+<td align="left">Sex.I.Species+month.by.Sex.I.Species</td>
+<td align="right">150.739</td>
+<td align="right">147.854</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.189</td>
 <td align="right">13.38</td>
-<td align="right">150.739</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date.te.month+Sex.I.Species</td>
-<td align="right">7384.896</td>
+<td align="left">Sex.I.Species+lunar.date.te.month</td>
+<td align="right">150.897</td>
+<td align="right">166.830</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.206</td>
 <td align="right">17.18</td>
-<td align="right">150.897</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.te.month+Sex+Species</td>
-<td align="right">7386.138</td>
+<td align="left">Sex+Species+lunar.date.te.month</td>
+<td align="right">152.139</td>
+<td align="right">163.268</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.212</td>
 <td align="right">16.21</td>
-<td align="right">152.139</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date+month.by.Species+Species</td>
-<td align="right">7401.838</td>
+<td align="left">Species+lunar.date+month.by.Species</td>
+<td align="right">167.839</td>
+<td align="right">148.702</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.173</td>
 <td align="right">10.11</td>
-<td align="right">167.839</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.by.Species+month+Species</td>
-<td align="right">7408.180</td>
+<td align="left">Species+lunar.date.by.Species+month</td>
+<td align="right">174.181</td>
+<td align="right">154.974</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.152</td>
 <td align="right">10.09</td>
-<td align="right">174.181</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date.by.Species+Species</td>
-<td align="right">7419.826</td>
+<td align="left">Species+lunar.date.by.Species</td>
+<td align="right">185.827</td>
+<td align="right">154.586</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.140</td>
 <td align="right">7.67</td>
-<td align="right">185.827</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date+month+Sex.I.Species</td>
-<td align="right">7425.448</td>
+<td align="left">Sex.I.Species+lunar.date+month</td>
+<td align="right">191.448</td>
+<td align="right">170.527</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.163</td>
 <td align="right">9.75</td>
-<td align="right">191.448</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date+month+Sex+Species</td>
-<td align="right">7426.179</td>
+<td align="left">Sex+Species+lunar.date+month</td>
+<td align="right">192.180</td>
+<td align="right">166.322</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.168</td>
 <td align="right">8.76</td>
-<td align="right">192.180</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.by.Sex+month+Sex+Species</td>
-<td align="right">7428.421</td>
+<td align="left">Sex+Species+lunar.date.by.Sex+month</td>
+<td align="right">194.422</td>
+<td align="right">181.995</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.166</td>
 <td align="right">11.46</td>
-<td align="right">194.422</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date+month.by.Sex+Sex+Species</td>
-<td align="right">7430.460</td>
+<td align="left">Sex+Species+lunar.date+month.by.Sex</td>
+<td align="right">196.460</td>
+<td align="right">182.529</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.168</td>
 <td align="right">11.16</td>
-<td align="right">196.460</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.by.Sex+month.by.Sex+Sex+Species</td>
-<td align="right">7432.573</td>
+<td align="left">Sex+Species+lunar.date.by.Sex+month.by.Sex</td>
+<td align="right">198.574</td>
+<td align="right">198.001</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.167</td>
 <td align="right">13.85</td>
-<td align="right">198.574</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date+Sex.I.Species</td>
-<td align="right">7436.578</td>
+<td align="left">Sex.I.Species+lunar.date</td>
+<td align="right">202.578</td>
+<td align="right">167.475</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.149</td>
 <td align="right">6.90</td>
-<td align="right">202.578</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date+Sex+Species</td>
-<td align="right">7437.742</td>
+<td align="left">Sex+Species+lunar.date</td>
+<td align="right">203.743</td>
+<td align="right">163.655</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.154</td>
 <td align="right">5.90</td>
-<td align="right">203.743</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">month.by.Species+Species</td>
-<td align="right">7438.992</td>
+<td align="left">Species+month.by.Species</td>
+<td align="right">204.993</td>
+<td align="right">170.650</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.137</td>
 <td align="right">7.05</td>
-<td align="right">204.993</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.by.Sex+Sex+Species</td>
-<td align="right">7440.063</td>
+<td align="left">Sex+Species+lunar.date.by.Sex</td>
+<td align="right">206.064</td>
+<td align="right">178.936</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.152</td>
 <td align="right">8.50</td>
-<td align="right">206.064</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date.te.month+Sex</td>
-<td align="right">7446.902</td>
+<td align="left">Sex+lunar.date.te.month</td>
+<td align="right">212.902</td>
+<td align="right">218.573</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.158</td>
 <td align="right">15.11</td>
-<td align="right">212.902</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.te.month+Species</td>
-<td align="right">7454.611</td>
+<td align="left">Species+lunar.date.te.month</td>
+<td align="right">220.611</td>
+<td align="right">225.634</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.150</td>
 <td align="right">14.98</td>
-<td align="right">220.611</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">month+Sex.I.Species</td>
-<td align="right">7460.792</td>
+<td align="left">Sex.I.Species+month</td>
+<td align="right">226.793</td>
+<td align="right">190.814</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.128</td>
 <td align="right">6.72</td>
-<td align="right">226.793</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">month+Sex+Species</td>
-<td align="right">7461.154</td>
+<td align="left">Sex+Species+month</td>
+<td align="right">227.154</td>
+<td align="right">186.260</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.133</td>
 <td align="right">5.74</td>
-<td align="right">227.154</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">month.by.Sex+Sex+Species</td>
-<td align="right">7464.742</td>
+<td align="left">Sex+Species+month.by.Sex</td>
+<td align="right">230.742</td>
+<td align="right">196.402</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.131</td>
 <td align="right">7.05</td>
-<td align="right">230.742</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">Sex.I.Species</td>
-<td align="right">7467.887</td>
+<td align="right">233.888</td>
+<td align="right">184.327</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.118</td>
 <td align="right">4.00</td>
-<td align="right">233.888</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">Sex+Species</td>
-<td align="right">7468.607</td>
+<td align="right">234.607</td>
+<td align="right">180.053</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.123</td>
 <td align="right">3.00</td>
-<td align="right">234.607</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date+month+Sex</td>
-<td align="right">7485.644</td>
+<td align="left">Sex+lunar.date+month</td>
+<td align="right">251.645</td>
+<td align="right">220.853</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.116</td>
 <td align="right">7.76</td>
-<td align="right">251.645</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date.by.Sex+month+Sex</td>
-<td align="right">7489.178</td>
+<td align="left">Sex+lunar.date.by.Sex+month</td>
+<td align="right">255.179</td>
+<td align="right">237.774</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.115</td>
 <td align="right">10.46</td>
-<td align="right">255.179</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date+month.by.Sex+Sex</td>
-<td align="right">7490.153</td>
+<td align="left">Sex+lunar.date+month.by.Sex</td>
+<td align="right">256.153</td>
+<td align="right">237.300</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.116</td>
 <td align="right">10.17</td>
-<td align="right">256.153</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date+month+Species</td>
-<td align="right">7490.714</td>
+<td align="left">Species+lunar.date+month</td>
+<td align="right">256.715</td>
+<td align="right">225.627</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.110</td>
 <td align="right">7.71</td>
-<td align="right">256.715</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.by.Sex+month.by.Sex+Sex</td>
-<td align="right">7493.776</td>
+<td align="left">Sex+lunar.date.by.Sex+month.by.Sex</td>
+<td align="right">259.776</td>
+<td align="right">254.307</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.115</td>
 <td align="right">12.86</td>
-<td align="right">259.776</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date+Sex</td>
-<td align="right">7495.473</td>
+<td align="left">Sex+lunar.date</td>
+<td align="right">261.474</td>
+<td align="right">216.403</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.102</td>
 <td align="right">4.90</td>
-<td align="right">261.474</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">lunar.date.by.Sex+Sex</td>
-<td align="right">7499.000</td>
+<td align="left">Sex+lunar.date.by.Sex</td>
+<td align="right">265.001</td>
+<td align="right">232.853</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.101</td>
 <td align="right">7.49</td>
-<td align="right">265.001</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">lunar.date+Species</td>
-<td align="right">7504.163</td>
+<td align="left">Species+lunar.date</td>
+<td align="right">270.164</td>
+<td align="right">225.087</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.093</td>
 <td align="right">4.90</td>
-<td align="right">270.164</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">lunar.date.te.month</td>
-<td align="right">7521.973</td>
+<td align="right">287.974</td>
+<td align="right">287.493</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.089</td>
 <td align="right">13.87</td>
-<td align="right">287.974</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">month+Sex</td>
-<td align="right">7522.975</td>
+<td align="left">Sex+month</td>
+<td align="right">288.976</td>
+<td align="right">243.208</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.079</td>
 <td align="right">4.76</td>
-<td align="right">288.976</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">month+Species</td>
-<td align="right">7525.747</td>
+<td align="left">Species+month</td>
+<td align="right">291.747</td>
+<td align="right">245.391</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.074</td>
 <td align="right">4.64</td>
-<td align="right">291.747</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">month.by.Sex+Sex</td>
-<td align="right">7526.348</td>
+<td align="left">Sex+month.by.Sex</td>
+<td align="right">292.349</td>
+<td align="right">252.147</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.076</td>
 <td align="right">5.88</td>
-<td align="right">292.349</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">Sex</td>
-<td align="right">7527.908</td>
+<td align="right">293.909</td>
+<td align="right">234.357</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.068</td>
 <td align="right">2.00</td>
-<td align="right">293.909</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">Species</td>
-<td align="right">7535.403</td>
+<td align="right">301.404</td>
+<td align="right">241.852</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.061</td>
 <td align="right">2.00</td>
-<td align="right">301.404</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">lunar.date+month</td>
-<td align="right">7556.756</td>
+<td align="right">322.757</td>
+<td align="right">286.821</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.052</td>
 <td align="right">6.73</td>
-<td align="right">322.757</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">lunar.date</td>
-<td align="right">7568.113</td>
+<td align="right">334.114</td>
+<td align="right">284.047</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.035</td>
 <td align="right">3.90</td>
-<td align="right">334.114</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">month</td>
-<td align="right">7594.033</td>
+<td align="right">360.034</td>
+<td align="right">309.002</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.013</td>
 <td align="right">3.71</td>
-<td align="right">360.034</td>
-<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">null</td>
-<td align="right">7600.418</td>
+<td align="right">366.419</td>
+<td align="right">301.866</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
 <td align="right">0.000</td>
 <td align="right">1.00</td>
-<td align="right">366.419</td>
-<td align="right">0.000</td>
 </tr>
 </tbody>
 </table>
+<div class="section level3">
+<h3 id="relationship-to-the-published-table">Relationship to the published table<a class="anchor" aria-label="anchor" href="#relationship-to-the-published-table"></a>
+</h3>
+<p>The first six rows of the table above correspond to Table A5.1 of
+Appendix S5. The best-supported model is the same one, and its
+statistics reproduce the published values exactly at the precision they
+were published: ΔAICc 0.0, ωAICc 0.998, R2 0.28 and a total edf of 14.0.
+R2 and total edf also reproduce for the remaining five rows.</p>
+<p>The ΔAICc values for those five rows differ a little from the
+published ones (12.4, 64.1, 106.8, 111.5 and 111.5 published, against
+13.0, 62.5, 105.5, 108.4 and 109.6 here), which is enough to exchange
+the fifth and sixth rows. The difference is attributable to changes in
+<code>mgcv</code> and R since 2018 rather than to <code>FSSgam</code>:
+running this code against <code>FSSgam</code> 1.0.0 and against the
+current development version on the same R and <code>mgcv</code> gives
+identical values for every one of the 52 candidate models.</p>
+<p><code>FSSgam</code> now writes the terms within a model name in byte
+order, so the model published as
+<code>Sex + Species + lunar date × Species + month × Species</code>
+appears here as
+<code>Sex+Species+lunar.date.by.Species+month.by.Species</code>. This is
+a naming change only.</p>
 <p>Examine the variable importance scores. In this case study, variable
 importance is not particularly interesting because all predictors are in
 the top model, and they are therefore all 1.</p>
@@ -739,6 +817,7 @@ the top model, and they are therefore all 1.</p>
 <p><img src="case-study-3_files/figure-html/importance-1.png" class="r-plt" alt="" width="700"></p>
 <p>Predictor correlations were minimal, and all candidate models were
 retained in the model set.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="bestsupported-model">Best‑supported model<a class="anchor" aria-label="anchor" href="#bestsupported-model"></a>
@@ -757,7 +836,7 @@ using:</p>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Method: GCV   Optimizer: outer newton</span></span>
 <span><span class="co">## full convergence after 8 iterations.</span></span>
-<span><span class="co">## Gradient range [6.886353e-11,6.377734e-07]</span></span>
+<span><span class="co">## Gradient range [6.886352e-11,6.377734e-07]</span></span>
 <span><span class="co">## (score 0.3332369 &amp; scale 0.3350731).</span></span>
 <span><span class="co">## Hessian positive definite, eigenvalue range [7.71641e-06,0.0001997042].</span></span>
 <span><span class="co">## Model rank =  15 / 15 </span></span>

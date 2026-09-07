@@ -221,7 +221,7 @@ model.set$predictor.correlations
     ## Species       0.035772358 0.04418362 0.045980185 1.00000000    0.99999995
     ## Sex.I.Species 0.036180060 0.05979362 0.707483898 0.70747167    1.00000000
 
-Examine the model table. Note that the bet model includes all of the
+Examine the model table. Note that the best model includes all of the
 predictors, with interactions between lunar date and species, month and
 species, and an additive effect of Sex.
 
@@ -232,71 +232,95 @@ mod.table <- mod.table[order(mod.table$AICc), ]
 
 tab <- mod.table |>
   as_tibble() |> 
-  select(modname, AICc, r2.vals, edf, delta.AICc, wi.AICc)
+  select(modname, delta.AICc, delta.BIC, wi.AICc, wi.BIC, r2.vals, edf)
 
 knitr::kable(
   tab,
   digits = 3,
-  caption = "Model comparison summary based on AICc"
+  col.names = c("Model", "ΔAICc", "ΔBIC", "ωAICc", "ωBIC", "R2", "Total edf"),
+  caption = "Model comparison summary. Columns follow Table A5.1 of Appendix S5, which published the top six rows of this table."
 )
 ```
 
-| modname | AICc | r2.vals | edf | delta.AICc | wi.AICc |
-|:---|---:|---:|---:|---:|---:|
-| lunar.date.by.Species+month.by.Species+Sex+Species | 7233.999 | 0.276 | 13.96 | 0.000 | 0.998 |
-| lunar.date.by.Sex.I.Species+month.by.Sex.I.Species+Sex.I.Species | 7246.967 | 0.273 | 23.26 | 12.968 | 0.002 |
-| lunar.date.by.Species+month.by.Species+Species | 7296.470 | 0.228 | 12.88 | 62.471 | 0.000 |
-| lunar.date.by.Species+month+Sex+Species | 7339.484 | 0.208 | 11.21 | 105.484 | 0.000 |
-| lunar.date+month.by.Species+Sex+Species | 7342.382 | 0.224 | 11.25 | 108.383 | 0.000 |
-| lunar.date.by.Sex+month.by.Species+Sex+Species | 7343.588 | 0.223 | 14.02 | 109.589 | 0.000 |
-| lunar.date.by.Species+month.by.Sex+Sex+Species | 7344.032 | 0.207 | 13.50 | 110.033 | 0.000 |
-| lunar.date.by.Sex.I.Species+month+Sex.I.Species | 7344.862 | 0.205 | 16.10 | 110.863 | 0.000 |
-| lunar.date+month.by.Sex.I.Species+Sex.I.Species | 7348.601 | 0.222 | 16.58 | 114.602 | 0.000 |
-| lunar.date.by.Species+Sex+Species | 7348.865 | 0.198 | 8.70 | 114.866 | 0.000 |
-| lunar.date.by.Sex.I.Species+Sex.I.Species | 7354.790 | 0.194 | 13.49 | 120.791 | 0.000 |
-| month.by.Species+Sex+Species | 7378.703 | 0.189 | 8.11 | 144.704 | 0.000 |
-| month.by.Sex.I.Species+Sex.I.Species | 7384.738 | 0.189 | 13.38 | 150.739 | 0.000 |
-| lunar.date.te.month+Sex.I.Species | 7384.896 | 0.206 | 17.18 | 150.897 | 0.000 |
-| lunar.date.te.month+Sex+Species | 7386.138 | 0.212 | 16.21 | 152.139 | 0.000 |
-| lunar.date+month.by.Species+Species | 7401.838 | 0.173 | 10.11 | 167.839 | 0.000 |
-| lunar.date.by.Species+month+Species | 7408.180 | 0.152 | 10.09 | 174.181 | 0.000 |
-| lunar.date.by.Species+Species | 7419.826 | 0.140 | 7.67 | 185.827 | 0.000 |
-| lunar.date+month+Sex.I.Species | 7425.448 | 0.163 | 9.75 | 191.448 | 0.000 |
-| lunar.date+month+Sex+Species | 7426.179 | 0.168 | 8.76 | 192.180 | 0.000 |
-| lunar.date.by.Sex+month+Sex+Species | 7428.421 | 0.166 | 11.46 | 194.422 | 0.000 |
-| lunar.date+month.by.Sex+Sex+Species | 7430.460 | 0.168 | 11.16 | 196.460 | 0.000 |
-| lunar.date.by.Sex+month.by.Sex+Sex+Species | 7432.573 | 0.167 | 13.85 | 198.574 | 0.000 |
-| lunar.date+Sex.I.Species | 7436.578 | 0.149 | 6.90 | 202.578 | 0.000 |
-| lunar.date+Sex+Species | 7437.742 | 0.154 | 5.90 | 203.743 | 0.000 |
-| month.by.Species+Species | 7438.992 | 0.137 | 7.05 | 204.993 | 0.000 |
-| lunar.date.by.Sex+Sex+Species | 7440.063 | 0.152 | 8.50 | 206.064 | 0.000 |
-| lunar.date.te.month+Sex | 7446.902 | 0.158 | 15.11 | 212.902 | 0.000 |
-| lunar.date.te.month+Species | 7454.611 | 0.150 | 14.98 | 220.611 | 0.000 |
-| month+Sex.I.Species | 7460.792 | 0.128 | 6.72 | 226.793 | 0.000 |
-| month+Sex+Species | 7461.154 | 0.133 | 5.74 | 227.154 | 0.000 |
-| month.by.Sex+Sex+Species | 7464.742 | 0.131 | 7.05 | 230.742 | 0.000 |
-| Sex.I.Species | 7467.887 | 0.118 | 4.00 | 233.888 | 0.000 |
-| Sex+Species | 7468.607 | 0.123 | 3.00 | 234.607 | 0.000 |
-| lunar.date+month+Sex | 7485.644 | 0.116 | 7.76 | 251.645 | 0.000 |
-| lunar.date.by.Sex+month+Sex | 7489.178 | 0.115 | 10.46 | 255.179 | 0.000 |
-| lunar.date+month.by.Sex+Sex | 7490.153 | 0.116 | 10.17 | 256.153 | 0.000 |
-| lunar.date+month+Species | 7490.714 | 0.110 | 7.71 | 256.715 | 0.000 |
-| lunar.date.by.Sex+month.by.Sex+Sex | 7493.776 | 0.115 | 12.86 | 259.776 | 0.000 |
-| lunar.date+Sex | 7495.473 | 0.102 | 4.90 | 261.474 | 0.000 |
-| lunar.date.by.Sex+Sex | 7499.000 | 0.101 | 7.49 | 265.001 | 0.000 |
-| lunar.date+Species | 7504.163 | 0.093 | 4.90 | 270.164 | 0.000 |
-| lunar.date.te.month | 7521.973 | 0.089 | 13.87 | 287.974 | 0.000 |
-| month+Sex | 7522.975 | 0.079 | 4.76 | 288.976 | 0.000 |
-| month+Species | 7525.747 | 0.074 | 4.64 | 291.747 | 0.000 |
-| month.by.Sex+Sex | 7526.348 | 0.076 | 5.88 | 292.349 | 0.000 |
-| Sex | 7527.908 | 0.068 | 2.00 | 293.909 | 0.000 |
-| Species | 7535.403 | 0.061 | 2.00 | 301.404 | 0.000 |
-| lunar.date+month | 7556.756 | 0.052 | 6.73 | 322.757 | 0.000 |
-| lunar.date | 7568.113 | 0.035 | 3.90 | 334.114 | 0.000 |
-| month | 7594.033 | 0.013 | 3.71 | 360.034 | 0.000 |
-| null | 7600.418 | 0.000 | 1.00 | 366.419 | 0.000 |
+| Model | ΔAICc | ΔBIC | ωAICc | ωBIC | R2 | Total edf |
+|:---|---:|---:|---:|---:|---:|---:|
+| Sex+Species+lunar.date.by.Species+month.by.Species | 0.000 | 0.000 | 0.998 | 1 | 0.276 | 13.96 |
+| Sex.I.Species+lunar.date.by.Sex.I.Species+month.by.Sex.I.Species | 12.968 | 53.965 | 0.002 | 0 | 0.273 | 23.26 |
+| Species+lunar.date.by.Species+month.by.Species | 62.471 | 57.100 | 0.000 | 0 | 0.228 | 12.88 |
+| Sex+Species+lunar.date.by.Species+month | 105.484 | 91.806 | 0.000 | 0 | 0.208 | 11.21 |
+| Sex+Species+lunar.date+month.by.Species | 108.383 | 94.942 | 0.000 | 0 | 0.224 | 11.25 |
+| Sex+Species+lunar.date.by.Sex+month.by.Species | 109.589 | 109.881 | 0.000 | 0 | 0.223 | 14.02 |
+| Sex+Species+lunar.date.by.Species+month.by.Sex | 110.033 | 107.732 | 0.000 | 0 | 0.207 | 13.50 |
+| Sex.I.Species+lunar.date.by.Sex.I.Species+month | 110.863 | 116.478 | 0.000 | 0 | 0.205 | 16.10 |
+| Sex.I.Species+lunar.date+month.by.Sex.I.Species | 114.602 | 127.534 | 0.000 | 0 | 0.222 | 16.58 |
+| Sex+Species+lunar.date.by.Species | 114.866 | 88.704 | 0.000 | 0 | 0.198 | 8.70 |
+| Sex.I.Species+lunar.date.by.Sex.I.Species | 120.791 | 113.486 | 0.000 | 0 | 0.194 | 13.49 |
+| Sex+Species+month.by.Species | 144.704 | 115.642 | 0.000 | 0 | 0.189 | 8.11 |
+| Sex.I.Species+month.by.Sex.I.Species | 150.739 | 147.854 | 0.000 | 0 | 0.189 | 13.38 |
+| Sex.I.Species+lunar.date.te.month | 150.897 | 166.830 | 0.000 | 0 | 0.206 | 17.18 |
+| Sex+Species+lunar.date.te.month | 152.139 | 163.268 | 0.000 | 0 | 0.212 | 16.21 |
+| Species+lunar.date+month.by.Species | 167.839 | 148.702 | 0.000 | 0 | 0.173 | 10.11 |
+| Species+lunar.date.by.Species+month | 174.181 | 154.974 | 0.000 | 0 | 0.152 | 10.09 |
+| Species+lunar.date.by.Species | 185.827 | 154.586 | 0.000 | 0 | 0.140 | 7.67 |
+| Sex.I.Species+lunar.date+month | 191.448 | 170.527 | 0.000 | 0 | 0.163 | 9.75 |
+| Sex+Species+lunar.date+month | 192.180 | 166.322 | 0.000 | 0 | 0.168 | 8.76 |
+| Sex+Species+lunar.date.by.Sex+month | 194.422 | 181.995 | 0.000 | 0 | 0.166 | 11.46 |
+| Sex+Species+lunar.date+month.by.Sex | 196.460 | 182.529 | 0.000 | 0 | 0.168 | 11.16 |
+| Sex+Species+lunar.date.by.Sex+month.by.Sex | 198.574 | 198.001 | 0.000 | 0 | 0.167 | 13.85 |
+| Sex.I.Species+lunar.date | 202.578 | 167.475 | 0.000 | 0 | 0.149 | 6.90 |
+| Sex+Species+lunar.date | 203.743 | 163.655 | 0.000 | 0 | 0.154 | 5.90 |
+| Species+month.by.Species | 204.993 | 170.650 | 0.000 | 0 | 0.137 | 7.05 |
+| Sex+Species+lunar.date.by.Sex | 206.064 | 178.936 | 0.000 | 0 | 0.152 | 8.50 |
+| Sex+lunar.date.te.month | 212.902 | 218.573 | 0.000 | 0 | 0.158 | 15.11 |
+| Species+lunar.date.te.month | 220.611 | 225.634 | 0.000 | 0 | 0.150 | 14.98 |
+| Sex.I.Species+month | 226.793 | 190.814 | 0.000 | 0 | 0.128 | 6.72 |
+| Sex+Species+month | 227.154 | 186.260 | 0.000 | 0 | 0.133 | 5.74 |
+| Sex+Species+month.by.Sex | 230.742 | 196.402 | 0.000 | 0 | 0.131 | 7.05 |
+| Sex.I.Species | 233.888 | 184.327 | 0.000 | 0 | 0.118 | 4.00 |
+| Sex+Species | 234.607 | 180.053 | 0.000 | 0 | 0.123 | 3.00 |
+| Sex+lunar.date+month | 251.645 | 220.853 | 0.000 | 0 | 0.116 | 7.76 |
+| Sex+lunar.date.by.Sex+month | 255.179 | 237.774 | 0.000 | 0 | 0.115 | 10.46 |
+| Sex+lunar.date+month.by.Sex | 256.153 | 237.300 | 0.000 | 0 | 0.116 | 10.17 |
+| Species+lunar.date+month | 256.715 | 225.627 | 0.000 | 0 | 0.110 | 7.71 |
+| Sex+lunar.date.by.Sex+month.by.Sex | 259.776 | 254.307 | 0.000 | 0 | 0.115 | 12.86 |
+| Sex+lunar.date | 261.474 | 216.403 | 0.000 | 0 | 0.102 | 4.90 |
+| Sex+lunar.date.by.Sex | 265.001 | 232.853 | 0.000 | 0 | 0.101 | 7.49 |
+| Species+lunar.date | 270.164 | 225.087 | 0.000 | 0 | 0.093 | 4.90 |
+| lunar.date.te.month | 287.974 | 287.493 | 0.000 | 0 | 0.089 | 13.87 |
+| Sex+month | 288.976 | 243.208 | 0.000 | 0 | 0.079 | 4.76 |
+| Species+month | 291.747 | 245.391 | 0.000 | 0 | 0.074 | 4.64 |
+| Sex+month.by.Sex | 292.349 | 252.147 | 0.000 | 0 | 0.076 | 5.88 |
+| Sex | 293.909 | 234.357 | 0.000 | 0 | 0.068 | 2.00 |
+| Species | 301.404 | 241.852 | 0.000 | 0 | 0.061 | 2.00 |
+| lunar.date+month | 322.757 | 286.821 | 0.000 | 0 | 0.052 | 6.73 |
+| lunar.date | 334.114 | 284.047 | 0.000 | 0 | 0.035 | 3.90 |
+| month | 360.034 | 309.002 | 0.000 | 0 | 0.013 | 3.71 |
+| null | 366.419 | 301.866 | 0.000 | 0 | 0.000 | 1.00 |
 
-Model comparison summary based on AICc {.table}
+Model comparison summary. Columns follow Table A5.1 of Appendix S5,
+which published the top six rows of this table. {.table}
+
+### Relationship to the published table
+
+The first six rows of the table above correspond to Table A5.1 of
+Appendix S5. The best-supported model is the same one, and its
+statistics reproduce the published values exactly at the precision they
+were published: ΔAICc 0.0, ωAICc 0.998, R2 0.28 and a total edf of 14.0.
+R2 and total edf also reproduce for the remaining five rows.
+
+The ΔAICc values for those five rows differ a little from the published
+ones (12.4, 64.1, 106.8, 111.5 and 111.5 published, against 13.0, 62.5,
+105.5, 108.4 and 109.6 here), which is enough to exchange the fifth and
+sixth rows. The difference is attributable to changes in `mgcv` and R
+since 2018 rather than to `FSSgam`: running this code against `FSSgam`
+1.0.0 and against the current development version on the same R and
+`mgcv` gives identical values for every one of the 52 candidate models.
+
+`FSSgam` now writes the terms within a model name in byte order, so the
+model published as
+`Sex + Species + lunar date × Species + month × Species` appears here as
+`Sex+Species+lunar.date.by.Species+month.by.Species`. This is a naming
+change only.
 
 Examine the variable importance scores. In this case study, variable
 importance is not particularly interesting because all predictors are in
@@ -341,7 +365,7 @@ gam.check(best.model)
     ## 
     ## Method: GCV   Optimizer: outer newton
     ## full convergence after 8 iterations.
-    ## Gradient range [6.886353e-11,6.377734e-07]
+    ## Gradient range [6.886352e-11,6.377734e-07]
     ## (score 0.3332369 & scale 0.3350731).
     ## Hessian positive definite, eigenvalue range [7.71641e-06,0.0001997042].
     ## Model rank =  15 / 15 
