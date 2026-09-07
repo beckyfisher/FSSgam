@@ -278,14 +278,14 @@ AICc units of the best model for each taxon. It is recomputed each time this vig
 built and will not agree digit for digit with the published table.
 
 **These results changed in September 2026, and the change is a correction.** Under `FSSgam`
-1.0.0 each candidate model was fitted with a Tweedie power parameter of about 1.01 rather
-than the value estimated for that model. A Tweedie with the power parameter near 1 is close
-to a Poisson, so the assumed variance function was wrong, and both the estimated degrees of
-freedom and the information criteria were inflated. Taking the model
-`Distance+lobster+sqrt.X2mm` for *Pagurus novizelandiae* as an example, 1.0.0 reported AICc
-605.50 at 24.87 edf, whereas fitting the identical formula to the identical data with a
-direct call to `mgcv::gam()` gives AICc 478.76 at 19.53 edf. The current version reproduces
-the `mgcv` value exactly. The candidate set is unchanged: the same 139 models with the same
+1.0.0 each candidate model was fitted with a Tweedie power parameter of about 1.01 rather than
+the value estimated for that model. A Tweedie with the power parameter near 1 is close to a
+Poisson, so the assumed variance function was wrong, and both the estimated degrees of freedom
+and the information criteria were inflated. Taking the model `Distance+lobster+sqrt.X2mm` for
+*Pagurus novizelandiae* as an example, 1.0.0 reported AICc 605.50 at 24.87 edf, whereas
+fitting the identical formula to the identical data with a direct call to `mgcv::gam()` gives
+AICc 478.76 at 19.53 edf. The current version reproduces the `mgcv` value exactly, measured on
+R 4.5.1 with `mgcv` 1.9-3. The candidate set is unchanged: the same 139 models with the same
 formulae are fitted either way.
 
 The practical effect is on how many models are close to the best one. For *Pagurus

@@ -141,11 +141,11 @@ exactly at the precision they were published: ΔAICc 0.0, ωAICc 0.998, R2 0.28 
 edf of 14.0. R2 and total edf also reproduce for the remaining five rows.
 
 The ΔAICc values for those five rows differ a little from the published ones (12.4, 64.1,
-106.8, 111.5 and 111.5 published, against 13.0, 62.5, 105.5, 108.4 and 109.6 here), which is
-enough to exchange the fifth and sixth rows. The difference is attributable to changes in
-`mgcv` and R since 2018 rather than to `FSSgam`: running this code against `FSSgam` 1.0.0
-and against the current development version on the same R and `mgcv` gives identical values
-for every one of the 52 candidate models.
+106.8, 111.5 and 111.5 published, against 13.0, 62.5, 105.5, 108.4 and 109.6 measured on R
+4.5.1 with `mgcv` 1.9-3), which is enough to exchange the fifth and sixth rows. The difference
+is attributable to changes in `mgcv` and R since 2018 rather than to `FSSgam`: running this
+code against `FSSgam` 1.0.0 and against the current development version on the same R and
+`mgcv` gives identical values for every one of the 52 candidate models.
 
 `FSSgam` now writes the terms within a model name in byte order, so the model published as
 `Sex + Species + lunar date × Species + month × Species` appears here as

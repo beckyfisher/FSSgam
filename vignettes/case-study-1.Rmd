@@ -243,11 +243,13 @@ knitr::kable(
 
 ### Relationship to the published table
 
-The table above is recomputed each time this vignette is built, so it will not agree digit
-for digit with Table A3.1 of Appendix S3, which was produced in 2018. Comparing the two
-across the seventeen published rows, AICc differs by a median of 0.66 and a maximum of 2.47
-units. The top-ranked model is the same as the published one for all eight responses, and
-the R2 and edf values agree to the precision at which they were published.
+The table above is recomputed each time this vignette is built, so it will not agree digit for
+digit with Table A3.1 of Appendix S3, which was produced in 2018. Comparing the two across the
+seventeen published rows, AICc differed by a median of 0.66 and a maximum of 2.47 units when
+measured on R 4.5.1 with `mgcv` 1.9-3 and `MuMIn` 1.48.11. Those figures depend on the
+versions this site is built against and will change as they do. The top-ranked model is the
+same as the published one for all eight responses, and the R2 and edf values agree to the
+precision at which they were published.
 
 The difference is not attributable to `FSSgam`. Running the same code against `FSSgam`
 1.0.0 and against the current development version on the same R and `mgcv` gives AICc
