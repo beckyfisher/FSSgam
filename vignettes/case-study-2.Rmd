@@ -76,6 +76,14 @@ It has since been updated with minimal changes on the 29th April 2026 to ensure 
 
 It was updated again on the dev branch to call generate_model_set and fit_model_set, the snake_case names that generate.model.set and fit.model.set were themselves renamed to. The old dot-case names still work (they now just emit a deprecation warning and forward to the new names), but new code should call generate_model_set/fit_model_set directly.
 
+It was updated again on the 7th September 2026 against FSSgam 1.1.0.9000. The results in this
+case study changed at that point, and the change is a correction. Under FSSgam 1.0.0 the
+candidate models were fitted with a Tweedie power parameter of about 1.01 instead of the value
+estimated for the model, which inflated both the estimated degrees of freedom and the
+information criteria. The candidate set, the formulae and the data are identical either way;
+only the fitted variance function differed. See 'Relationship to the published table' below for
+the measured effect.
+
 ## Script information
 
 ### Part 1-FSS modeling
@@ -247,16 +255,51 @@ for(i in 1:length(resp.vars)){
 names(out.all)=resp.vars
 names(var.imp)=resp.vars
 all.mod.fits=do.call("rbind",out.all)
+# label each row with its taxon: rbind on a named list leaves that only in the row names
+all.mod.fits$Taxa=rep(resp.vars, times=sapply(out.all, nrow))
 all.var.imp=do.call("rbind",var.imp)
 ```
 
 ```{r}
 knitr::kable(
-  all.mod.fits,
+  all.mod.fits[, c("Taxa", "modname", "delta.AICc", "delta.BIC",
+                   "wi.AICc", "wi.BIC", "r2.vals", "edf")],
   digits = 3,
-  caption = "Summary of all fitted FSSgam models"
+  col.names = c("Taxa", "Best models", "ΔAICc", "ΔBIC", "ωAICc", "ωBIC", "R2", "EDF"),
+  row.names = FALSE,
+  caption = "Models within 3 AICc units of the best model for each taxon. Columns follow Table A4.2 of Appendix S4."
 )
 ```
+
+### Relationship to the published table
+
+The table above corresponds to Table A4.2 of Appendix S4, which listed the models within 2
+AICc units of the best model for each taxon. It is recomputed each time this vignette is
+built and will not agree digit for digit with the published table.
+
+**These results changed in September 2026, and the change is a correction.** Under `FSSgam`
+1.0.0 each candidate model was fitted with a Tweedie power parameter of about 1.01 rather than
+the value estimated for that model. A Tweedie with the power parameter near 1 is close to a
+Poisson, so the assumed variance function was wrong, and both the estimated degrees of freedom
+and the information criteria were inflated. Taking the model `Distance+lobster+sqrt.X2mm` for
+*Pagurus novizelandiae* as an example, 1.0.0 reported AICc 605.50 at 24.87 edf, whereas
+fitting the identical formula to the identical data with a direct call to `mgcv::gam()` gives
+AICc 478.76 at 19.53 edf. The current version reproduces the `mgcv` value exactly, measured on
+R 4.5.1 with `mgcv` 1.9-3. The candidate set is unchanged: the same 139 models with the same
+formulae are fitted either way.
+
+The practical effect is on how many models are close to the best one. For *Pagurus
+novizelandiae*, 1.0.0 placed a single model within 2 AICc units of the best; the corrected
+fit places twelve there, against the eighteen of the published table, with estimated degrees
+of freedom of 17.7 to 21.1 against the published 17.7 to 21.5. The corrected results are
+therefore much closer to the published analysis than the ones this vignette previously
+showed. For *Dosinia subrosea* and *Myadora striata* the effect is smaller, two models within
+2 AICc units becoming two and three respectively.
+
+Model names are also written differently from the published table. `FSSgam` now orders the
+terms within a model name in byte order, and the vignette uses the column names of the data
+set rather than the shortened labels used in the paper, so the model published as
+`4mm + lobster` appears here as `lobster+sqrt.X4mm`. This is a naming change only.
 
 ```{r}
 knitr::kable(

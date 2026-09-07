@@ -114,7 +114,7 @@ Examine predictor correlations. This looks as would be expected. Note the functi
 ```{r predictorcors}
 model.set$predictor.correlations
 ```
-Examine the model table. Note that the bet model includes all of the predictors, with interactions between lunar date and species, month and species, and an additive effect of Sex.
+Examine the model table. Note that the best model includes all of the predictors, with interactions between lunar date and species, month and species, and an additive effect of Sex.
 
 ```{r assessment}
 mod.table <- out.list$mod.data.out
@@ -122,15 +122,34 @@ mod.table <- mod.table[order(mod.table$AICc), ]
 
 tab <- mod.table |>
   as_tibble() |> 
-  select(modname, AICc, r2.vals, edf, delta.AICc, wi.AICc)
+  select(modname, delta.AICc, delta.BIC, wi.AICc, wi.BIC, r2.vals, edf)
 
 knitr::kable(
   tab,
   digits = 3,
-  caption = "Model comparison summary based on AICc"
+  col.names = c("Model", "ΔAICc", "ΔBIC", "ωAICc", "ωBIC", "R2", "Total edf"),
+  caption = "Model comparison summary. Columns follow Table A5.1 of Appendix S5, which published the top six rows of this table."
 )
 
 ```
+
+### Relationship to the published table
+
+The first six rows of the table above correspond to Table A5.1 of Appendix S5. The
+best-supported model is the same one, and its statistics reproduce the published values
+exactly at the precision they were published: ΔAICc 0.0, ωAICc 0.998, R2 0.28 and a total
+edf of 14.0. R2 and total edf also reproduce for the remaining five rows.
+
+The ΔAICc values for those five rows differ a little from the published ones (12.4, 64.1,
+106.8, 111.5 and 111.5 published, against 13.0, 62.5, 105.5, 108.4 and 109.6 measured on R
+4.5.1 with `mgcv` 1.9-3), which is enough to exchange the fifth and sixth rows. The difference
+is attributable to changes in `mgcv` and R since 2018 rather than to `FSSgam`: running this
+code against `FSSgam` 1.0.0 and against the current development version on the same R and
+`mgcv` gives identical values for every one of the 52 candidate models.
+
+`FSSgam` now writes the terms within a model name in byte order, so the model published as
+`Sex + Species + lunar date × Species + month × Species` appears here as
+`Sex+Species+lunar.date.by.Species+month.by.Species`. This is a naming change only.
 
 Examine the variable importance scores. In this case study, variable importance is not particularly interesting because all predictors are in the top model, and they are therefore all 1.
 
