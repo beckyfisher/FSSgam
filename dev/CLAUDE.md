@@ -161,12 +161,16 @@ here, per Section 1.
   from this repo’s session. This repo only consumes that package.
 
 - **The site installs the real package from GitHub at build time**
-  (`.github/workflows/pkgdown.yaml`). The install step is
-  branch-conditional: when *this* repo’s branch is `dev` it installs
-  `FSSgam_package`’s `dev` ref; otherwise it installs `FSSgam_package`’s
-  default branch. This is a separate mechanism from the root/`dev` site
+  (`.github/workflows/pkgdown.yaml`). Every branch installs
+  `FSSgam_package`’s `dev` ref, named explicitly in the workflow (RF,
+  2026-09-07). It was previously branch-conditional, installing `dev`
+  only when *this* repo’s branch was `dev` and otherwise falling back to
+  `FSSgam_package`’s default branch; that default has since become
+  `dev`, so the condition had stopped distinguishing anything and the
+  fallback made which package the root site built against a property of
+  the other repo. This is a separate mechanism from the root/`dev` site
   split below — it controls which package version vignettes are rendered
-  against, not where the built site lands. Don’t remove it without
+  against, not where the built site lands. Don’t change it without
   checking with the user first.
 
 - **The root-vs-`docs/dev/` site split is controlled by `DESCRIPTION`’s
