@@ -65,7 +65,18 @@ jobs:
       # in _pkgdown.yml is parsed but does not suppress the index, so remove it
       # after the build. RF, 2026-09-07.
       - name: Remove the empty reference index
-        run: rm -rf docs/reference docs/dev/reference
+        run: |
+          rm -rf docs/reference docs/dev/reference
+          # pkgdown writes the sitemap before this step runs, so the page it
+          # just removed is still listed there. Matched as a fixed string on
+          # the local path: the external FSSgam_package reference URL in
+          # search.json and llms.txt has no index.html and is left alone.
+          for f in docs/sitemap.xml docs/dev/sitemap.xml; do
+            if [ -f "$f" ]; then
+              grep -vF '/reference/index.html</loc>' "$f" > "$f.tmp"
+              mv "$f.tmp" "$f"
+            fi
+          done
 
       - name: Check pkgdown output
         run: ls -R docs
