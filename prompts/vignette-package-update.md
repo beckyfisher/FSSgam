@@ -1,3 +1,80 @@
+## Session: vignette figures, hidden code and a site content review
+Date: 2026-09-07
+Model: Claude Opus 5 (1M context)
+
+### Prompts and Responses
+
+**User:** Add the practicalities notes. Case study 1's response and predictor plots are very
+ugly; case study 2's predictor plots are very ugly, and that vignette seems to be missing a lot
+of the fitting code. Also review all the content on the GitHub pages and ensure it is up to date
+following the major overhaul of the package code.
+
+**Claude:**
+
+#### Diagnostic figures
+
+Case study 1 drew 15 base R figures from two loops, each `hist()` beside a `plot(jitter(x))`
+index plot, with `par(mfrow=)` reset inside the loop. These became two faceted `ggplot2` panels,
+one for the seven predictors and one for the eight responses, each a histogram with a rug. The
+rug replaces the index plot: for the stated purpose, confirming an even spread with no gaps, it
+shows where the observations lie more directly than position in the data frame does. Panels are
+ordered as `cont.preds` and `resp.vars` declare them rather than alphabetically. The rendered
+page fell from 1.13 MB to 843 kB.
+
+Case study 2 drew 12 six-panel figures comparing raw, square-root and log transformations. These
+became one faceted figure, 12 predictors by 3 transformations.
+
+`facet_grid(predictor ~ transformation)` was tried first and is wrong: `facet_grid` shares the x
+scale down each column, so every predictor's raw panel was drawn on `fetch`'s range of 0 to
+3e6 and collapsed to a single bar. Only inspecting the rendered PNG showed this; the code ran
+without error. `facet_wrap(~ predictor + transformation, scales = 'free', ncol = 3)` gives the
+same layout with per-panel scales.
+
+#### Hidden fitting code
+
+Case study 2's `fss` chunk and the `fit` and `run` chunks of the extra examples vignette were
+`include=FALSE`, so the model fitting, the whole point of each example, was invisible while its
+output was shown. All three are now `echo=TRUE, results='hide'`, matching case study 3.
+
+`options(error = recover)` was removed from case study 2's setup chunk. It attempts an
+interactive debugger and has no place in a document built on CI.
+
+#### Practicalities notes
+
+Case study 2: why the 80% zeros screen precedes fitting; that `max.models` is a guard and what
+to reduce before raising it; why `Status` survives the new `null.cov.cutoff` screen despite
+being perfectly correlated with `Location`, namely that variables inside a `bs='re'` smooth are
+excluded from that screen; and how to read `failed.models`. Case study 3: what `cyclic.vars`
+does and why a periodic predictor needs `bs='cc'`; how the two interaction arguments size the
+candidate set, measured at 52 here; and that the `test.fit` supplies structure, not terms.
+
+#### Site content review
+
+`CLAUDE.md` was being published at <https://beckyfisher.github.io/FSSgam/CLAUDE.html>, in full.
+`pkgdown::package_mds()` renders every `.md` in the package root and in `.github/`, skipping
+only README, NEWS, LICENCE and a three-item no-render list, and it does not consult
+`.Rbuildignore`; adding the file there was tried and had no effect. The workflow now removes
+`CLAUDE.md` from the CI checkout before `build_site`, which keeps it out of the pages and out of
+`search.json` and `llms.txt` as well. The repository file is untouched.
+
+README: `remotes::install_github('beckyfisher/FSSgam_package')` installs that repository's
+default branch, which is now `dev`, so the documented command gives a development version
+without saying so. Recorded, with the `ref = 'master'` form alongside. Also recorded that
+`gamm4` moved from Imports to Suggests in 1.1.0, so installing FSSgam no longer installs `gamm4`
+and `lme4`; the extra examples vignette needs that route and now says so and loads it.
+
+Every link in the vignettes and README was checked and resolves. The DOI returns 403 to
+automated requests, which is Wiley blocking the client rather than a dead link; the DOI
+resolves through Crossref.
+
+Two findings not acted on: `/reference/index.html` is built as an empty orphaned page, since
+`build: reference: false` is set and the navbar Reference component points at
+`FSSgam_package`'s own site, and removing it needs a `_pkgdown.yml` change; and the already
+published `CLAUDE.html` and `CLAUDE.md` remain on `gh-pages`, which `keep_files: true` will not
+delete, so they need removing from that branch directly.
+
+---
+
 ## Session: update vignettes for FSSgam 1.1.0.9000 (issues #19, #20)
 Date: 2026-09-07
 Model: Claude Opus 5 (1M context)

@@ -46,9 +46,26 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      # pkgdown renders every .md in the package root as a site page, with no
+      # opt-out: package_mds() skips only README/NEWS/LICENCE and a short fixed
+      # list, and does not consult .Rbuildignore. CLAUDE.md is internal working
+      # notes and was being published at /CLAUDE.html. Removing it from the
+      # checkout before the build keeps it out of the pages, and out of
+      # search.json and llms.txt with them. The repository file is untouched.
+      - name: Keep internal notes out of the built site
+        run: rm -f CLAUDE.md
+
       - name: Build pkgdown site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
+
+      # FSSgam.docs exports nothing, so pkgdown writes an empty reference index
+      # that nothing links to: the navbar Reference component points at
+      # FSSgam_package's own reference site instead. `build: reference: false`
+      # in _pkgdown.yml is parsed but does not suppress the index, so remove it
+      # after the build. RF, 2026-09-07.
+      - name: Remove the empty reference index
+        run: rm -rf docs/reference docs/dev/reference
 
       - name: Check pkgdown output
         run: ls -R docs
