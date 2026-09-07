@@ -75,9 +75,10 @@ outputs returned by the original combined
 <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html">full.subsets.gam()</a></code> function. That function has since been
 split into <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set()</a></code>, which builds and returns
 the candidate model set, and <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set()</a></code>, which fits
-every model in that set and returns the fitted results.
-<code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html">full.subsets.gam()</a></code> itself still exists and returns the same
-combined set of outputs described here.</p>
+every model in that set and returns the fitted results. The combined
+function itself still exists, as <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full_subsets_gam.html">full_subsets_gam()</a></code> and
+under its original name <code><a href="https://beckyfisher.github.io/FSSgam_package/reference/full.subsets.gam.html">full.subsets.gam()</a></code>, and returns the
+same combined set of outputs described here.</p>
 <p>The tables below reproduce the original output descriptions, split
 according to which of the two functions now returns each one — matching
 how they are accessed in the case study vignettes
@@ -108,8 +109,41 @@ cbind.</td>
 <tr class="even">
 <td>$predictor.correlations</td>
 <td>The matrix of estimated predictor correlations returned by the
-function check.correlations and used for model exclusion based on
+function check_correlations and used for model exclusion based on
 cov.cutoff (see the function-arguments vignette).</td>
+</tr>
+<tr class="odd">
+<td>$n.mods</td>
+<td>The number of candidate models in the set. Useful as a check before
+fitting, since the set grows quickly with the number of predictors and
+with <strong>max.predictors</strong>.</td>
+</tr>
+<tr class="even">
+<td>$mod.formula</td>
+<td>A list of the model formulae making up the candidate set, named by
+the model names used throughout the outputs. Note that the terms within
+a model name are written in byte order, so a model containing complexity
+and ZONE is named ZONE+complexity.</td>
+</tr>
+<tr class="odd">
+<td>$null.term.correlations</td>
+<td>The correlations between each candidate predictor and the variables
+named in <strong>null.terms</strong>, used for model exclusion based on
+<strong>null.cov.cutoff</strong> (see the function-arguments vignette).
+Variables inside a bs=‘re’ smooth are excluded from this screen and so
+do not appear here.</td>
+</tr>
+<tr class="even">
+<td>$included.vars</td>
+<td>The predictors that survived the collinearity screens and are
+present in at least one candidate model. Comparing this with the
+predictors supplied shows which were dropped.</td>
+</tr>
+<tr class="odd">
+<td>$test.fit</td>
+<td>The test model fit supplied by the user, retained so that
+fit_model_set() can update it for each candidate model without the user
+passing it again.</td>
 </tr>
 </tbody>
 </table>
@@ -132,21 +166,25 @@ cov.cutoff (see the function-arguments vignette).</td>
 <td>A data.frame that contains the statistics associated with each model
 fit. This includes AICc and BIC, delta values (e.g. AICc-(min(AICc))),
 corresponding weight (omega_i) values <span class="citation">(Burnham
-and Anderson 2002)</span>, an estimate of the model R2, and a column for
-each of the included predictor variables containing either 0 (variable
-not included in the model) or 1 (variable is present in the model). Use
-of BIC in information theoretic approaches has been heavily criticised
-because of the inherent assumption of BIC that there is a “true” model
-that is represented in the candidate set <span class="citation">(Anderson and Burnham 2002)</span>. Rather than decide
-a-priori which model selection tool users should adopt, both AICc and
-BIC are supplied as part of the function outputs. To simplify output,
-only AICc and AICc based model weights, rather than AIC, are included as
-these are asymptotically equivalent at large sample sizes, and for small
-sample sizes AICc should be used in any case. Calculating R2 values is
-non-trivial for mixed models, especially non-gaussian cases. A range of
-methods for estimating R2 are supplied (see <code>r2.type</code> in the
-function-arguments vignette), as in our experience a single method
-rarely performs adequately across all scenarios.</td>
+and Anderson 2002)</span>, an estimate of the model R2 (r2.vals, and
+r2.vals.unique where report.unique.r2 was set), the estimated degrees of
+freedom (edf, and edf.less.1 giving the count of smooth terms whose edf
+is below 1), and a column for each of the included predictor variables
+containing either 0 (variable not included in the model) or 1 (variable
+is present in the model). Use of BIC in information theoretic approaches
+has been heavily criticised because of the inherent assumption of BIC
+that there is a “true” model that is represented in the candidate set
+<span class="citation">(Anderson and Burnham 2002)</span>. Rather than
+decide a-priori which model selection tool users should adopt, both AICc
+and BIC are supplied as part of the function outputs. To simplify
+output, only AICc and AICc based model weights, rather than AIC, are
+included as these are asymptotically equivalent at large sample sizes,
+and for small sample sizes AICc should be used in any case. Calculating
+R2 values is non-trivial for mixed models, especially non-gaussian
+cases. A range of methods for estimating R2 are supplied (see
+<code>r2.type</code> in the function-arguments vignette), as in our
+experience a single method rarely performs adequately across all
+scenarios.</td>
 </tr>
 <tr class="even">
 <td>$failed.models</td>
@@ -168,16 +206,30 @@ in the model set.</td>
 for multimodel inference and creating model averaged predictions.</td>
 </tr>
 <tr class="even">
-<td>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>a</mi><mi>r</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mi>.</mi><mi>i</mi><mi>m</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>c</mi><mi>e</mi><mo stretchy="false" form="prefix">|</mo><mi>A</mi><mi>l</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>i</mi><mi>m</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi><mi>s</mi><mi>f</mi><mi>o</mi><mi>r</mi><mi>e</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>i</mi><mi>n</mi><mi>c</mi><mi>l</mi><mi>u</mi><mi>d</mi><mi>e</mi><mi>d</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>.</mi><mi>T</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>r</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>r</mi><mi>e</mi><mi>l</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>v</mi><mi>e</mi><mi>i</mi><mi>m</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>o</mi><mi>f</mi><mi>e</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>a</mi><mi>c</mi><mi>r</mi><mi>o</mi><mi>s</mi><mi>s</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>w</mi><mi>h</mi><mi>o</mi><mi>l</mi><mi>e</mi><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mi>s</mi><mi>e</mi><mi>t</mi><mo>,</mo><mi>t</mi><mi>h</mi><mi>e</mi><mi>o</mi><mi>m</mi><mi>e</mi><mi>g</mi><msub><mi>a</mi><mi>i</mi></msub><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi><mi>s</mi><mi>a</mi><mi>r</mi><mi>e</mi><mi>s</mi><mi>u</mi><mi>m</mi><mi>m</mi><mi>e</mi><mi>d</mi><mi>f</mi><mi>o</mi><mi>r</mi><mi>a</mi><mi>l</mi><mi>l</mi><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mi>s</mi><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>e</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>v</mi><mi>a</mi><mi>r</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mi>.</mi><mi>T</mi><mi>h</mi><mi>e</mi><mi>h</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>e</mi><mi>r</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>b</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi>s</mi><mi>f</mi><mi>o</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>e</mi><mi>x</mi><mi>p</mi><mi>l</mi><mi>a</mi><mi>n</mi><mi>a</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>p</mi><mi>a</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>r</mi><mo>,</mo><mi>t</mi><mi>h</mi><mi>e</mi><mi>m</mi><mi>o</mi><mi>r</mi><mi>e</mi><mi>i</mi><mi>m</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>s</mi><mi>i</mi><mi>n</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>a</mi><mi>n</mi><mi>a</mi><mi>l</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>s</mi><mo stretchy="false" form="prefix">[</mo><mi>@</mi><mi>B</mi><mi>u</mi><mi>r</mi><mi>n</mi><mi>h</mi><mi>a</mi><mi>m</mi><mn>2002</mn><mi>M</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mi>S</mi><mi>e</mi><mi>l</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo stretchy="false" form="postfix">]</mo><mi>.</mi><mi>A</mi><mi>n</mi><mi>a</mi><mi>s</mi><mi>s</mi><mi>u</mi><mi>m</mi><mi>p</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi>o</mi><mi>f</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>u</mi><mi>s</mi><mi>e</mi><mi>o</mi><mi>f</mi><mi>s</mi><mi>u</mi><mi>m</mi><mi>m</mi><mi>e</mi><mi>d</mi><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi>s</mi><mi>t</mi><mi>o</mi><mi>i</mi><mi>n</mi><mi>f</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>a</mi><mi>r</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mi>i</mi><mi>m</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>h</mi><mi>a</mi><mi>t</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>n</mi><mi>u</mi><mi>m</mi><mi>b</mi><mi>e</mi><mi>r</mi><mi>o</mi><mi>f</mi><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mi>s</mi><mi>i</mi><mi>n</mi><mi>w</mi><mi>h</mi><mi>i</mi><mi>c</mi><mi>h</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>f</mi><mi>f</mi><mi>e</mi><mi>r</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>s</mi><mi>a</mi><mi>r</mi><mi>e</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>s</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>s</mi><mi>u</mi><mi>n</mi><mi>i</mi><mi>f</mi><mi>o</mi><mi>r</mi><mi>m</mi><mi>.</mi><mi>A</mi><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>r</mi><mi>e</mi><mi>l</mi><mi>a</mi><mi>t</mi><mi>e</mi><mi>d</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>s</mi><mi>a</mi><mi>r</mi><mi>e</mi><mi>r</mi><mi>e</mi><mi>m</mi><mi>o</mi><mi>v</mi><mi>e</mi><mi>d</mi><mi>f</mi><mi>r</mi><mi>o</mi><mi>m</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mi>s</mi><mi>e</mi><mi>t</mi><mo>,</mo><mi>t</mi><mi>h</mi><mi>i</mi><mi>s</mi><mi>i</mi><mi>s</mi><mi>n</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi><mi>w</mi><mi>a</mi><mi>y</mi><mi>s</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>c</mi><mi>a</mi><mi>s</mi><mi>e</mi><mi>.</mi><mi>T</mi><mi>o</mi><mi>o</mi><mi>v</mi><mi>e</mi><mi>r</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mi>t</mi><mi>h</mi><mi>i</mi><mi>s</mi><mi>i</mi><mi>s</mi><mi>s</mi><mi>u</mi><mi>e</mi><mo>,</mo><mi>t</mi><mi>h</mi><mi>e</mi><mi>s</mi><mi>u</mi><mi>m</mi><mi>m</mi><mi>e</mi><mi>d</mi><mi>v</mi><mi>a</mi><mi>r</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mi>.</mi><mi>i</mi><mi>m</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi><mi>s</mi><mi>a</mi><mi>r</mi><mi>e</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>s</mi><mi>u</mi><mi>m</mi><mi>m</mi><mi>e</mi><mi>d</mi><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mi>s</mi><mi>f</mi><mi>o</mi><mi>r</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>b</mi><mi>e</mi><mi>s</mi><mi>t</mi><mi>n</mi><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mi>s</mi><mo>,</mo><mi>w</mi><mi>h</mi><mi>e</mi><mi>r</mi><mi>e</mi><mi>n</mi><mi>i</mi><mi>s</mi><mi>e</mi><mi>q</mi><mi>u</mi><mi>a</mi><mi>l</mi><mi>t</mi><mi>o</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>m</mi><mi>u</mi><mi>m</mi><mi>n</mi><mi>u</mi><mi>m</mi><mi>b</mi><mi>e</mi><mi>r</mi><mi>o</mi><mi>f</mi><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mi>s</mi><mi>a</mi><mi>n</mi><mi>y</mi><mi>o</mi><mi>n</mi><mi>e</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>i</mi><mi>s</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>s</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>n</mi><mi>.</mi><mo stretchy="false" form="prefix">|</mo><mo stretchy="false" form="prefix">|</mo><mo stretchy="false" form="prefix">|</mo><mi>*</mi><mo>*</mo></mrow><annotation encoding="application/x-tex">variable.importance | A list containing importance scores for each included predictor. To determine the relative importance of each predictor across the whole model set, the omega_i values are summed for all models containing each variable. The higher the combined weights for an explanatory parameter, the more important it is in the analysis [@Burnham2002ModelSelection]. An assumption of the use of summed model weights to infer variable importance is that the number of models in which the different predictors are present is uniform. As correlated predictors are removed from the model set, this is not always the case. To overcome this issue, the summed variable.importance scores are the summed weights for the best n models, where n is equal to the minimum number of models any one predictor is present in. |
-| | **</annotation></semantics></math>aic** — Variable importance values
-based on summed AICc weights.</td>
-<td></td>
+<td>$variable.importance</td>
+<td>A list containing importance scores for each included predictor. To
+determine the relative importance of each predictor across the whole
+model set, the omega_i values are summed for all models containing each
+variable. The higher the combined weights for an explanatory parameter,
+the more important it is in the analysis <span class="citation">(Burnham
+and Anderson 2002)</span>. An assumption of the use of summed model
+weights to infer variable importance is that the number of models in
+which the different predictors are present is uniform. As correlated
+predictors are removed from the model set, this is not always the case.
+To overcome this issue, the summed variable.importance scores are the
+summed weights for the best n models, where n is equal to the minimum
+number of models any one predictor is present in.</td>
 </tr>
 <tr class="odd">
-<td></td>
+<td>variable.importance[[“aic”]]</td>
 <td>
-<strong>$bic</strong> — Variable importance values based on summed
+<strong>aic</strong> — Variable importance values based on summed
+AICc weights.</td>
+</tr>
+<tr class="even">
+<td>variable.importance[[“bic”]]</td>
+<td>
+<strong>bic</strong> — Variable importance values based on summed
 BIC weights.</td>
 </tr>
 </tbody>
@@ -216,7 +268,7 @@ Ecology with r.”</span> <em>Ecology and Evolution</em> 8 (12): 6104–13.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -224,7 +224,7 @@ interpreting variable importance values difficult.</td>
 <td>cor.matrix</td>
 <td>NA</td>
 <td>By default predictor correlations are evaluated via a call to
-check.correlations, a function taking a data.frame (containing all
+check_correlations, a function taking a data.frame (containing all
 predictors) as argument and generating a correlation matrix comprised
 of: 1) correlation coefficients between all continuous predictors via a
 call to cor; 2) approximate correlation values between continuous
@@ -294,15 +294,38 @@ use of PQL and allows the greater range of families available in gam
 (mgcv) to be used. Note: make sure you use “gam” instead of uGamm to
 make sure PQL is not used.</td>
 </tr>
+<tr class="even">
+<td>non.linear.correlations</td>
+<td>FALSE</td>
+<td>A logical value indicating whether predictor correlations should be
+estimated using a non-linear method rather than the linear method
+described under <strong>cor.matrix</strong>. Defaults to FALSE. Setting
+it to TRUE is useful where strong non-linear dependencies between
+predictors are suspected; see the extra examples vignette for a worked
+case.</td>
+</tr>
+<tr class="odd">
+<td>null.cov.cutoff</td>
+<td>0.8</td>
+<td>A numeric value between 0 and 1 giving the correlation above which a
+predictor is dropped from the model set because it is too strongly
+correlated with a variable named in <strong>null.terms</strong>. Added
+after the original 2018 paper. Terms named in null.terms are forced into
+every candidate model and were previously outside the
+<strong>cov.cutoff</strong> screen, so a predictor could be arbitrarily
+strongly correlated with a forced term and still appear in every model.
+The default is much looser than cov.cutoff’s 0.28 because the two
+screens answer different questions: cov.cutoff decides which predictors
+may appear together, whereas null.cov.cutoff decides which predictor is
+close to a restatement of a forced term. Set it to 1 to admit every
+predictor whatever its correlation with a forced term. A variable inside
+a bs=‘re’ smooth is excluded from this screen, because a random effect
+grouping factor is correlated with the predictors measured within it by
+construction — this is the situation in case study 2, where null.terms
+is s(Location,Site,bs=‘re’) and Status is nested within Location.</td>
+</tr>
 </tbody>
 </table>
-<p><code><a href="https://beckyfisher.github.io/FSSgam_package/reference/generate_model_set.html">generate_model_set()</a></code> also accepts
-<code>non.linear.correlations</code> (default <code>FALSE</code>), added
-after the original 2018 paper and not part of the table above. As shown
-in the extra examples vignette, setting it to <code>TRUE</code> runs the
-predictor correlation matrix using a non-linear correlation method,
-“which can be useful if you think there might be strong non-linear
-dependencies between predictors.”</p>
 </div>
 <div class="section level2">
 <h2 id="arguments-to-fit_model_set">Arguments to <code>fit_model_set()</code><a class="anchor" aria-label="anchor" href="#arguments-to-fit_model_set"></a>
@@ -336,7 +359,7 @@ is suitable for most current quad core machines.</td>
 </tr>
 <tr class="odd">
 <td>max.models</td>
-<td>500</td>
+<td>200</td>
 <td>The total number of models allowed to be fit. If the candidate set
 is bigger than this value, an error message will be returned, asking the
 user to reset this to a larger value.</td>
@@ -358,12 +381,48 @@ gamm. Note gamm4 does not currently return a deviance.</td>
 an idea of the unique variance explained. This can be useful where null
 terms are included in the model set.</td>
 </tr>
+<tr class="even">
+<td>save.model.fits</td>
+<td>TRUE</td>
+<td>A logical value indicating whether the fitted model objects should
+be retained and returned in $success.models. Added after the original
+2018 paper. Setting it to FALSE reduces memory use for large model sets,
+at the price of losing the fits needed for model averaged
+prediction.</td>
+</tr>
+<tr class="odd">
+<td>VI.mods</td>
+<td>“min.n”</td>
+<td>Which models contribute to the summed variable importance scores.
+Added after the original 2018 paper. The default “min.n” sums the
+weights of the best n models, where n is the minimum number of models
+any one predictor appears in, which corrects for the unequal
+representation caused by removing correlated predictors. “all” sums over
+every candidate that was given a weight.</td>
+</tr>
+<tr class="even">
+<td>progress</td>
+<td>interactive()</td>
+<td>A logical value indicating whether a progress bar is shown while the
+model set is fitted. Added after the original 2018 paper. Defaults to
+TRUE in an interactive session and FALSE otherwise, so that rendered
+documents such as these vignettes do not fill with progress output.</td>
+</tr>
+<tr class="odd">
+<td>logLik.fn</td>
+<td>NULL</td>
+<td>An optional function of one fitted model returning a single
+log-likelihood value, used in place of the value the fitted family
+supplies. Added after the original 2018 paper. AICc and BIC are
+ordinarily read from MuMIn::AICc() and stats::BIC(), which resolve to
+the family’s own aic slot; where logLik.fn is supplied the
+log-likelihood alone is replaced, and the criterion is built at the same
+degrees of freedom and sample size, so every model in the set is scored
+the same way. This is what allows a family with no usable criterion of
+its own, such as a quasi-likelihood, to be ranked.</td>
+</tr>
 </tbody>
 </table>
-<p><code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">fit_model_set()</a></code> also accepts
-<code>save.model.fits</code> and <code>VI.mods</code>, added after the
-original 2018 paper and not part of the table above — see
-<code><a href="https://beckyfisher.github.io/FSSgam_package/reference/fit_model_set.html">?fit_model_set</a></code> for details.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -405,7 +464,7 @@ with s</em>. 4th ed. Springer.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

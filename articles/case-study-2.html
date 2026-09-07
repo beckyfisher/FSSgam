@@ -295,6 +295,15 @@ fit.model.set were themselves renamed to. The old dot-case names still
 work (they now just emit a deprecation warning and forward to the new
 names), but new code should call generate_model_set/fit_model_set
 directly.</p>
+<p>It was updated again on the 7th September 2026 against FSSgam
+1.1.0.9000. The results in this case study changed at that point, and
+the change is a correction. Under FSSgam 1.0.0 the candidate models were
+fitted with a Tweedie power parameter of about 1.01 instead of the value
+estimated for the model, which inflated both the estimated degrees of
+freedom and the information criteria. The candidate set, the formulae
+and the data are identical either way; only the fitted variance function
+differed. See ‘Relationship to the published table’ below for the
+measured effect.</p>
 </div>
 </div>
 <div class="section level2">
@@ -487,206 +496,392 @@ variables.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">out.all</span><span class="op">)</span><span class="op">=</span><span class="va">resp.vars</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">var.imp</span><span class="op">)</span><span class="op">=</span><span class="va">resp.vars</span></span>
 <span><span class="va">all.mod.fits</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"rbind"</span>,<span class="va">out.all</span><span class="op">)</span></span>
+<span><span class="co"># label each row with its taxon: rbind on a named list leaves that only in the row names</span></span>
+<span><span class="va">all.mod.fits</span><span class="op">$</span><span class="va">Taxa</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">resp.vars</span>, times<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">out.all</span>, <span class="va">nrow</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">all.var.imp</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"rbind"</span>,<span class="va">var.imp</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
-<span>  <span class="va">all.mod.fits</span>,</span>
+<span>  <span class="va">all.mod.fits</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Taxa"</span>, <span class="st">"modname"</span>, <span class="st">"delta.AICc"</span>, <span class="st">"delta.BIC"</span>,</span>
+<span>                   <span class="st">"wi.AICc"</span>, <span class="st">"wi.BIC"</span>, <span class="st">"r2.vals"</span>, <span class="st">"edf"</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  caption <span class="op">=</span> <span class="st">"Summary of all fitted FSSgam models"</span></span>
+<span>  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Taxa"</span>, <span class="st">"Best models"</span>, <span class="st">"ΔAICc"</span>, <span class="st">"ΔBIC"</span>, <span class="st">"ωAICc"</span>, <span class="st">"ωBIC"</span>, <span class="st">"R2"</span>, <span class="st">"EDF"</span><span class="op">)</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Models within 3 AICc units of the best model for each taxon. Columns follow Table A4.2 of Appendix S4."</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<caption>Summary of all fitted FSSgam models</caption>
+<table style="width:100%;" class="table">
+<caption>Models within 3 AICc units of the best model for each taxon.
+Columns follow Table A4.2 of Appendix S4.</caption>
 <colgroup>
-<col width="11%">
-<col width="10%">
-<col width="31%">
-<col width="1%">
-<col width="1%">
-<col width="1%">
-<col width="3%">
-<col width="1%">
-<col width="2%">
-<col width="2%">
-<col width="2%">
-<col width="1%">
-<col width="1%">
-<col width="2%">
-<col width="2%">
-<col width="2%">
-<col width="2%">
-<col width="1%">
-<col width="0%">
-<col width="1%">
-<col width="1%">
-<col width="1%">
-<col width="2%">
-<col width="2%">
+<col width="6%">
+<col width="50%">
+<col width="7%">
+<col width="7%">
+<col width="7%">
+<col width="7%">
+<col width="7%">
+<col width="7%">
 </colgroup>
 <thead><tr class="header">
-<th align="left"></th>
-<th align="left">modname</th>
-<th align="left">formula</th>
-<th align="right">AICc</th>
-<th align="right">BIC</th>
-<th align="right">r2.vals</th>
-<th align="right">r2.vals.unique</th>
-<th align="right">edf</th>
-<th align="right">edf.less.1</th>
-<th align="right">delta.AICc</th>
-<th align="right">delta.BIC</th>
-<th align="right">wi.AICc</th>
-<th align="right">wi.BIC</th>
-<th align="right">sqrt.X4mm</th>
-<th align="right">sqrt.X2mm</th>
-<th align="right">sqrt.X1mm</th>
-<th align="right">sqrt.X500um</th>
-<th align="right">fetch</th>
-<th align="right">org</th>
-<th align="right">snapper</th>
-<th align="right">lobster</th>
-<th align="right">Status</th>
-<th align="right">Distance</th>
-<th align="right">cumsum.wi</th>
+<th align="left">Taxa</th>
+<th align="left">Best models</th>
+<th align="right">ΔAICc</th>
+<th align="right">ΔBIC</th>
+<th align="right">ωAICc</th>
+<th align="right">ωBIC</th>
+<th align="right">R2</th>
+<th align="right">EDF</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">BDS.Distance+sqrt.X4mm</td>
-<td align="left">Distance+sqrt.X4mm</td>
-<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location,
-Site, bs = “re”)</td>
-<td align="right">276.405</td>
-<td align="right">321.906</td>
-<td align="right">0.529</td>
-<td align="right">NA</td>
-<td align="right">23.24</td>
-<td align="right">0</td>
+<td align="left">BDS</td>
+<td align="left">Distance+fetch+sqrt.X4mm</td>
 <td align="right">0.000</td>
 <td align="right">0.000</td>
-<td align="right">0.677</td>
-<td align="right">0.721</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0.677</td>
+<td align="right">0.468</td>
+<td align="right">0.548</td>
+<td align="right">0.450</td>
+<td align="right">22.36</td>
 </tr>
 <tr class="even">
-<td align="left">BDS.Distance.t.Status+sqrt.X4mm+Status</td>
-<td align="left">Distance.t.Status+sqrt.X4mm+Status</td>
-<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + Status +
-s(Location, Site, bs = “re”) + Distance:Status</td>
-<td align="right">277.884</td>
-<td align="right">323.807</td>
-<td align="right">0.517</td>
-<td align="right">NA</td>
-<td align="right">23.82</td>
-<td align="right">0</td>
-<td align="right">1.480</td>
-<td align="right">1.901</td>
-<td align="right">0.323</td>
-<td align="right">0.279</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1.000</td>
+<td align="left">BDS</td>
+<td align="left">Distance+sqrt.X4mm+sqrt.X500um</td>
+<td align="right">1.512</td>
+<td align="right">2.131</td>
+<td align="right">0.220</td>
+<td align="right">0.189</td>
+<td align="right">0.531</td>
+<td align="right">23.13</td>
 </tr>
 <tr class="odd">
-<td align="left">BMS.fetch.by.Status+sqrt.X4mm+Status</td>
-<td align="left">fetch.by.Status+sqrt.X4mm+Status</td>
-<td align="left">s(sqrt.X4mm, k = 3, bs = “cr”) + s(fetch, by = Status,
-k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”)</td>
-<td align="right">157.220</td>
-<td align="right">195.278</td>
-<td align="right">0.114</td>
-<td align="right">NA</td>
-<td align="right">15.70</td>
-<td align="right">0</td>
+<td align="left">BMS</td>
+<td align="left">Distance+Status+fetch.by.Status</td>
 <td align="right">0.000</td>
 <td align="right">0.000</td>
-<td align="right">0.630</td>
-<td align="right">0.909</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0.630</td>
+<td align="right">0.298</td>
+<td align="right">0.443</td>
+<td align="right">0.115</td>
+<td align="right">15.89</td>
 </tr>
 <tr class="even">
-<td align="left">BMS.fetch.by.Status+sqrt.X4mm.by.Status+Status</td>
-<td align="left">fetch.by.Status+sqrt.X4mm.by.Status+Status</td>
-<td align="left">s(fetch, by = Status, k = 3, bs = “cr”) + s(sqrt.X4mm,
-by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs =
-“re”)</td>
-<td align="right">158.379</td>
-<td align="right">199.933</td>
+<td align="left">BMS</td>
+<td align="left">Status+fetch.by.Status+org.by.Status</td>
+<td align="right">0.198</td>
+<td align="right">2.896</td>
+<td align="right">0.270</td>
+<td align="right">0.104</td>
 <td align="right">0.116</td>
-<td align="right">NA</td>
-<td align="right">17.70</td>
-<td align="right">0</td>
-<td align="right">1.159</td>
-<td align="right">4.655</td>
-<td align="right">0.353</td>
-<td align="right">0.089</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0.983</td>
+<td align="right">17.39</td>
+</tr>
+<tr class="odd">
+<td align="left">BMS</td>
+<td align="left">Distance.t.Status+Status+fetch.by.Status</td>
+<td align="right">0.954</td>
+<td align="right">2.291</td>
+<td align="right">0.185</td>
+<td align="right">0.141</td>
+<td align="right">0.115</td>
+<td align="right">16.89</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">Distance+sqrt.X4mm</td>
+<td align="right">0.000</td>
+<td align="right">1.735</td>
+<td align="right">0.059</td>
+<td align="right">0.029</td>
+<td align="right">0.493</td>
+<td align="right">20.90</td>
 </tr>
 <tr class="odd">
 <td align="left">CPN</td>
-<td align="left">lobster+org+sqrt.X4mm</td>
-<td align="left">s(lobster, k = 3, bs = “cr”) + s(org, k = 3, bs = “cr”)
-+ s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”)</td>
-<td align="right">399.262</td>
-<td align="right">446.531</td>
+<td align="left">Distance+lobster+sqrt.X1mm</td>
+<td align="right">0.167</td>
+<td align="right">0.000</td>
+<td align="right">0.054</td>
+<td align="right">0.069</td>
+<td align="right">0.444</td>
+<td align="right">19.05</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">Distance+fetch+sqrt.X4mm</td>
+<td align="right">0.306</td>
+<td align="right">2.169</td>
+<td align="right">0.051</td>
+<td align="right">0.023</td>
+<td align="right">0.489</td>
+<td align="right">21.06</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">Distance+sqrt.X1mm</td>
+<td align="right">0.590</td>
+<td align="right">0.476</td>
+<td align="right">0.044</td>
+<td align="right">0.055</td>
+<td align="right">0.454</td>
+<td align="right">19.11</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">Distance+snapper+sqrt.X1mm</td>
+<td align="right">0.837</td>
+<td align="right">0.809</td>
+<td align="right">0.039</td>
+<td align="right">0.046</td>
+<td align="right">0.447</td>
+<td align="right">19.14</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">Distance+Status+sqrt.X1mm</td>
+<td align="right">0.927</td>
+<td align="right">0.999</td>
+<td align="right">0.037</td>
+<td align="right">0.042</td>
+<td align="right">0.453</td>
+<td align="right">19.28</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">lobster+sqrt.X4mm</td>
+<td align="right">1.513</td>
+<td align="right">1.861</td>
+<td align="right">0.028</td>
+<td align="right">0.027</td>
+<td align="right">0.467</td>
+<td align="right">19.54</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">lobster+sqrt.X4mm+sqrt.X500um</td>
+<td align="right">1.607</td>
+<td align="right">2.298</td>
+<td align="right">0.026</td>
+<td align="right">0.022</td>
+<td align="right">0.462</td>
+<td align="right">19.84</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">sqrt.X4mm+sqrt.X500um</td>
+<td align="right">1.876</td>
+<td align="right">2.602</td>
+<td align="right">0.023</td>
+<td align="right">0.019</td>
+<td align="right">0.474</td>
+<td align="right">19.90</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">sqrt.X4mm</td>
+<td align="right">1.892</td>
+<td align="right">2.328</td>
+<td align="right">0.023</td>
+<td align="right">0.022</td>
 <td align="right">0.481</td>
-<td align="right">NA</td>
-<td align="right">24.75</td>
-<td align="right">0</td>
-<td align="right">0.000</td>
-<td align="right">0.000</td>
-<td align="right">0.988</td>
-<td align="right">0.983</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0.988</td>
+<td align="right">19.66</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">snapper+sqrt.X4mm</td>
+<td align="right">1.905</td>
+<td align="right">2.349</td>
+<td align="right">0.023</td>
+<td align="right">0.021</td>
+<td align="right">0.471</td>
+<td align="right">19.62</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">snapper+sqrt.X4mm+sqrt.X500um</td>
+<td align="right">1.920</td>
+<td align="right">2.671</td>
+<td align="right">0.023</td>
+<td align="right">0.018</td>
+<td align="right">0.464</td>
+<td align="right">19.87</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">fetch+lobster+sqrt.X4mm</td>
+<td align="right">2.198</td>
+<td align="right">2.757</td>
+<td align="right">0.020</td>
+<td align="right">0.017</td>
+<td align="right">0.458</td>
+<td align="right">19.68</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">Status+sqrt.X4mm+sqrt.X500um</td>
+<td align="right">2.249</td>
+<td align="right">3.155</td>
+<td align="right">0.019</td>
+<td align="right">0.014</td>
+<td align="right">0.472</td>
+<td align="right">20.07</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">Status+sqrt.X4mm</td>
+<td align="right">2.266</td>
+<td align="right">2.878</td>
+<td align="right">0.019</td>
+<td align="right">0.016</td>
+<td align="right">0.478</td>
+<td align="right">19.82</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">Distance+Status+sqrt.X1mm.by.Status</td>
+<td align="right">2.317</td>
+<td align="right">3.331</td>
+<td align="right">0.018</td>
+<td align="right">0.013</td>
+<td align="right">0.459</td>
+<td align="right">20.19</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">fetch+sqrt.X4mm</td>
+<td align="right">2.351</td>
+<td align="right">2.989</td>
+<td align="right">0.018</td>
+<td align="right">0.016</td>
+<td align="right">0.476</td>
+<td align="right">19.81</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">Distance+sqrt.X500um</td>
+<td align="right">2.425</td>
+<td align="right">2.558</td>
+<td align="right">0.018</td>
+<td align="right">0.019</td>
+<td align="right">0.476</td>
+<td align="right">19.31</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">Distance+lobster+sqrt.X2mm</td>
+<td align="right">2.546</td>
+<td align="right">2.864</td>
+<td align="right">0.016</td>
+<td align="right">0.017</td>
+<td align="right">0.453</td>
+<td align="right">19.53</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">fetch+snapper+sqrt.X4mm</td>
+<td align="right">2.566</td>
+<td align="right">3.282</td>
+<td align="right">0.016</td>
+<td align="right">0.013</td>
+<td align="right">0.465</td>
+<td align="right">19.84</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">Distance+snapper+sqrt.X500um</td>
+<td align="right">2.591</td>
+<td align="right">2.770</td>
+<td align="right">0.016</td>
+<td align="right">0.017</td>
+<td align="right">0.466</td>
+<td align="right">19.29</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">Status+fetch+sqrt.X4mm</td>
+<td align="right">2.768</td>
+<td align="right">3.560</td>
+<td align="right">0.015</td>
+<td align="right">0.012</td>
+<td align="right">0.471</td>
+<td align="right">19.93</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">lobster+sqrt.X1mm</td>
+<td align="right">2.859</td>
+<td align="right">1.185</td>
+<td align="right">0.014</td>
+<td align="right">0.038</td>
+<td align="right">0.420</td>
+<td align="right">17.72</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">Distance</td>
+<td align="right">2.871</td>
+<td align="right">2.921</td>
+<td align="right">0.014</td>
+<td align="right">0.016</td>
+<td align="right">0.483</td>
+<td align="right">19.27</td>
+</tr>
+<tr class="even">
+<td align="left">CPN</td>
+<td align="left">Distance+Status+sqrt.X500um</td>
+<td align="right">2.913</td>
+<td align="right">3.275</td>
+<td align="right">0.014</td>
+<td align="right">0.013</td>
+<td align="right">0.474</td>
+<td align="right">19.51</td>
+</tr>
+<tr class="odd">
+<td align="left">CPN</td>
+<td align="left">Distance+snapper</td>
+<td align="right">3.000</td>
+<td align="right">3.080</td>
+<td align="right">0.013</td>
+<td align="right">0.015</td>
+<td align="right">0.474</td>
+<td align="right">19.23</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section level3">
+<h3 id="relationship-to-the-published-table">Relationship to the published table<a class="anchor" aria-label="anchor" href="#relationship-to-the-published-table"></a>
+</h3>
+<p>The table above corresponds to Table A4.2 of Appendix S4, which
+listed the models within 2 AICc units of the best model for each taxon.
+It is recomputed each time this vignette is built and will not agree
+digit for digit with the published table.</p>
+<p><strong>These results changed in September 2026, and the change is a
+correction.</strong> Under <code>FSSgam</code> 1.0.0 each candidate
+model was fitted with a Tweedie power parameter of about 1.01 rather
+than the value estimated for that model. A Tweedie with the power
+parameter near 1 is close to a Poisson, so the assumed variance function
+was wrong, and both the estimated degrees of freedom and the information
+criteria were inflated. Taking the model
+<code>Distance+lobster+sqrt.X2mm</code> for <em>Pagurus
+novizelandiae</em> as an example, 1.0.0 reported AICc 605.50 at 24.87
+edf, whereas fitting the identical formula to the identical data with a
+direct call to <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">mgcv::gam()</a></code> gives AICc 478.76 at 19.53 edf.
+The current version reproduces the <code>mgcv</code> value exactly,
+measured on R 4.5.1 with <code>mgcv</code> 1.9-3. The candidate set is
+unchanged: the same 139 models with the same formulae are fitted either
+way.</p>
+<p>The practical effect is on how many models are close to the best one.
+For <em>Pagurus novizelandiae</em>, 1.0.0 placed a single model within 2
+AICc units of the best; the corrected fit places twelve there, against
+the eighteen of the published table, with estimated degrees of freedom
+of 17.7 to 21.1 against the published 17.7 to 21.5. The corrected
+results are therefore much closer to the published analysis than the
+ones this vignette previously showed. For <em>Dosinia subrosea</em> and
+<em>Myadora striata</em> the effect is smaller, two models within 2 AICc
+units becoming two and three respectively.</p>
+<p>Model names are also written differently from the published table.
+<code>FSSgam</code> now orders the terms within a model name in byte
+order, and the vignette uses the column names of the data set rather
+than the shortened labels used in the paper, so the model published as
+<code>4mm + lobster</code> appears here as
+<code>lobster+sqrt.X4mm</code>. This is a naming change only.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="va">all.var.imp</span>,</span>
@@ -724,42 +919,42 @@ by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs =
 <tbody>
 <tr class="odd">
 <td align="left">BDS</td>
-<td align="right">1.000</td>
-<td align="right">0</td>
-<td align="right">0.000</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">0.958</td>
 <td align="right">0.000</td>
 <td align="right">0.000</td>
-<td align="right">0.000</td>
-<td align="right">0.323</td>
-<td align="right">1.000</td>
+<td align="right">0.220</td>
+<td align="right">0.468</td>
+<td align="right">0.043</td>
+<td align="right">0.049</td>
+<td align="right">0.061</td>
+<td align="right">0.164</td>
+<td align="right">1.001</td>
 </tr>
 <tr class="even">
 <td align="left">BMS</td>
-<td align="right">0.984</td>
-<td align="right">0</td>
+<td align="right">0.056</td>
 <td align="right">0.000</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0.000</td>
-<td align="right">0.017</td>
-<td align="right">0.000</td>
-<td align="right">0.983</td>
-<td align="right">0.013</td>
+<td align="right">0.001</td>
+<td align="right">0.003</td>
+<td align="right">0.967</td>
+<td align="right">0.340</td>
+<td align="right">0.001</td>
+<td align="right">0.035</td>
+<td align="right">0.924</td>
+<td align="right">0.573</td>
 </tr>
 <tr class="odd">
 <td align="left">CPN</td>
-<td align="right">0.988</td>
-<td align="right">0</td>
-<td align="right">0.013</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1.001</td>
-<td align="right">0.000</td>
-<td align="right">0.996</td>
-<td align="right">0.005</td>
-<td align="right">0.000</td>
+<td align="right">0.410</td>
+<td align="right">0.074</td>
+<td align="right">0.260</td>
+<td align="right">0.183</td>
+<td align="right">0.210</td>
+<td align="right">0.061</td>
+<td align="right">0.194</td>
+<td align="right">0.193</td>
+<td align="right">0.223</td>
+<td align="right">0.472</td>
 </tr>
 </tbody>
 </table>
@@ -800,7 +995,7 @@ by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs =
 <span><span class="co">## Columns: 3</span></span>
 <span><span class="co">## $ resp.var   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BDS"<span style="color: #949494;">, </span>"BD…</span></span>
 <span><span class="co">## $ predictor  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "sqrt.X4mm"<span style="color: #949494;">, </span>"sqrt.X2mm"<span style="color: #949494;">, </span>"sqrt.X1mm"<span style="color: #949494;">, </span>"sqrt.X500um"<span style="color: #949494;">, </span>"fetc…</span></span>
-<span><span class="co">## $ importance <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.3…</span></span></code></pre>
+<span><span class="co">## $ importance <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.958<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.000<span style="color: #949494;">, </span>0.220<span style="color: #949494;">, </span>0.468<span style="color: #949494;">, </span>0.043<span style="color: #949494;">, </span>0.049<span style="color: #949494;">, </span>0.061<span style="color: #949494;">, </span>0.1…</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gg.importance.scores</span></span></code></pre></div>
 <p><img src="case-study-2_files/figure-html/imp2plot-1.png" class="r-plt" alt="" width="700"></p>
@@ -1433,7 +1628,7 @@ r</em>. 2nd ed. CRC Press.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

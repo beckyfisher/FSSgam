@@ -185,6 +185,16 @@ work (they now just emit a deprecation warning and forward to the new
 names), but new code should call generate_model_set/fit_model_set
 directly.
 
+It was updated again on the 7th September 2026 against FSSgam
+1.1.0.9000. The results in this case study changed at that point, and
+the change is a correction. Under FSSgam 1.0.0 the candidate models were
+fitted with a Tweedie power parameter of about 1.01 instead of the value
+estimated for the model, which inflated both the estimated degrees of
+freedom and the information criteria. The candidate set, the formulae
+and the data are identical either way; only the fitted variance function
+differed. See ‘Relationship to the published table’ below for the
+measured effect.
+
 ## Script information
 
 ### Part 1-FSS modeling
@@ -397,27 +407,97 @@ unique.vars.use
 names(out.all)=resp.vars
 names(var.imp)=resp.vars
 all.mod.fits=do.call("rbind",out.all)
+# label each row with its taxon: rbind on a named list leaves that only in the row names
+all.mod.fits$Taxa=rep(resp.vars, times=sapply(out.all, nrow))
 all.var.imp=do.call("rbind",var.imp)
 ```
 
 ``` r
 
 knitr::kable(
-  all.mod.fits,
+  all.mod.fits[, c("Taxa", "modname", "delta.AICc", "delta.BIC",
+                   "wi.AICc", "wi.BIC", "r2.vals", "edf")],
   digits = 3,
-  caption = "Summary of all fitted FSSgam models"
+  col.names = c("Taxa", "Best models", "ΔAICc", "ΔBIC", "ωAICc", "ωBIC", "R2", "EDF"),
+  row.names = FALSE,
+  caption = "Models within 3 AICc units of the best model for each taxon. Columns follow Table A4.2 of Appendix S4."
 )
 ```
 
-|  | modname | formula | AICc | BIC | r2.vals | r2.vals.unique | edf | edf.less.1 | delta.AICc | delta.BIC | wi.AICc | wi.BIC | sqrt.X4mm | sqrt.X2mm | sqrt.X1mm | sqrt.X500um | fetch | org | snapper | lobster | Status | Distance | cumsum.wi |
-|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| BDS.Distance+sqrt.X4mm | Distance+sqrt.X4mm | s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + s(Location, Site, bs = “re”) | 276.405 | 321.906 | 0.529 | NA | 23.24 | 0 | 0.000 | 0.000 | 0.677 | 0.721 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0.677 |
-| BDS.Distance.t.Status+sqrt.X4mm+Status | Distance.t.Status+sqrt.X4mm+Status | s(sqrt.X4mm, k = 3, bs = “cr”) + Distance + Status + s(Location, Site, bs = “re”) + Distance:Status | 277.884 | 323.807 | 0.517 | NA | 23.82 | 0 | 1.480 | 1.901 | 0.323 | 0.279 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1.000 |
-| BMS.fetch.by.Status+sqrt.X4mm+Status | fetch.by.Status+sqrt.X4mm+Status | s(sqrt.X4mm, k = 3, bs = “cr”) + s(fetch, by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 157.220 | 195.278 | 0.114 | NA | 15.70 | 0 | 0.000 | 0.000 | 0.630 | 0.909 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0.630 |
-| BMS.fetch.by.Status+sqrt.X4mm.by.Status+Status | fetch.by.Status+sqrt.X4mm.by.Status+Status | s(fetch, by = Status, k = 3, bs = “cr”) + s(sqrt.X4mm, by = Status, k = 3, bs = “cr”) + Status + s(Location, Site, bs = “re”) | 158.379 | 199.933 | 0.116 | NA | 17.70 | 0 | 1.159 | 4.655 | 0.353 | 0.089 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0.983 |
-| CPN | lobster+org+sqrt.X4mm | s(lobster, k = 3, bs = “cr”) + s(org, k = 3, bs = “cr”) + s(sqrt.X4mm, k = 3, bs = “cr”) + s(Location, Site, bs = “re”) | 399.262 | 446.531 | 0.481 | NA | 24.75 | 0 | 0.000 | 0.000 | 0.988 | 0.983 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0.988 |
+| Taxa | Best models | ΔAICc | ΔBIC | ωAICc | ωBIC | R2 | EDF |
+|:---|:---|---:|---:|---:|---:|---:|---:|
+| BDS | Distance+fetch+sqrt.X4mm | 0.000 | 0.000 | 0.468 | 0.548 | 0.450 | 22.36 |
+| BDS | Distance+sqrt.X4mm+sqrt.X500um | 1.512 | 2.131 | 0.220 | 0.189 | 0.531 | 23.13 |
+| BMS | Distance+Status+fetch.by.Status | 0.000 | 0.000 | 0.298 | 0.443 | 0.115 | 15.89 |
+| BMS | Status+fetch.by.Status+org.by.Status | 0.198 | 2.896 | 0.270 | 0.104 | 0.116 | 17.39 |
+| BMS | Distance.t.Status+Status+fetch.by.Status | 0.954 | 2.291 | 0.185 | 0.141 | 0.115 | 16.89 |
+| CPN | Distance+sqrt.X4mm | 0.000 | 1.735 | 0.059 | 0.029 | 0.493 | 20.90 |
+| CPN | Distance+lobster+sqrt.X1mm | 0.167 | 0.000 | 0.054 | 0.069 | 0.444 | 19.05 |
+| CPN | Distance+fetch+sqrt.X4mm | 0.306 | 2.169 | 0.051 | 0.023 | 0.489 | 21.06 |
+| CPN | Distance+sqrt.X1mm | 0.590 | 0.476 | 0.044 | 0.055 | 0.454 | 19.11 |
+| CPN | Distance+snapper+sqrt.X1mm | 0.837 | 0.809 | 0.039 | 0.046 | 0.447 | 19.14 |
+| CPN | Distance+Status+sqrt.X1mm | 0.927 | 0.999 | 0.037 | 0.042 | 0.453 | 19.28 |
+| CPN | lobster+sqrt.X4mm | 1.513 | 1.861 | 0.028 | 0.027 | 0.467 | 19.54 |
+| CPN | lobster+sqrt.X4mm+sqrt.X500um | 1.607 | 2.298 | 0.026 | 0.022 | 0.462 | 19.84 |
+| CPN | sqrt.X4mm+sqrt.X500um | 1.876 | 2.602 | 0.023 | 0.019 | 0.474 | 19.90 |
+| CPN | sqrt.X4mm | 1.892 | 2.328 | 0.023 | 0.022 | 0.481 | 19.66 |
+| CPN | snapper+sqrt.X4mm | 1.905 | 2.349 | 0.023 | 0.021 | 0.471 | 19.62 |
+| CPN | snapper+sqrt.X4mm+sqrt.X500um | 1.920 | 2.671 | 0.023 | 0.018 | 0.464 | 19.87 |
+| CPN | fetch+lobster+sqrt.X4mm | 2.198 | 2.757 | 0.020 | 0.017 | 0.458 | 19.68 |
+| CPN | Status+sqrt.X4mm+sqrt.X500um | 2.249 | 3.155 | 0.019 | 0.014 | 0.472 | 20.07 |
+| CPN | Status+sqrt.X4mm | 2.266 | 2.878 | 0.019 | 0.016 | 0.478 | 19.82 |
+| CPN | Distance+Status+sqrt.X1mm.by.Status | 2.317 | 3.331 | 0.018 | 0.013 | 0.459 | 20.19 |
+| CPN | fetch+sqrt.X4mm | 2.351 | 2.989 | 0.018 | 0.016 | 0.476 | 19.81 |
+| CPN | Distance+sqrt.X500um | 2.425 | 2.558 | 0.018 | 0.019 | 0.476 | 19.31 |
+| CPN | Distance+lobster+sqrt.X2mm | 2.546 | 2.864 | 0.016 | 0.017 | 0.453 | 19.53 |
+| CPN | fetch+snapper+sqrt.X4mm | 2.566 | 3.282 | 0.016 | 0.013 | 0.465 | 19.84 |
+| CPN | Distance+snapper+sqrt.X500um | 2.591 | 2.770 | 0.016 | 0.017 | 0.466 | 19.29 |
+| CPN | Status+fetch+sqrt.X4mm | 2.768 | 3.560 | 0.015 | 0.012 | 0.471 | 19.93 |
+| CPN | lobster+sqrt.X1mm | 2.859 | 1.185 | 0.014 | 0.038 | 0.420 | 17.72 |
+| CPN | Distance | 2.871 | 2.921 | 0.014 | 0.016 | 0.483 | 19.27 |
+| CPN | Distance+Status+sqrt.X500um | 2.913 | 3.275 | 0.014 | 0.013 | 0.474 | 19.51 |
+| CPN | Distance+snapper | 3.000 | 3.080 | 0.013 | 0.015 | 0.474 | 19.23 |
 
-Summary of all fitted FSSgam models {.table}
+Models within 3 AICc units of the best model for each taxon. Columns
+follow Table A4.2 of Appendix S4. {.table style="width:100%;"}
+
+### Relationship to the published table
+
+The table above corresponds to Table A4.2 of Appendix S4, which listed
+the models within 2 AICc units of the best model for each taxon. It is
+recomputed each time this vignette is built and will not agree digit for
+digit with the published table.
+
+**These results changed in September 2026, and the change is a
+correction.** Under `FSSgam` 1.0.0 each candidate model was fitted with
+a Tweedie power parameter of about 1.01 rather than the value estimated
+for that model. A Tweedie with the power parameter near 1 is close to a
+Poisson, so the assumed variance function was wrong, and both the
+estimated degrees of freedom and the information criteria were inflated.
+Taking the model `Distance+lobster+sqrt.X2mm` for *Pagurus
+novizelandiae* as an example, 1.0.0 reported AICc 605.50 at 24.87 edf,
+whereas fitting the identical formula to the identical data with a
+direct call to [`mgcv::gam()`](https://rdrr.io/pkg/mgcv/man/gam.html)
+gives AICc 478.76 at 19.53 edf. The current version reproduces the
+`mgcv` value exactly, measured on R 4.5.1 with `mgcv` 1.9-3. The
+candidate set is unchanged: the same 139 models with the same formulae
+are fitted either way.
+
+The practical effect is on how many models are close to the best one.
+For *Pagurus novizelandiae*, 1.0.0 placed a single model within 2 AICc
+units of the best; the corrected fit places twelve there, against the
+eighteen of the published table, with estimated degrees of freedom of
+17.7 to 21.1 against the published 17.7 to 21.5. The corrected results
+are therefore much closer to the published analysis than the ones this
+vignette previously showed. For *Dosinia subrosea* and *Myadora striata*
+the effect is smaller, two models within 2 AICc units becoming two and
+three respectively.
+
+Model names are also written differently from the published table.
+`FSSgam` now orders the terms within a model name in byte order, and the
+vignette uses the column names of the data set rather than the shortened
+labels used in the paper, so the model published as `4mm + lobster`
+appears here as `lobster+sqrt.X4mm`. This is a naming change only.
 
 ``` r
 
@@ -430,9 +510,9 @@ knitr::kable(
 
 |  | sqrt.X4mm | sqrt.X2mm | sqrt.X1mm | sqrt.X500um | fetch | org | snapper | lobster | Status | Distance |
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| BDS | 1.000 | 0 | 0.000 | 0 | 0 | 0.000 | 0.000 | 0.000 | 0.323 | 1.000 |
-| BMS | 0.984 | 0 | 0.000 | 0 | 1 | 0.000 | 0.017 | 0.000 | 0.983 | 0.013 |
-| CPN | 0.988 | 0 | 0.013 | 0 | 0 | 1.001 | 0.000 | 0.996 | 0.005 | 0.000 |
+| BDS | 0.958 | 0.000 | 0.000 | 0.220 | 0.468 | 0.043 | 0.049 | 0.061 | 0.164 | 1.001 |
+| BMS | 0.056 | 0.000 | 0.001 | 0.003 | 0.967 | 0.340 | 0.001 | 0.035 | 0.924 | 0.573 |
+| CPN | 0.410 | 0.074 | 0.260 | 0.183 | 0.210 | 0.061 | 0.194 | 0.193 | 0.223 | 0.472 |
 
 Variable importance scores across response variables {.table
 style="width:100%;"}
@@ -476,7 +556,7 @@ dat.taxa <- all.var.imp |>
     ## Columns: 3
     ## $ resp.var   <chr> "BDS", "BDS", "BDS", "BDS", "BDS", "BDS", "BDS", "BDS", "BD…
     ## $ predictor  <chr> "sqrt.X4mm", "sqrt.X2mm", "sqrt.X1mm", "sqrt.X500um", "fetc…
-    ## $ importance <dbl> 1.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.3…
+    ## $ importance <dbl> 0.958, 0.000, 0.000, 0.220, 0.468, 0.043, 0.049, 0.061, 0.1…
 
 ``` r
 

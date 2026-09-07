@@ -176,23 +176,23 @@ knitr::kable(
 
 | modname | AICc | r2.vals | edf | delta.AICc | wi.AICc |
 |:---|---:|---:|---:|---:|---:|
-| av.wave.by.Survey+Survey | 5726.072 | 0.002 | 30.43 | 0.000 | 1 |
-| Depth.by.Survey+Survey | 5804.118 | 0.117 | 30.00 | 78.047 | 0 |
-| av.wave+Survey | 5872.776 | 0.001 | 10.00 | 146.704 | 0 |
+| Survey+av.wave.by.Survey | 5726.072 | 0.002 | 30.43 | 0.000 | 1 |
+| Depth.by.Survey+Survey | 5804.053 | 0.121 | 30.00 | 77.981 | 0 |
+| Survey+av.wave | 5872.776 | 0.001 | 10.00 | 146.704 | 0 |
 | Survey | 5901.816 | 0.021 | 6.00 | 175.744 | 0 |
 | Depth+Survey | 5904.288 | 0.103 | 10.00 | 178.216 | 0 |
 | av.wave.by.bleach.pres+bleach.pres+dredge.pres | 5937.926 | 0.002 | 11.02 | 211.854 | 0 |
 | av.wave.by.dredge.pres+bleach.pres+dredge.pres | 5940.948 | 0.001 | 11.28 | 214.877 | 0 |
-| bleach.pres+Depth.by.dredge.pres+dredge.pres | 5943.791 | 0.098 | 11.04 | 217.719 | 0 |
+| Depth.by.dredge.pres+bleach.pres+dredge.pres | 5943.791 | 0.098 | 11.04 | 217.719 | 0 |
 | av.wave.by.bleach.pres+bleach.pres | 5951.533 | 0.004 | 10.03 | 225.461 | 0 |
 | av.wave+bleach.pres+dredge.pres | 5952.134 | 0.000 | 7.00 | 226.062 | 0 |
 | av.wave+bleach.pres | 5967.230 | 0.001 | 6.00 | 241.158 | 0 |
 | bleach.pres+dredge.pres | 5967.610 | 0.024 | 3.00 | 241.538 | 0 |
-| bleach.pres+Depth+dredge.pres | 5969.965 | 0.104 | 7.00 | 243.893 | 0 |
-| bleach.pres+Depth.by.bleach.pres+dredge.pres | 5972.946 | 0.107 | 11.00 | 246.874 | 0 |
+| Depth+bleach.pres+dredge.pres | 5969.965 | 0.104 | 7.00 | 243.893 | 0 |
+| Depth.by.bleach.pres+bleach.pres+dredge.pres | 5972.946 | 0.107 | 11.00 | 246.874 | 0 |
 | bleach.pres | 5979.667 | 0.011 | 2.00 | 253.595 | 0 |
-| bleach.pres+Depth | 5982.157 | 0.091 | 6.00 | 256.085 | 0 |
-| bleach.pres+Depth.by.bleach.pres | 5985.270 | 0.093 | 10.00 | 259.198 | 0 |
+| Depth+bleach.pres | 5982.157 | 0.091 | 6.00 | 256.085 | 0 |
+| Depth.by.bleach.pres+bleach.pres | 5985.270 | 0.093 | 10.00 | 259.198 | 0 |
 | dhw.fact | 5990.095 | 0.000 | 4.00 | 264.023 | 0 |
 | av.wave.by.dredge.pres+dredge.pres | 6003.459 | 0.007 | 10.40 | 277.387 | 0 |
 | Depth.by.dredge.pres+dredge.pres | 6020.712 | 0.089 | 10.04 | 294.640 | 0 |
@@ -215,10 +215,10 @@ model.set$predictor.correlations
     ##                 av.wave      Depth    Survey bleach.pres dredge.pres  dhw.fact
     ## av.wave     1.000000000 0.66692956 0.1050576  0.03546485 0.003477723 0.4510273
     ## Depth       0.666929559 1.00000000 0.1280074  0.08540189 0.085632622 0.4483424
-    ## Survey      0.105057639 0.12800735 0.9999999  0.42179124 0.302465738 0.4460807
+    ## Survey      0.105057639 0.12800735 1.0000000  0.42179124 0.302465738 0.4460807
     ## bleach.pres 0.035464850 0.08540189 0.9445830  1.00000000 0.275014427 0.2937127
     ## dredge.pres 0.003477723 0.08563262 0.5198438  0.21105312 1.000000000 0.3239795
-    ## dhw.fact    0.451027270 0.44834237 0.5850417  0.17197695 0.247240075 0.9999999
+    ## dhw.fact    0.451027270 0.44834237 0.5850417  0.17197695 0.247240075 1.0000000
 
 We can run the same thing using the non.linear correlation matrix, which
 can be useful if you think there might be strong non-linear dependencies
@@ -245,12 +245,6 @@ model.set$predictor.correlations
 ``` r
 
 out.list=fit_model_set(model.set)
-```
-
-    ##   |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   4%  |                                                                              |=====                                                                 |   8%  |                                                                              |========                                                              |  12%  |                                                                              |===========                                                           |  15%  |                                                                              |=============                                                         |  19%  |                                                                              |================                                                      |  23%  |                                                                              |===================                                                   |  27%  |                                                                              |======================                                                |  31%  |                                                                              |========================                                              |  35%  |                                                                              |===========================                                           |  38%  |                                                                              |==============================                                        |  42%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  58%  |                                                                              |===========================================                           |  62%  |                                                                              |==============================================                        |  65%  |                                                                              |================================================                      |  69%  |                                                                              |===================================================                   |  73%  |                                                                              |======================================================                |  77%  |                                                                              |=========================================================             |  81%  |                                                                              |===========================================================           |  85%  |                                                                              |==============================================================        |  88%  |                                                                              |=================================================================     |  92%  |                                                                              |===================================================================   |  96%  |                                                                              |======================================================================| 100%
-
-``` r
-
 mod.table=out.list$mod.data.out
 mod.table=mod.table[order(mod.table$AICc),]
 tab <- mod.table |>
@@ -266,23 +260,23 @@ knitr::kable(
 
 | modname | AICc | r2.vals | edf | delta.AICc | wi.AICc |
 |:---|---:|---:|---:|---:|---:|
-| av.wave.by.Survey+Survey | 5726.072 | 0.002 | 30.43 | 0.000 | 1 |
-| Depth.by.Survey+Survey | 5804.118 | 0.117 | 30.00 | 78.047 | 0 |
-| av.wave+Survey | 5872.776 | 0.001 | 10.00 | 146.704 | 0 |
+| Survey+av.wave.by.Survey | 5726.072 | 0.002 | 30.43 | 0.000 | 1 |
+| Depth.by.Survey+Survey | 5804.053 | 0.121 | 30.00 | 77.981 | 0 |
+| Survey+av.wave | 5872.776 | 0.001 | 10.00 | 146.704 | 0 |
 | Survey | 5901.816 | 0.021 | 6.00 | 175.744 | 0 |
 | Depth+Survey | 5904.288 | 0.103 | 10.00 | 178.216 | 0 |
 | av.wave.by.bleach.pres+bleach.pres+dredge.pres | 5937.926 | 0.002 | 11.02 | 211.854 | 0 |
 | av.wave.by.dredge.pres+bleach.pres+dredge.pres | 5940.948 | 0.001 | 11.28 | 214.877 | 0 |
-| bleach.pres+Depth.by.dredge.pres+dredge.pres | 5943.791 | 0.098 | 11.04 | 217.719 | 0 |
+| Depth.by.dredge.pres+bleach.pres+dredge.pres | 5943.791 | 0.098 | 11.04 | 217.719 | 0 |
 | av.wave.by.bleach.pres+bleach.pres | 5951.533 | 0.004 | 10.03 | 225.461 | 0 |
 | av.wave+bleach.pres+dredge.pres | 5952.134 | 0.000 | 7.00 | 226.062 | 0 |
 | av.wave+bleach.pres | 5967.230 | 0.001 | 6.00 | 241.158 | 0 |
 | bleach.pres+dredge.pres | 5967.610 | 0.024 | 3.00 | 241.538 | 0 |
-| bleach.pres+Depth+dredge.pres | 5969.965 | 0.104 | 7.00 | 243.893 | 0 |
-| bleach.pres+Depth.by.bleach.pres+dredge.pres | 5972.946 | 0.107 | 11.00 | 246.874 | 0 |
+| Depth+bleach.pres+dredge.pres | 5969.965 | 0.104 | 7.00 | 243.893 | 0 |
+| Depth.by.bleach.pres+bleach.pres+dredge.pres | 5972.946 | 0.107 | 11.00 | 246.874 | 0 |
 | bleach.pres | 5979.667 | 0.011 | 2.00 | 253.595 | 0 |
-| bleach.pres+Depth | 5982.157 | 0.091 | 6.00 | 256.085 | 0 |
-| bleach.pres+Depth.by.bleach.pres | 5985.270 | 0.093 | 10.00 | 259.198 | 0 |
+| Depth+bleach.pres | 5982.157 | 0.091 | 6.00 | 256.085 | 0 |
+| Depth.by.bleach.pres+bleach.pres | 5985.270 | 0.093 | 10.00 | 259.198 | 0 |
 | dhw.fact | 5990.095 | 0.000 | 4.00 | 264.023 | 0 |
 | av.wave.by.dredge.pres+dredge.pres | 6003.459 | 0.007 | 10.40 | 277.387 | 0 |
 | Depth.by.dredge.pres+dredge.pres | 6020.712 | 0.089 | 10.04 | 294.640 | 0 |
@@ -354,22 +348,22 @@ knitr::kable(
 |:---|:---|---:|---:|---:|---:|---:|
 | Turbinaria | Survey | 559.824 | 0.017 | 6.00 | 0.000 | 0.569 |
 | Turbinaria | Depth+Survey | 561.895 | 0.013 | 10.00 | 2.071 | 0.202 |
-| Turbinaria | av.wave+Survey | 563.911 | 0.013 | 10.00 | 4.087 | 0.074 |
+| Turbinaria | Survey+av.wave | 563.911 | 0.013 | 10.00 | 4.087 | 0.074 |
 | Turbinaria | bleach.pres+dredge.pres | 564.723 | 0.017 | 3.00 | 4.899 | 0.049 |
-| Turbinaria | bleach.pres+Depth+dredge.pres | 565.142 | 0.010 | 7.00 | 5.318 | 0.040 |
+| Turbinaria | Depth+bleach.pres+dredge.pres | 565.142 | 0.010 | 7.00 | 5.318 | 0.040 |
 | Turbinaria | bleach.pres | 565.903 | 0.010 | 2.00 | 6.078 | 0.027 |
-| Turbinaria | bleach.pres+Depth | 567.612 | 0.009 | 6.00 | 7.788 | 0.012 |
+| Turbinaria | Depth+bleach.pres | 567.612 | 0.009 | 6.00 | 7.788 | 0.012 |
 | Turbinaria | av.wave+bleach.pres+dredge.pres | 568.610 | 0.019 | 7.00 | 8.786 | 0.007 |
-| Turbinaria | bleach.pres+Depth.by.dredge.pres+dredge.pres | 569.565 | 0.015 | 11.00 | 9.741 | 0.004 |
+| Turbinaria | Depth.by.dredge.pres+bleach.pres+dredge.pres | 569.565 | 0.015 | 11.00 | 9.741 | 0.004 |
 | Turbinaria | av.wave+bleach.pres | 569.940 | 0.013 | 6.00 | 10.115 | 0.004 |
 | Turbinaria | av.wave.by.dredge.pres+bleach.pres+dredge.pres | 570.617 | 0.015 | 11.00 | 10.792 | 0.003 |
-| Turbinaria | bleach.pres+Depth.by.bleach.pres+dredge.pres | 570.814 | 0.010 | 11.00 | 10.990 | 0.002 |
-| Turbinaria | bleach.pres+Depth.by.bleach.pres | 571.536 | 0.010 | 10.00 | 11.712 | 0.002 |
-| Turbinaria | Depth.by.Survey+Survey | 571.688 | 0.025 | 30.00 | 11.864 | 0.002 |
+| Turbinaria | Depth.by.bleach.pres+bleach.pres+dredge.pres | 570.814 | 0.010 | 11.00 | 10.990 | 0.002 |
+| Turbinaria | Depth.by.bleach.pres+bleach.pres | 571.536 | 0.010 | 10.00 | 11.712 | 0.002 |
+| Turbinaria | Depth.by.Survey+Survey | 571.688 | 0.025 | 30.00 | 11.863 | 0.002 |
 | Turbinaria | av.wave.by.bleach.pres+bleach.pres+dredge.pres | 572.788 | 0.019 | 11.00 | 12.964 | 0.001 |
 | Turbinaria | null | 573.482 | 0.000 | 1.00 | 13.658 | 0.001 |
 | Turbinaria | av.wave.by.bleach.pres+bleach.pres | 574.085 | 0.012 | 10.00 | 14.261 | 0.000 |
-| Turbinaria | av.wave.by.Survey+Survey | 574.418 | 0.024 | 30.00 | 14.593 | 0.000 |
+| Turbinaria | Survey+av.wave.by.Survey | 574.418 | 0.024 | 30.00 | 14.593 | 0.000 |
 | Turbinaria | dredge.pres | 574.514 | 0.003 | 2.00 | 14.690 | 0.000 |
 | Turbinaria | Depth | 574.896 | 0.005 | 5.00 | 15.072 | 0.000 |
 | Turbinaria | Depth+dredge.pres | 575.128 | 0.006 | 6.00 | 15.304 | 0.000 |
@@ -390,37 +384,37 @@ knitr::kable(
 | Pocillopora | Depth+dredge.pres | 826.443 | 0.002 | 6.00 | 3.614 | 0.029 |
 | Pocillopora | av.wave+bleach.pres+dredge.pres | 826.462 | 0.001 | 7.00 | 3.632 | 0.029 |
 | Pocillopora | Depth | 826.524 | 0.007 | 5.00 | 3.694 | 0.028 |
-| Pocillopora | av.wave+Survey | 827.629 | 0.000 | 10.00 | 4.800 | 0.016 |
-| Pocillopora | bleach.pres+Depth.by.bleach.pres | 827.650 | 0.002 | 10.00 | 4.820 | 0.016 |
-| Pocillopora | bleach.pres+Depth.by.bleach.pres+dredge.pres | 827.878 | 0.001 | 11.00 | 5.048 | 0.014 |
-| Pocillopora | bleach.pres+Depth+dredge.pres | 828.429 | 0.001 | 7.00 | 5.599 | 0.011 |
-| Pocillopora | bleach.pres+Depth | 828.489 | 0.007 | 6.00 | 5.660 | 0.010 |
+| Pocillopora | Survey+av.wave | 827.629 | 0.000 | 10.00 | 4.800 | 0.016 |
+| Pocillopora | Depth.by.bleach.pres+bleach.pres | 827.650 | 0.002 | 10.00 | 4.820 | 0.016 |
+| Pocillopora | Depth.by.bleach.pres+bleach.pres+dredge.pres | 827.878 | 0.001 | 11.00 | 5.048 | 0.014 |
+| Pocillopora | Depth+bleach.pres+dredge.pres | 828.429 | 0.001 | 7.00 | 5.599 | 0.011 |
+| Pocillopora | Depth+bleach.pres | 828.489 | 0.007 | 6.00 | 5.660 | 0.010 |
 | Pocillopora | av.wave.by.dredge.pres+dredge.pres | 828.597 | 0.008 | 10.00 | 5.768 | 0.010 |
 | Pocillopora | Depth+Survey | 828.883 | 0.002 | 10.00 | 6.054 | 0.009 |
 | Pocillopora | Depth.by.dredge.pres+dredge.pres | 830.277 | 0.002 | 10.00 | 7.447 | 0.004 |
 | Pocillopora | av.wave.by.bleach.pres+bleach.pres | 830.522 | 0.001 | 10.00 | 7.693 | 0.004 |
 | Pocillopora | av.wave.by.dredge.pres+bleach.pres+dredge.pres | 830.564 | 0.010 | 11.00 | 7.734 | 0.004 |
 | Pocillopora | av.wave.by.bleach.pres+bleach.pres+dredge.pres | 831.352 | 0.006 | 11.00 | 8.522 | 0.003 |
-| Pocillopora | bleach.pres+Depth.by.dredge.pres+dredge.pres | 832.313 | 0.002 | 11.00 | 9.483 | 0.002 |
+| Pocillopora | Depth.by.dredge.pres+bleach.pres+dredge.pres | 832.313 | 0.002 | 11.00 | 9.483 | 0.002 |
 | Pocillopora | Depth.by.Survey+Survey | 836.556 | 0.002 | 30.00 | 13.727 | 0.000 |
-| Pocillopora | av.wave.by.Survey+Survey | 842.665 | 0.026 | 30.00 | 19.835 | 0.000 |
-| Acropora | av.wave.by.Survey+Survey | 3216.484 | 0.142 | 30.11 | 0.000 | 1.000 |
-| Acropora | Depth.by.Survey+Survey | 3234.481 | 0.176 | 30.00 | 17.997 | 0.000 |
+| Pocillopora | Survey+av.wave.by.Survey | 842.662 | 0.026 | 30.00 | 19.832 | 0.000 |
+| Acropora | Survey+av.wave.by.Survey | 3216.484 | 0.142 | 30.11 | 0.000 | 1.000 |
+| Acropora | Depth.by.Survey+Survey | 3234.481 | 0.174 | 30.00 | 17.997 | 0.000 |
 | Acropora | Survey | 3273.224 | 0.009 | 6.00 | 56.740 | 0.000 |
 | Acropora | Depth+Survey | 3276.126 | 0.251 | 10.00 | 59.642 | 0.000 |
-| Acropora | av.wave+Survey | 3277.110 | 0.046 | 10.20 | 60.626 | 0.000 |
+| Acropora | Survey+av.wave | 3277.110 | 0.046 | 10.20 | 60.626 | 0.000 |
 | Acropora | av.wave.by.bleach.pres+bleach.pres | 3297.990 | 0.099 | 10.08 | 81.505 | 0.000 |
 | Acropora | av.wave.by.bleach.pres+bleach.pres+dredge.pres | 3300.081 | 0.100 | 11.09 | 83.597 | 0.000 |
 | Acropora | bleach.pres | 3309.545 | 0.006 | 2.00 | 93.061 | 0.000 |
 | Acropora | bleach.pres+dredge.pres | 3310.819 | 0.007 | 3.00 | 94.335 | 0.000 |
-| Acropora | bleach.pres+Depth | 3312.365 | 0.245 | 6.00 | 95.881 | 0.000 |
+| Acropora | Depth+bleach.pres | 3312.365 | 0.245 | 6.00 | 95.881 | 0.000 |
 | Acropora | av.wave+bleach.pres | 3312.997 | 0.081 | 6.06 | 96.513 | 0.000 |
-| Acropora | bleach.pres+Depth+dredge.pres | 3313.685 | 0.244 | 7.00 | 97.201 | 0.000 |
+| Acropora | Depth+bleach.pres+dredge.pres | 3313.685 | 0.244 | 7.00 | 97.201 | 0.000 |
 | Acropora | av.wave+bleach.pres+dredge.pres | 3313.942 | 0.044 | 7.02 | 97.458 | 0.000 |
 | Acropora | av.wave.by.dredge.pres+bleach.pres+dredge.pres | 3316.647 | 0.093 | 11.01 | 100.163 | 0.000 |
-| Acropora | bleach.pres+Depth.by.bleach.pres | 3317.370 | 0.190 | 10.00 | 100.885 | 0.000 |
-| Acropora | bleach.pres+Depth.by.bleach.pres+dredge.pres | 3318.651 | 0.188 | 11.00 | 102.167 | 0.000 |
-| Acropora | bleach.pres+Depth.by.dredge.pres+dredge.pres | 3318.979 | 0.182 | 11.00 | 102.495 | 0.000 |
+| Acropora | Depth.by.bleach.pres+bleach.pres | 3317.370 | 0.190 | 10.00 | 100.885 | 0.000 |
+| Acropora | Depth.by.bleach.pres+bleach.pres+dredge.pres | 3318.651 | 0.188 | 11.00 | 102.167 | 0.000 |
+| Acropora | Depth.by.dredge.pres+bleach.pres+dredge.pres | 3318.979 | 0.182 | 11.00 | 102.495 | 0.000 |
 | Acropora | dhw.fact | 3334.531 | 0.005 | 4.00 | 118.047 | 0.000 |
 | Acropora | av.wave+dredge.pres | 3341.902 | 0.100 | 6.02 | 125.418 | 0.000 |
 | Acropora | dredge.pres | 3341.995 | 0.003 | 2.00 | 125.510 | 0.000 |
@@ -430,31 +424,31 @@ knitr::kable(
 | Acropora | Depth | 3347.500 | 0.247 | 5.00 | 131.016 | 0.000 |
 | Acropora | av.wave.by.dredge.pres+dredge.pres | 3349.062 | 0.135 | 10.00 | 132.578 | 0.000 |
 | Acropora | Depth.by.dredge.pres+dredge.pres | 3350.130 | 0.205 | 10.00 | 133.645 | 0.000 |
-| Porites | Depth.by.Survey+Survey | 4746.245 | 0.387 | 30.00 | 0.000 | 0.999 |
-| Porites | av.wave.by.Survey+Survey | 4759.394 | 0.355 | 30.23 | 13.150 | 0.001 |
-| Porites | Depth+Survey | 4768.854 | 0.380 | 10.00 | 22.609 | 0.000 |
-| Porites | av.wave+Survey | 4776.205 | 0.276 | 10.98 | 29.960 | 0.000 |
-| Porites | Survey | 4779.562 | 0.000 | 6.00 | 33.318 | 0.000 |
-| Porites | bleach.pres+Depth.by.dredge.pres+dredge.pres | 4779.670 | 0.384 | 11.00 | 33.425 | 0.000 |
-| Porites | bleach.pres+Depth.by.bleach.pres+dredge.pres | 4782.469 | 0.384 | 11.00 | 36.225 | 0.000 |
-| Porites | bleach.pres+Depth+dredge.pres | 4783.759 | 0.383 | 7.00 | 37.514 | 0.000 |
-| Porites | bleach.pres+Depth | 4785.050 | 0.382 | 6.00 | 38.805 | 0.000 |
-| Porites | bleach.pres+Depth.by.bleach.pres | 4785.144 | 0.383 | 10.00 | 38.899 | 0.000 |
-| Porites | av.wave+bleach.pres | 4786.290 | 0.291 | 7.03 | 40.046 | 0.000 |
-| Porites | av.wave+bleach.pres+dredge.pres | 4786.730 | 0.293 | 8.05 | 40.486 | 0.000 |
-| Porites | av.wave.by.dredge.pres+bleach.pres+dredge.pres | 4787.680 | 0.313 | 11.36 | 41.436 | 0.000 |
-| Porites | av.wave | 4788.046 | 0.328 | 5.25 | 41.802 | 0.000 |
-| Porites | av.wave.by.bleach.pres+bleach.pres | 4788.993 | 0.314 | 10.50 | 42.749 | 0.000 |
-| Porites | av.wave+dredge.pres | 4789.557 | 0.331 | 6.23 | 43.312 | 0.000 |
-| Porites | av.wave.by.bleach.pres+bleach.pres+dredge.pres | 4790.172 | 0.286 | 12.12 | 43.927 | 0.000 |
-| Porites | av.wave.by.dredge.pres+dredge.pres | 4790.216 | 0.326 | 10.39 | 43.971 | 0.000 |
-| Porites | Depth.by.dredge.pres+dredge.pres | 4792.761 | 0.386 | 10.00 | 46.516 | 0.000 |
-| Porites | Depth | 4793.113 | 0.383 | 5.00 | 46.869 | 0.000 |
-| Porites | Depth+dredge.pres | 4794.107 | 0.383 | 6.00 | 47.863 | 0.000 |
-| Porites | bleach.pres+dredge.pres | 4794.599 | 0.001 | 3.00 | 48.354 | 0.000 |
-| Porites | bleach.pres | 4795.960 | 0.008 | 2.00 | 49.715 | 0.000 |
-| Porites | null | 4804.087 | 0.000 | 1.00 | 57.843 | 0.000 |
-| Porites | dhw.fact | 4804.345 | 0.055 | 4.00 | 58.100 | 0.000 |
-| Porites | dredge.pres | 4805.036 | 0.014 | 2.00 | 58.791 | 0.000 |
+| Porites | Depth.by.Survey+Survey | 4746.243 | 0.386 | 30.00 | 0.000 | 0.999 |
+| Porites | Survey+av.wave.by.Survey | 4759.394 | 0.355 | 30.22 | 13.152 | 0.001 |
+| Porites | Depth+Survey | 4768.854 | 0.380 | 10.00 | 22.611 | 0.000 |
+| Porites | Survey+av.wave | 4776.205 | 0.276 | 10.98 | 29.962 | 0.000 |
+| Porites | Survey | 4779.562 | 0.000 | 6.00 | 33.320 | 0.000 |
+| Porites | Depth.by.dredge.pres+bleach.pres+dredge.pres | 4779.670 | 0.384 | 11.00 | 33.427 | 0.000 |
+| Porites | Depth.by.bleach.pres+bleach.pres+dredge.pres | 4782.469 | 0.384 | 11.00 | 36.227 | 0.000 |
+| Porites | Depth+bleach.pres+dredge.pres | 4783.759 | 0.383 | 7.00 | 37.516 | 0.000 |
+| Porites | Depth+bleach.pres | 4785.050 | 0.382 | 6.00 | 38.807 | 0.000 |
+| Porites | Depth.by.bleach.pres+bleach.pres | 4785.144 | 0.383 | 10.00 | 38.901 | 0.000 |
+| Porites | av.wave+bleach.pres | 4786.290 | 0.291 | 7.03 | 40.048 | 0.000 |
+| Porites | av.wave+bleach.pres+dredge.pres | 4786.730 | 0.293 | 8.05 | 40.488 | 0.000 |
+| Porites | av.wave.by.dredge.pres+bleach.pres+dredge.pres | 4787.680 | 0.313 | 11.36 | 41.438 | 0.000 |
+| Porites | av.wave | 4788.046 | 0.328 | 5.25 | 41.804 | 0.000 |
+| Porites | av.wave.by.bleach.pres+bleach.pres | 4788.993 | 0.314 | 10.50 | 42.751 | 0.000 |
+| Porites | av.wave+dredge.pres | 4789.557 | 0.331 | 6.23 | 43.314 | 0.000 |
+| Porites | av.wave.by.bleach.pres+bleach.pres+dredge.pres | 4790.172 | 0.286 | 12.12 | 43.929 | 0.000 |
+| Porites | av.wave.by.dredge.pres+dredge.pres | 4790.216 | 0.326 | 10.39 | 43.973 | 0.000 |
+| Porites | Depth.by.dredge.pres+dredge.pres | 4792.761 | 0.386 | 10.00 | 46.518 | 0.000 |
+| Porites | Depth | 4793.113 | 0.383 | 5.00 | 46.871 | 0.000 |
+| Porites | Depth+dredge.pres | 4794.107 | 0.383 | 6.00 | 47.865 | 0.000 |
+| Porites | bleach.pres+dredge.pres | 4794.599 | 0.001 | 3.00 | 48.356 | 0.000 |
+| Porites | bleach.pres | 4795.960 | 0.008 | 2.00 | 49.717 | 0.000 |
+| Porites | null | 4804.087 | 0.000 | 1.00 | 57.845 | 0.000 |
+| Porites | dhw.fact | 4804.345 | 0.055 | 4.00 | 58.102 | 0.000 |
+| Porites | dredge.pres | 4805.036 | 0.014 | 2.00 | 58.793 | 0.000 |
 
 Model comparison summary based on AICc {.table}

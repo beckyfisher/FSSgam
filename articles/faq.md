@@ -20,8 +20,8 @@ recommending fitting a reasonable **test.fit** and exploring this
 thoroughly to be confident the model has fit as you intend.
 
 There are two examples of generating **test.fit** in the supporting
-material. The first is in the case study 1 vignette
-<https://github.com/beckyfisher/FSSgam/blob/master/case_study1_reef_fish.R>).
+material. The first is in the [case study 1
+vignette](https://beckyfisher.github.io/FSSgam/articles/case-study-1.md).
 This example shows a **test.fit** calling the gam function in mgcv
 directly, which is necessary to use the **tw()** distribution in this
 example. The main things that need to be specified are the response
@@ -36,14 +36,15 @@ our null model in this example consists of a random effect of **site**
 specified through **s(site, bs=“re”)**. Note that specifying the null
 terms in **test.fit** does not automatically mean the null terms are
 carried into the full subsets gam. They must also be specified as
-**null.terms** (see line 111 of the case_study1_reef_fish.R example).
+**null.terms** (see the full subsets GAMM analysis section of the case
+study 1 vignette).
 
-In the extra examples vignette
-<https://github.com/beckyfisher/FSSgam/blob/master/extra_examples.R> you
-can see an alternative specification of **test.fit** using the **uGamm**
-function from the **MuMIn**. **uGamm** is wrapper function that allows
-**gamm4** model fits to be updateable and therefore usable by
-**FSSgam**. Here we are fitting a binomial model using the **cbind**
+In the [extra examples
+vignette](https://beckyfisher.github.io/FSSgam/articles/extra-examples.md)
+you can see an alternative specification of **test.fit** using the
+**uGamm** function from the **MuMIn**. **uGamm** is wrapper function
+that allows **gamm4** model fits to be updateable and therefore usable
+by **FSSgam**. Here we are fitting a binomial model using the **cbind**
 format for **successes** and **failures** which must be as labelled in
 the **use.dat** data.frame. With uGamm the random effects are specified
 outside the model formula, meaning they will not be updated by
@@ -99,11 +100,31 @@ model formula as they are fit by FSSgam.
 
 Those dot-case names have been renamed to **generate_model_set** and
 **fit_model_set** respectively, to follow modern snake_case R naming
-conventions. The old names still work exactly as before - they now
+conventions. These two old names still work exactly as before - they now
 simply emit a [`.Deprecated()`](https://rdrr.io/r/base/Deprecated.html)
 warning and forward all of their arguments straight on to the new
 functions - so existing scripts, including code from the original 2018
 paper, will keep running. No argument names changed as part of this
-rename, and **full.subsets.gam** was not renamed. New code should call
-**generate_model_set** and **fit_model_set** directly to avoid the
-deprecation warning.
+rename.
+
+**full.subsets.gam** was not renamed and is still exported. It is now
+also available as **full_subsets_gam**, and the two are the same
+function.
+
+The rest of the exported functions were renamed as well, but without a
+deprecated alias, so the dot-case forms no longer exist. Code calling
+one of them will fail with a “could not find function” error. The
+replacements are:
+
+| old name                      | current name                  |
+|-------------------------------|-------------------------------|
+| check.correlations            | check_correlations            |
+| check.non.linear.correlations | check_non_linear_correlations |
+| build.inclusion.mat           | build_inclusion_mat           |
+| extract.mod.dat               | extract_mod_dat               |
+
+**fit.mod.l** is no longer exported at all. It was an internal helper
+and was never intended to be called directly.
+
+New code should call **generate_model_set** and **fit_model_set**
+directly to avoid the deprecation warning.
