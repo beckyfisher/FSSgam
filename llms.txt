@@ -38,15 +38,20 @@ remotes::install_github("beckyfisher/FSSgam_package")
 ```
 
 That installs the default branch of the package repository, which is
-currently `dev`, so it gives you the development version. To install the
-last released state instead, name the branch:
+`dev`. The vignettes on this site are built against that same branch, so
+what you install is what produced the results shown here. To install a
+specific state instead, name a branch or a tag:
 
 ``` r
 
 remotes::install_github("beckyfisher/FSSgam_package", ref = "master")
 ```
 
-The vignettes on this site are built against the `dev` branch.
+Check which version you have with `packageVersion("FSSgam")`, and see
+the package’s
+[NEWS](https://github.com/beckyfisher/FSSgam_package/blob/dev/NEWS.md)
+for what changed between versions. Results can differ between versions:
+the case study 2 vignette records one such change and its cause.
 
 Fitting through `gamm4`, by way of `MuMIn::uGamm(lme4 = TRUE)`, needs
 one further step. As of **FSSgam** 1.1.0 `gamm4` is a suggested rather
