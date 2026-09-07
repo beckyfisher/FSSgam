@@ -59,6 +59,14 @@ jobs:
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
+      # FSSgam.docs exports nothing, so pkgdown writes an empty reference index
+      # that nothing links to: the navbar Reference component points at
+      # FSSgam_package's own reference site instead. `build: reference: false`
+      # in _pkgdown.yml is parsed but does not suppress the index, so remove it
+      # after the build. RF, 2026-09-07.
+      - name: Remove the empty reference index
+        run: rm -rf docs/reference docs/dev/reference
+
       - name: Check pkgdown output
         run: ls -R docs
 
