@@ -69,18 +69,21 @@
 </h3>
 <p>The <strong>FSSgam</strong> package depends on a number of standard R packages for generalised additive modelling and model selection.</p>
 <p>All examples on this site are built and tested using current versions of R and the package dependencies via continuous integration.</p>
-<p>To install the latest version from github use:</p>
+<p>The released version is on <a href="https://CRAN.R-project.org/package=FSSgam" class="external-link">CRAN</a>, from version 1.2.0:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"FSSgam"</span><span class="op">)</span></span></code></pre></div>
+<p>The development version is installed from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"beckyfisher/FSSgam_package"</span><span class="op">)</span></span></code></pre></div>
-<p>That installs the default branch of the package repository, which is <code>dev</code>. The vignettes on this site are built against that same branch, so what you install is what produced the results shown here. To install a specific state instead, name a branch or a tag:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>That installs the default branch of the package repository, which is <code>dev</code>. The vignettes on this site are built against that branch, which can be ahead of the CRAN release. To install a specific state instead, name a branch or a tag; <code>master</code> holds the released version:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"beckyfisher/FSSgam_package"</span>, ref <span class="op">=</span> <span class="st">"master"</span><span class="op">)</span></span></code></pre></div>
 <p>Check which version you have with <code>packageVersion("FSSgam")</code>, and see the package’s <a href="https://github.com/beckyfisher/FSSgam_package/blob/dev/NEWS.md" class="external-link">NEWS</a> for what changed between versions. Results can differ between versions: the case study 2 vignette records one such change and its cause.</p>
 <p>Fitting through <code>gamm4</code>, by way of <code>MuMIn::uGamm(lme4 = TRUE)</code>, needs one further step. As of <strong>FSSgam</strong> 1.1.0 <code>gamm4</code> is a suggested rather than an imported package, so installing <strong>FSSgam</strong> no longer installs <code>gamm4</code> and <code>lme4</code> with it. Install <code>gamm4</code> separately if you need that route, as the extra examples vignette does:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"gamm4"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
