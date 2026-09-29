@@ -120,8 +120,8 @@ _pkgdown.yml              # site nav/config — do not restructure without being
                           # `development: mode: auto`, and a custom "Reference" navbar component
                           # linking out to FSSgam_package's own pkgdown reference site.
 .github/workflows/pkgdown.yaml  # builds + deploys the site. Triggers on push to main/master/dev.
-                          # Installs FSSgam_package's `dev` ref, named explicitly, on every
-                          # branch (see Section 4). Carries two clean-up steps, both needed and
+                          # Installs FSSgam from CRAN on master and FSSgam_package's `dev`
+                          # ref on dev (see Section 4). Carries two clean-up steps, both needed and
                           # neither obvious — do not remove either without reading this:
                           #  1. `rm -f CLAUDE.md` BEFORE the build. pkgdown's package_mds()
                           #     renders every .md in the package root and in .github/, skipping
@@ -168,15 +168,21 @@ publication/                # supplementary files from the original paper — re
 - **Do not edit, clone into, or push to `beckyfisher/FSSgam_package`** from
   this repo's session. This repo only consumes that package.
 
-- **The site installs the real package from GitHub at build time**
-  (`.github/workflows/pkgdown.yaml`). Every branch installs
-  `FSSgam_package`'s `dev` ref, named explicitly in the workflow (RF,
-  2026-09-07). It was previously branch-conditional, installing `dev` only
-  when *this* repo's branch was `dev` and otherwise falling back to
-  `FSSgam_package`'s default branch; that default has since become `dev`, so
-  the condition had stopped distinguishing anything and the fallback made
-  which package the root site built against a property of the other repo.
-  This is a separate mechanism from the root/`dev` site split below — it
+- **The site installs the real package at build time, by branch of this
+  repo** (`.github/workflows/pkgdown.yaml`). `master` installs the CRAN
+  release with `install.packages("FSSgam")`, so the root site reproduces what
+  a reader installing from CRAN gets; `dev` installs `FSSgam_package`'s `dev`
+  ref, named explicitly (RF, 2026-09-29, after FSSgam 1.2.0 was published on
+  CRAN on 2026-09-28). The step logs the installed `packageVersion()`.
+  Consequence: a vignette change that needs an unreleased package feature
+  stays on this repo's `dev`, and on the `/dev/` site, until that feature
+  reaches CRAN; merging it to `master` earlier breaks the root build.
+
+  History: from 2026-09-07 to 2026-09-29 every branch installed `dev`. Before
+  that the workflow was branch-conditional but fell back to
+  `FSSgam_package`'s default branch, which made the root site's package a
+  property of the other repo; a CRAN release is a fixed target and does not
+  have that defect. This is a separate mechanism from the root/`dev` site split below — it
   controls which package version vignettes are rendered against, not where
   the built site lands. Don't change it without checking with the user first.
 

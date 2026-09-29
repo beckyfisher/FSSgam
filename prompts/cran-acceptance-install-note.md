@@ -16,3 +16,30 @@ against the CRAN release was left to the user, per Section 4 of this repository'
 `CLAUDE.md`.
 
 ---
+
+**User:** Help me decide on [whether the root site should build against the CRAN release]. / yes, go ahead I agree
+
+**Claude:** Recommended, and on agreement implemented, building the root site against the
+CRAN release and the `/dev/` site against `FSSgam_package`'s `dev` branch. Reason: a reader
+who installs from CRAN should reproduce the numbers on the root site, which is not
+guaranteed while it renders against unreleased code. The branch-conditional form removed on
+2026-09-07 fell back to the package repository's default branch; the CRAN release is a fixed
+target and does not have that defect. Cost: a vignette needing an unreleased feature stays
+on `dev` until that feature is on CRAN.
+
+`.github/workflows/pkgdown.yaml`:
+
+``` r
+if (Sys.getenv("DOCS_BRANCH") == "dev") {
+  remotes::install_github("beckyfisher/FSSgam_package", ref = "dev")
+} else {
+  install.packages("FSSgam")
+}
+message("Building against FSSgam ", packageVersion("FSSgam"))
+```
+
+with `DOCS_BRANCH: ${{ github.ref_name }}`. The README installation text and `CLAUDE.md`
+Sections 3 and 4 were revised to match. The workflow was parsed with `yaml::read_yaml()` and
+the step's R code with `parse()`; the build itself is verified only by the CI runs on push.
+
+---
