@@ -18,7 +18,14 @@ The **FSSgam** package depends on a number of standard R packages for generalise
 
 All examples on this site are built and tested using current versions of R and the package dependencies via continuous integration.
 
-To install the latest version from github use:
+The released version is on [CRAN](https://CRAN.R-project.org/package=FSSgam), from version
+1.2.0:
+
+``` r
+install.packages("FSSgam")
+```
+
+The development version is installed from GitHub:
 
 ``` r
 if (!requireNamespace("remotes", quietly = TRUE)) {
@@ -28,8 +35,8 @@ remotes::install_github("beckyfisher/FSSgam_package")
 ```
 
 That installs the default branch of the package repository, which is `dev`. The vignettes on
-this site are built against that same branch, so what you install is what produced the results
-shown here. To install a specific state instead, name a branch or a tag:
+this site are built against that branch, which can be ahead of the CRAN release. To install a
+specific state instead, name a branch or a tag; `master` holds the released version:
 
 ``` r
 remotes::install_github("beckyfisher/FSSgam_package", ref = "master")
