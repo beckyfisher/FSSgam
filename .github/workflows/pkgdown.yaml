@@ -28,18 +28,27 @@ jobs:
             any::remotes
             local::.
 
-      # Install the real package so examples in articles/reference can run.
-      # Every branch builds against FSSgam_package's dev branch, named here
-      # explicitly rather than left to that repo's default. Its default is
-      # currently dev, so the previous `ref = NULL` resolved there anyway, but
-      # that is a property of the other repo and would change without warning
-      # if its default moved. RF, 2026-09-07.
-      - name: Install FSSgam package from GitHub
+      # Install the real package so the vignettes can run. The root site, built
+      # from this repo's master, renders against the CRAN release, so a reader
+      # who runs install.packages("FSSgam") reproduces the numbers shown. The
+      # /dev/ site, built from this repo's dev, renders against FSSgam_package's
+      # dev branch, named explicitly rather than left to that repo's default
+      # branch, which is a property of the other repo and could change without
+      # warning. Keyed on this repo's branch, the same one DESCRIPTION's Version
+      # tracks for the root-vs-/dev/ split. RF, 2026-09-29, after FSSgam 1.2.0
+      # was published on CRAN; before that every branch installed dev.
+      - name: Install FSSgam package
         run: |
-          remotes::install_github("beckyfisher/FSSgam_package", ref = "dev")
+          if (Sys.getenv("DOCS_BRANCH") == "dev") {
+            remotes::install_github("beckyfisher/FSSgam_package", ref = "dev")
+          } else {
+            install.packages("FSSgam")
+          }
+          message("Building against FSSgam ", packageVersion("FSSgam"))
         shell: Rscript {0}
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+          DOCS_BRANCH: ${{ github.ref_name }}
 
       - name: Configure git
         run: |

@@ -34,9 +34,11 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 remotes::install_github("beckyfisher/FSSgam_package")
 ```
 
-That installs the default branch of the package repository, which is `dev`. The vignettes on
-this site are built against that branch, which can be ahead of the CRAN release. To install a
-specific state instead, name a branch or a tag; `master` holds the released version:
+That installs the default branch of the package repository, which is `dev` and can be ahead of
+the CRAN release. The vignettes on this site are built against the CRAN release, so installing
+from CRAN reproduces the results shown here. The development site at
+<https://beckyfisher.github.io/FSSgam/dev/> is built against `dev`. To install a specific state
+instead, name a branch or a tag; `master` holds the released version:
 
 ``` r
 remotes::install_github("beckyfisher/FSSgam_package", ref = "master")
